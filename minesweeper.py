@@ -17,17 +17,17 @@ def mines_around_square(mine_locations, current_square):
         how many mines there are """
     adjacent_mines = 0
     for mine in mine_locations:
-        if (mine[0] == current_square[0] -1 or
-        mine[0] == current_square[0] +1 and
-        mine[1] == current_square[1] or
-        mine[1] == current_square[1] -1 or
-        mine[1] == current_square[1] +1):
+        if ((mine[0] == current_square[0] -1 or
+             mine[0] == current_square[0] +1) and
+            (mine[1] == current_square[1] or
+             mine[1] == current_square[1] -1 or
+             mine[1] == current_square[1] +1)):
             adjacent_mines += 1
-        elif (mine[1] == current_square[1] -1 or
-        mine[1] == current_square[1] +1 and
-        mine[0] == current_square[0] or
-        mine[0] == current_square[0] -1 or
-        mine[0] == current_square[0] +1):
+        elif ((mine[1] == current_square[1] -1 or
+               mine[1] == current_square[1] +1) and
+              (mine[0] == current_square[0] or
+               mine[0] == current_square[0] -1 or
+               mine[0] == current_square[0] +1)):
             adjacent_mines += 1
     return adjacent_mines
 
