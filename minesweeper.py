@@ -22,10 +22,7 @@ big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
 def check_if_theres_mine():
-    if mine == True:
-        print('BOOOOM!')
-    elif mine == False:
-        mines_around_square()
+    print('BOOOM!')
     
 
 for x in (range(width)):
