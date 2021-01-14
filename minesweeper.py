@@ -1,47 +1,50 @@
 import random
+import tkinter
+from tkinter import ttk
 
-width = 5
+width = 21
 height = width
 
 def generate_random_mine_locations(where_user_clicked, how_many_mines_user_wants):
+    """ Generates mine locations across the board after the user
+    clicks the first square """
     mine_locations = []
     while len(mine_locations) < how_many_mines_user_wants:
-        x = random.randrange(WIDTH)
-        y = random.randrange(HEIGHT)
+        x = random.randrange(width)
+        y = random.randrange(height)
         if (x, y) != where_user_clicked and (x, y) not in mine_locations:
             mine_locations.append((x, y))
     return mine_locations
 
+<<<<<<< HEAD
 import tkinter
 from tkinter import ttk
 
 
+=======
+>>>>>>> 54ceafde5be33366fc8cf82153b8fe1aea0ba11b
 root = tkinter.Tk()
 root.resizable(False, False)
 big_frame = ttk.Frame(root)
-big_frame.pack(fill='both', expand=True)
+big_frame.pack(fill = 'both', expand = True)
 
-# None means that we'll create the button later
-
+<<<<<<< HEAD
 for y, row in enumerate(range(0, 21)):
     for x, character in enumerate(range(0, 21)):
         if character is not None:
             # try this without width=3 so you'll know why i put it there
             button = ttk.Button(big_frame, width=3)
             button.grid(row=y, column=x, sticky='nswe')
+=======
+>>>>>>> 54ceafde5be33366fc8cf82153b8fe1aea0ba11b
 
-# the widths of these buttons are set to smallest possible values because grid
-# will make sure that they are wide enough, e.g. zerobutton is below '1' and
-# '2', and it will have the same width as the '1' and '2' buttons together
+for x in (range(width)):
+    for y in (range(height)):
+        button = ttk.Button(big_frame, text = x, width = 2)
+        button.grid(row = y, column = x, sticky = 'nswe')
 
 
-# let's make everything stretch when the window is resized
-for x in range(20):
-    big_frame.grid_columnconfigure(x, weight=1)
-for y in range(20):
-    big_frame.grid_rowconfigure(y, weight=1)
-
-root.title("Calculator")
+root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
 
 def mines_around_square(mine_locations, current_square):
@@ -66,4 +69,7 @@ def mines_around_square(mine_locations, current_square):
 ### Test for function mines_around_square
 # mine_locations = [(2,3), (3,3), (4,3), (2,4), (4,4), (2,5), (3,5), (4,5)]
 # print(mines_around_square(mine_locations, (3,4)))   # should be 8
+<<<<<<< HEAD
 
+=======
+>>>>>>> 54ceafde5be33366fc8cf82153b8fe1aea0ba11b
