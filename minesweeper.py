@@ -21,14 +21,6 @@ root.resizable(False, False)
 big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
-
-for y, row in enumerate(range(0, 21)):
-    for x, character in enumerate(range(0, 21)):
-        if character is not None:
-            # try this without width=3 so you'll know why i put it there
-            button = ttk.Button(big_frame, width=3)
-            button.grid(row=y, column=x, sticky='nswe')
-
 for x in (range(width)):
     for y in (range(height)):
         button = ttk.Button(big_frame, width = 2)
