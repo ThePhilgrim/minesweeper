@@ -28,10 +28,10 @@ def check_if_theres_mine():
 canvas = tkinter.Canvas(big_frame, width=500, height=500, bg='black')
 canvas.pack(fill='both', expand=True)
 
+button_image = PhotoImage(file='button_small.png')   # must be outside loop
 for x in (range(width)):
     for y in (range(height)):
-        button_style=PhotoImage(file='C:/Users/Martin/minesweeper/button_small.png')
-        canvas.create_image(25, 25, image=button_style)
+        canvas.create_image(25, 25, image=button_image)
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
