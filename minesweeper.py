@@ -5,54 +5,85 @@ from tkinter import ttk
 width = 21
 height = width
 
+how_many_mines_user_wants = 150
+
+mine_locations = []
+
+
 def generate_random_mine_locations(where_user_clicked, how_many_mines_user_wants):
     """ Generates mine locations across the board after the user
     clicks the first square """
-    mine_locations = []
     while len(mine_locations) < how_many_mines_user_wants:
         x = random.randrange(width)
         y = random.randrange(height)
         if (x, y) != where_user_clicked and (x, y) not in mine_locations:
             mine_locations.append((x, y))
-    return mine_locations
+
 
 root = tkinter.Tk()
 root.resizable(False, False)
 big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
-def check_if_theres_mine():
-    print('BOOOM!')
-
 
 for x in (range(width)):
     for y in (range(height)):
-        button = ttk.Label(big_frame, width = 2, text = 'a', relief='sunken')
-        button.state(['pressed'])
-        button.grid(row = y, column = x, sticky = 'nswe')
+        label = ttk.Label(big_frame, width = 2, text = 'a', relief='sunken')
+        label.grid(row = y, column = x, sticky = 'nswe')
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
 
-def mines_around_square(mine_locations, current_square):
+def mines_around_square(mine_locations, clicked_square):
     """ Looks at the squares adjacent to current_square and counts
         how many mines there are """
     adjacent_mines = 0
     for mine in mine_locations:
-        if ((mine[0] == current_square[0] -1 or
-             mine[0] == current_square[0] +1) and
-            (mine[1] == current_square[1] or
-             mine[1] == current_square[1] -1 or
-             mine[1] == current_square[1] +1)):
+        if ((mine[0] == clicked_square[0] -1 or
+             mine[0] == clicked_square[0] +1) and
+            (mine[1] == clicked_square[1] or
+             mine[1] == clicked_square[1] -1 or
+             mine[1] == clicked_square[1] +1)):
             adjacent_mines += 1
-        elif ((mine[1] == current_square[1] -1 or
-               mine[1] == current_square[1] +1) and
-              (mine[0] == current_square[0] or
-               mine[0] == current_square[0] -1 or
-               mine[0] == current_square[0] +1)):
+        elif ((mine[1] == clicked_square[1] -1 or
+               mine[1] == clicked_square[1] +1) and
+              (mine[0] == clicked_square[0] or
+               mine[0] == clicked_square[0] -1 or
+               mine[0] == clicked_square[0] +1)):
             adjacent_mines += 1
     return adjacent_mines
 
 ### Test for function mines_around_square
 # mine_locations = [(2,3), (3,3), (4,3), (2,4), (4,4), (2,5), (3,5), (4,5)]
 # print(mines_around_square(mine_locations, (3,4)))   # should be 8
+
+
+
+### Akuli, please take a look on this if statement, if it has sense /Phil ###
+already_clicked_squares = []
+if label in already_clicked_squares:
+    label.config(relief='sunken') # or button['relief']='sunken'
+
+
+def user_clicked_square(x, y):
+    """ Defines what happens when the user clicks on a square. """
+    generate_random_mine_locations((0,0), how_many_mines_user_wants)
+    clicked_square = (x, y)
+    live_message = ["You're alive.. for now !", "You think you're smart, huh?",
+    "Great.. now what?", "There's no mine in the top right corner! Promise!",
+    "Wait, why are there even mines everywhere??", "Feeling lucky, punk?"]
+    fail_message = ["Sorry bud, lost a couple of limbs there ..",
+    "Aww, so unlucky! You almost didn't step on it!",
+    "Ouch, that must've hurt..", "Dance, bitch!", "Happy birthday!",
+    "Hasta la vista.. baby!"]
+    if clicked_square in mine_locations:
+        print("BOOOOOOOOOOOOOOOOOOOOOM\n")
+        print(random.choice(fail_message))
+    else:
+        mines_around_square(mine_locations, clicked_square)
+        already_clicked_squares.append(clicked_square)
+        print(random.choice(live_message))
+# Should return adjacent_mines, but it's not defined (scope error). Need help
+# to solve it. Would like to keep adjacent_mines inside mines_around_square function.
+
+print(user_clicked_square(3, 8))
