@@ -23,9 +23,9 @@ big_frame.pack(fill = 'both', expand = True)
 
 for x in (range(width)):
     for y in (range(height)):
-        button = ttk.Button(big_frame, width = 2)
+        button = ttk.Button(big_frame, width = 3)
+        button.state(['pressed'])
         button.grid(row = y, column = x, sticky = 'nswe')
-
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
