@@ -1,6 +1,7 @@
 import random
 import tkinter
 from tkinter import ttk
+from tkinter import PhotoImage
 
 width = 21
 height = width
@@ -26,10 +27,13 @@ big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
 
+canvas = tkinter.Canvas(big_frame, width=500, height=500, bg='black')
+canvas.pack(fill='both', expand=True)
+
+button_image = PhotoImage(file='button_small.png')   # must be outside loop
 for x in (range(width)):
     for y in (range(height)):
-        label = ttk.Label(big_frame, width = 2, text = 'a', relief='sunken')
-        label.grid(row = y, column = x, sticky = 'nswe')
+        canvas.create_image(25, 25, image=button_image)
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
@@ -60,9 +64,11 @@ def mines_around_square(mine_locations, clicked_square):
 
 
 ### Akuli, please take a look on this if statement, if it has sense /Phil ###
-already_clicked_squares = []
-if label in already_clicked_squares:
-    label.config(relief='sunken') # or button['relief']='sunken'
+### Update: label was removed and substituted by canvas. Not sure how label.config
+# would work then ###
+
+# if label in already_clicked_squares:
+    #label.config(relief='sunken') # or button['relief']='sunken'
 
 
 def user_clicked_square(x, y):
