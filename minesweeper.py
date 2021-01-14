@@ -12,7 +12,6 @@ def generate_random_mine_locations(where_user_clicked, how_many_mines_user_wants
             mine_locations.append((x, y))
     return mine_locations
 
-<<<<<<< HEAD
 import tkinter
 from tkinter import ttk
 
@@ -28,7 +27,7 @@ for y, row in enumerate(range(0, 21)):
     for x, character in enumerate(range(0, 21)):
         if character is not None:
             # try this without width=3 so you'll know why i put it there
-            button = ttk.Button(big_frame, text=character, width=3)
+            button = ttk.Button(big_frame, width=3)
             button.grid(row=y, column=x, sticky='nswe')
 
 # the widths of these buttons are set to smallest possible values because grid
@@ -44,7 +43,7 @@ for y in range(20):
 
 root.title("Calculator")
 root.mainloop()
-=======
+
 def mines_around_square(mine_locations, current_square):
     """ Looks at the squares adjacent to current_square and counts
         how many mines there are """
@@ -67,4 +66,4 @@ def mines_around_square(mine_locations, current_square):
 ### Test for function mines_around_square
 # mine_locations = [(2,3), (3,3), (4,3), (2,4), (4,4), (2,5), (3,5), (4,5)]
 # print(mines_around_square(mine_locations, (3,4)))   # should be 8
->>>>>>> a2d4c023da0bc15bbde431ff42baf2c86ae857b9
+
