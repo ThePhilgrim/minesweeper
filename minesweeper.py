@@ -23,11 +23,11 @@ big_frame.pack(fill = 'both', expand = True)
 
 def check_if_theres_mine():
     print('BOOOM!')
-    
+
 
 for x in (range(width)):
     for y in (range(height)):
-        button = ttk.Button(big_frame, width = 3, command=check_if_theres_mine)
+        button = ttk.Label(big_frame, width = 2, text = 'a', relief='sunken')
         button.state(['pressed'])
         button.grid(row = y, column = x, sticky = 'nswe')
 
@@ -56,5 +56,3 @@ def mines_around_square(mine_locations, current_square):
 ### Test for function mines_around_square
 # mine_locations = [(2,3), (3,3), (4,3), (2,4), (4,4), (2,5), (3,5), (4,5)]
 # print(mines_around_square(mine_locations, (3,4)))   # should be 8
-
-
