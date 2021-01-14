@@ -30,7 +30,7 @@ def check_if_theres_mine():
 
 for x in (range(width)):
     for y in (range(height)):
-        button = ttk.Button(big_frame, width = 3)
+        button = ttk.Button(big_frame, width = 3, command=check_if_theres_mine)
         button.state(['pressed'])
         button.grid(row = y, column = x, sticky = 'nswe')
 
