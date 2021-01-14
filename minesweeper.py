@@ -2,10 +2,12 @@ import random
 import tkinter
 from tkinter import ttk
 
-width = 5
+width = 21
 height = width
 
 def generate_random_mine_locations(where_user_clicked, how_many_mines_user_wants):
+    """ Generates mine locations across the board after the user
+    clicks the first square """
     mine_locations = []
     while len(mine_locations) < how_many_mines_user_wants:
         x = random.randrange(width)
@@ -17,14 +19,13 @@ def generate_random_mine_locations(where_user_clicked, how_many_mines_user_wants
 root = tkinter.Tk()
 root.resizable(False, False)
 big_frame = ttk.Frame(root)
-big_frame.pack(fill='both', expand=True)
+big_frame.pack(fill = 'both', expand = True)
 
 
-for y, row in enumerate(range(0, 21)):
-    for x, character in enumerate(range(0, 21)):
-            # try this without width=3 so you'll know why i put it there
-        button = ttk.Button(big_frame, text=character, width=3)
-        button.grid(row=y, column=x, sticky='nswe')
+for x in (range(width)):
+    for y in (range(height)):
+        button = ttk.Button(big_frame, text = x, width = 2)
+        button.grid(row = y, column = x, sticky = 'nswe')
 
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
