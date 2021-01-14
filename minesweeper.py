@@ -1,6 +1,7 @@
 import random
 import tkinter
 from tkinter import ttk
+from tkinter import PhotoImage
 
 width = 21
 height = width
@@ -24,12 +25,13 @@ big_frame.pack(fill = 'both', expand = True)
 def check_if_theres_mine():
     print('BOOOM!')
 
+canvas = tkinter.Canvas(big_frame, width=500, height=500, bg='black')
+canvas.pack(fill='both', expand=True)
 
 for x in (range(width)):
     for y in (range(height)):
-        button = ttk.Label(big_frame, width = 2, text = 'a', relief='sunken')
-        button.state(['pressed'])
-        button.grid(row = y, column = x, sticky = 'nswe')
+        button_style=PhotoImage(file='C:/Users/Martin/minesweeper/button_small.png')
+        canvas.create_image(25, 25, image=button_style)
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
