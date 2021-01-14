@@ -16,31 +16,22 @@ def generate_random_mine_locations(where_user_clicked, how_many_mines_user_wants
             mine_locations.append((x, y))
     return mine_locations
 
-<<<<<<< HEAD
-import tkinter
-from tkinter import ttk
-
-
-=======
->>>>>>> 54ceafde5be33366fc8cf82153b8fe1aea0ba11b
 root = tkinter.Tk()
 root.resizable(False, False)
 big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
-<<<<<<< HEAD
+
 for y, row in enumerate(range(0, 21)):
     for x, character in enumerate(range(0, 21)):
         if character is not None:
             # try this without width=3 so you'll know why i put it there
             button = ttk.Button(big_frame, width=3)
             button.grid(row=y, column=x, sticky='nswe')
-=======
->>>>>>> 54ceafde5be33366fc8cf82153b8fe1aea0ba11b
 
 for x in (range(width)):
     for y in (range(height)):
-        button = ttk.Button(big_frame, text = x, width = 2)
+        button = ttk.Button(big_frame, width = 2)
         button.grid(row = y, column = x, sticky = 'nswe')
 
 
@@ -69,7 +60,5 @@ def mines_around_square(mine_locations, current_square):
 ### Test for function mines_around_square
 # mine_locations = [(2,3), (3,3), (4,3), (2,4), (4,4), (2,5), (3,5), (4,5)]
 # print(mines_around_square(mine_locations, (3,4)))   # should be 8
-<<<<<<< HEAD
 
-=======
->>>>>>> 54ceafde5be33366fc8cf82153b8fe1aea0ba11b
+
