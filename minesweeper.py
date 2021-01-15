@@ -56,12 +56,10 @@ def clicked_square(event):
         coordinate[1] * 25 + 12.5, text = str(mine_count))
 
 def flagging(event):
-    print(event.__dict__)
-    #flag_coordinates = []
-    #x_flag = int(event.x / 25) * 25
-    #y_flag = int(event.y / 25) * 25
-    print('RIGHT CLICK')
-    #canvas.create_image(int(event.x / 25)*25, int(event.y / 25)*25, image=flag_image, anchor='center')
+    flag_coordinates = []
+    x_flag = int(event.x / 25) * 25
+    y_flag = int(event.y / 25) * 25
+    canvas.create_image(int(event.x / 25) * 25 + 12.5, int(event.y / 25) * 25 + 12.5, image=flag_image, anchor='center')
 
 
 canvas = tkinter.Canvas(big_frame, width=25*width, height=25*height, highlightthickness=0, bg='black')
