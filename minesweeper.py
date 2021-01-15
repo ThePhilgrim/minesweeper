@@ -8,7 +8,7 @@ width = 21
 height = width
 button_size = 25
 
-how_many_mines_user_wants = 300
+how_many_mines_user_wants = 120
 
 mine_locations = []
 
@@ -30,6 +30,7 @@ big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
 def clicked_square(event):
+    print(event.__dict__)
     x = int(event.x / 25)
     y = int(event.y / 25)
     coordinate = (x, y)
@@ -54,14 +55,20 @@ def clicked_square(event):
         canvas.create_text(coordinate[0] * 25 + 12.5,
         coordinate[1] * 25 + 12.5, text = str(mine_count))
 
-def coordinates_flag(event):
-    print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
+def flagging(event):
+    print(event.__dict__)
+    #flag_coordinates = []
+    #x_flag = int(event.x / 25) * 25
+    #y_flag = int(event.y / 25) * 25
+    print('RIGHT CLICK')
+    #canvas.create_image(int(event.x / 25)*25, int(event.y / 25)*25, image=flag_image, anchor='center')
 
 
 canvas = tkinter.Canvas(big_frame, width=25*width, height=25*height, highlightthickness=0, bg='black')
 canvas.pack(fill='both', expand=True)
 canvas.bind('<Button-1>', clicked_square)
-canvas.bind('<Button-2>', coordinates_flag)
+canvas.bind('<Button-2>', flagging)
+canvas.bind('<Button-3>', flagging)
 
 
 where_this_file_is = pathlib.Path(__file__).parent
@@ -86,13 +93,12 @@ fail_message = ["Sorry bud, lost a couple of limbs there ..",
 
 statusbar=tkinter.Label(root, bd=1, text='***Lets go!***', relief=tkinter.SUNKEN, anchor=tkinter.W)
 statusbar.pack(side=tkinter.BOTTOM, fill=tkinter.X)
-    
+
 def mines_around_square(mine_locations, coordinate):
     """ Looks at the squares adjacent to current_square and counts
         how many mines there are """
     adjacent_mines = 0
     for mine in mine_locations:
-        print("*********", mine, coordinate, "********")
         if ((mine[0] == coordinate[0] -1 or
              mine[0] == coordinate[0] +1) and
             (mine[1] == coordinate[1] or
