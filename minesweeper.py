@@ -45,7 +45,7 @@ button_image = PhotoImage(file=(where_this_file_is / 'button_small.png'))
 
 for x in (range(0, 21*25, 25)):
     for y in (range(0, 21*25, 25)):
-        canvas.create_image((x, y), image=button_image)
+        canvas.create_image((x, y), image=button_image, anchor='nw')
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
