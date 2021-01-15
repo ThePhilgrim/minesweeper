@@ -41,16 +41,12 @@ def clicked_square(event):
     print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
 
     if coordinate in mine_locations:
-        print("BOOOOOOOOOOOOOOOOOOOOOM\n")
-        print(random.choice(fail_message))
+        statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
     else:
-        print(random.choice(live_message))
+        statusbar.config(text=f"{random.choice(live_message)}")
         mine_count = mines_around_square(mine_locations, coordinate)
-        canvas.create_text((coordinate[0] * 25 + 12.5),
-        (coordinate[1] * 25 + 12.5), text=(str(mines_around_square(mine_locations, clicked_square))))
-
-
-
+#        canvas.create_text((coordinate[0] * 25 + 12.5),
+#        (coordinate[1] * 25 + 12.5), text=(str(mines_around_square(mine_locations, clicked_square))))
 
 def coordinates_flag(event):
     print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
@@ -71,8 +67,6 @@ for x in range(0, button_size*width, button_size):
     for y in (range(0, button_size*height, button_size)):
         canvas.create_image((x, y), image=button_image, anchor='nw')
 
-
-
 live_message = ["You're alive.. for now !", "You think you're smart, huh?",
     "Great.. now what?", "There's no mine in the top right corner! Promise!",
     "Wait, why are there even mines everywhere??", "Feeling lucky, punk?"]
@@ -81,8 +75,10 @@ fail_message = ["Sorry bud, lost a couple of limbs there ..",
     "Ouch, that must've hurt..", "Dance, bitch!", "Happy birthday!",
     "Hasta la vista.. baby!"]
 
-statusbar=tkinter.Label(root, text=random.choice(live_message), bd=1, relief=tkinter.SUNKEN, anchor=tkinter.W)
+
+statusbar=tkinter.Label(root, bd=1, text='***Lets go!***', relief=tkinter.SUNKEN, anchor=tkinter.W)
 statusbar.pack(side=tkinter.BOTTOM, fill=tkinter.X)
+
 
 def mines_around_square(mine_locations, clicked_square):
     """ Looks at the squares adjacent to current_square and counts
