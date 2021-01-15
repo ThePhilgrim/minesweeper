@@ -30,7 +30,7 @@ big_frame.pack(fill = 'both', expand = True)
 
 def coordinates(event):
     #coordinate['text'] =
-    canvas.create_image(int(event.x / 25)*25, int(event.y / 25)*25, image=button_image_pressed)
+    canvas.create_image(int(event.x / 25)*25, int(event.y / 25)*25, image=button_image_pressed, anchor='nw')
     print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
 
 def coordinates_flag(event):
