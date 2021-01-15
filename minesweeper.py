@@ -35,7 +35,7 @@ def coordinates_flag(event):
     print(f'x = {event.x} y = {event.y}')
 
 
-canvas = tkinter.Canvas(big_frame, width=25*width, height=25*height, bg='black')
+canvas = tkinter.Canvas(big_frame, width=25*width, height=25*height, highlightthickness=0, bg='black')
 canvas.pack(fill='both', expand=True)
 canvas.bind('<Button-1>', coordinates)
 canvas.bind('<Button-2>', coordinates_flag)
