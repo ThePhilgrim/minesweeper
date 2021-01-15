@@ -25,6 +25,7 @@ def generate_random_mine_locations(where_user_clicked, how_many_mines_user_wants
 
 root = tkinter.Tk()
 root.resizable(False, False)
+
 big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
@@ -61,7 +62,17 @@ def print_adjacent_mines(coordinate):
         mine_count = mines_around_square(mine_locations, coordinate)
         canvas.create_text((coordinate[0] * 25), (coordinate[1] * 25), text = ('lol'))
 
-
+live_message = ["You're alive.. for now !", "You think you're smart, huh?",
+    "Great.. now what?", "There's no mine in the top right corner! Promise!",
+    "Wait, why are there even mines everywhere??", "Feeling lucky, punk?"]
+fail_message = ["Sorry bud, lost a couple of limbs there ..",
+    "Aww, so unlucky! You almost didn't step on it!",
+    "Ouch, that must've hurt..", "Dance, bitch!", "Happy birthday!",
+    "Hasta la vista.. baby!"]
+    
+statusbar=tkinter.Label(root, text=random.choice(live_message), bd=1, relief=tkinter.SUNKEN, anchor=tkinter.W)
+statusbar.pack(side=tkinter.BOTTOM, fill=tkinter.X)
+               
 def mines_around_square(mine_locations, clicked_square):
     """ Looks at the squares adjacent to current_square and counts
         how many mines there are """
@@ -90,13 +101,6 @@ def user_clicked_square(x, y):
     if len(mine_locations) == 0:
         generate_random_mine_locations((0,0), how_many_mines_user_wants)
     clicked_square = (x, y)
-    live_message = ["You're alive.. for now !", "You think you're smart, huh?",
-    "Great.. now what?", "There's no mine in the top right corner! Promise!",
-    "Wait, why are there even mines everywhere??", "Feeling lucky, punk?"]
-    fail_message = ["Sorry bud, lost a couple of limbs there ..",
-    "Aww, so unlucky! You almost didn't step on it!",
-    "Ouch, that must've hurt..", "Dance, bitch!", "Happy birthday!",
-    "Hasta la vista.. baby!"]
     if clicked_square in mine_locations:
         print("BOOOOOOOOOOOOOOOOOOOOOM\n")
         print(random.choice(fail_message))
