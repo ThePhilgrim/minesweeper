@@ -54,7 +54,8 @@ def clicked_square(event):
 #        (coordinate[1] * 25 + 12.5), text=(str(mines_around_square(mine_locations, clicked_square))))
 
         canvas.create_text(coordinate[0] * 25 + 12.5,
-        coordinate[1] * 25 + 12.5, text = str(mine_count))
+        coordinate[1] * 25 + 12.5, text = str(mine_count), font=("helvetica", 22, 'bold'), fill='yellow')
+
 
 def flagging(event):
     """ Takes right click events, and places or removes flag_image.
