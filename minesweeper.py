@@ -36,7 +36,7 @@ for x in (range(width)):
         canvas.create_image(25, 25, image=button_image)
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
-root.mainloop()
+#root.mainloop()
 
 def mines_around_square(mine_locations, clicked_square):
     """ Looks at the squares adjacent to current_square and counts
@@ -61,11 +61,10 @@ def mines_around_square(mine_locations, clicked_square):
 # mine_locations = [(2,3), (3,3), (4,3), (2,4), (4,4), (2,5), (3,5), (4,5)]
 # print(mines_around_square(mine_locations, (3,4)))   # should be 8
 
-
-# TODO: generate_random_mine_locations should be called only on first click
 def user_clicked_square(x, y):
     """ Defines what happens when the user clicks on a square. """
-    generate_random_mine_locations((0,0), how_many_mines_user_wants)
+    if len(mine_locations) == 0:
+        generate_random_mine_locations((0,0), how_many_mines_user_wants)
     clicked_square = (x, y)
     live_message = ["You're alive.. for now !", "You think you're smart, huh?",
     "Great.. now what?", "There's no mine in the top right corner! Promise!",
@@ -81,9 +80,8 @@ def user_clicked_square(x, y):
         # TODO: add code to make button look like it's pressed down
         # TODO: show mines_around_square number in the button
         mines_around_square(mine_locations, clicked_square)
-        already_clicked_squares.append(clicked_square)
         print(random.choice(live_message))
 # Should return adjacent_mines, but it's not defined (scope error). Need help
 # to solve it. Would like to keep adjacent_mines inside mines_around_square function.
 
-print(user_clicked_square(3, 8))
+user_clicked_square(3, 8)
