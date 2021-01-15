@@ -62,15 +62,7 @@ def mines_around_square(mine_locations, clicked_square):
 # print(mines_around_square(mine_locations, (3,4)))   # should be 8
 
 
-
-### Akuli, please take a look on this if statement, if it has sense /Phil ###
-### Update: label was removed and substituted by canvas. Not sure how label.config
-# would work then ###
-
-# if label in already_clicked_squares:
-    #label.config(relief='sunken') # or button['relief']='sunken'
-
-
+# TODO: generate_random_mine_locations should be called only on first click
 def user_clicked_square(x, y):
     """ Defines what happens when the user clicks on a square. """
     generate_random_mine_locations((0,0), how_many_mines_user_wants)
@@ -86,6 +78,8 @@ def user_clicked_square(x, y):
         print("BOOOOOOOOOOOOOOOOOOOOOM\n")
         print(random.choice(fail_message))
     else:
+        # TODO: add code to make button look like it's pressed down
+        # TODO: show mines_around_square number in the button
         mines_around_square(mine_locations, clicked_square)
         already_clicked_squares.append(clicked_square)
         print(random.choice(live_message))
