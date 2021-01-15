@@ -30,16 +30,26 @@ big_frame.pack(fill = 'both', expand = True)
 
 def coordinates(event):
     #coordinate['text'] =
-    print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
+    x = int(event.x / 25)
+    y = int(event.y / 25)
+    coordinate = (x, y)
+    print_adjacent_mines(coordinate)
+
 
 def coordinates_flag(event):
-    print(f'x = {event.x} y = {event.y}')
+    print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
 
 
 canvas = tkinter.Canvas(big_frame, width=25*width, height=25*height, highlightthickness=0, bg='black')
 canvas.pack(fill='both', expand=True)
 canvas.bind('<Button-1>', coordinates)
 canvas.bind('<Button-2>', coordinates_flag)
+
+def print_adjacent_mines(coordinate):
+    if coordinate not in mine_locations:
+        mine_count = mines_around_square(mine_locations, coordinate)
+        canvas.create_text(mine_count)
+
 
 where_this_file_is = pathlib.Path(__file__).parent
 button_image = PhotoImage(file=(where_this_file_is / 'button_small.png'))
@@ -48,8 +58,6 @@ for x in range(0, button_size*width, button_size):
     for y in (range(0, button_size*height, button_size)):
         canvas.create_image((x, y), image=button_image, anchor='nw')
 
-root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
-root.mainloop()
 
 def mines_around_square(mine_locations, clicked_square):
     """ Looks at the squares adjacent to current_square and counts
@@ -97,4 +105,7 @@ def user_clicked_square(x, y):
 # Should return adjacent_mines, but it's not defined (scope error). Need help
 # to solve it. Would like to keep adjacent_mines inside mines_around_square function.
 
-user_clicked_square(3, 8)
+# user_clicked_square(3, 8)
+
+root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
+root.mainloop()
