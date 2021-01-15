@@ -29,8 +29,6 @@ big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
 def coordinates(event):
-    #coordinate['text'] =
-
     x = int(event.x / 25)
     y = int(event.y / 25)
     coordinate = (x, y)
@@ -48,11 +46,6 @@ canvas.pack(fill='both', expand=True)
 canvas.bind('<Button-1>', coordinates)
 canvas.bind('<Button-2>', coordinates_flag)
 
-def print_adjacent_mines(coordinate):
-    if coordinate not in mine_locations:
-        mine_count = mines_around_square(mine_locations, coordinate)
-        canvas.create_text(mine_count)
-
 
 where_this_file_is = pathlib.Path(__file__).parent
 button_image = PhotoImage(file=(where_this_file_is / 'button_small.png'))
@@ -62,6 +55,11 @@ flag_image = PhotoImage(file=(where_this_file_is / 'flag_small.png'))
 for x in range(0, button_size*width, button_size):
     for y in (range(0, button_size*height, button_size)):
         canvas.create_image((x, y), image=button_image, anchor='nw')
+
+def print_adjacent_mines(coordinate):
+    if coordinate not in mine_locations:
+        mine_count = mines_around_square(mine_locations, coordinate)
+        canvas.create_text((coordinate[0] * 25), (coordinate[1] * 25), text = ('lol'))
 
 
 def mines_around_square(mine_locations, clicked_square):
