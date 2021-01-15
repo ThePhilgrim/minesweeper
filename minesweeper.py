@@ -39,7 +39,7 @@ for x in (range(width)):
         canvas.create_image(25, 25, image=button_image)
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
-#root.mainloop()
+root.mainloop()
 
 def mines_around_square(mine_locations, clicked_square):
     """ Looks at the squares adjacent to current_square and counts
