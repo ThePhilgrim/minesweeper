@@ -29,11 +29,14 @@ root.resizable(False, False)
 big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
+previously_clicked_square = []
+
 def clicked_square(event):
     """ Takes click events and prints number of adjacent mines,
     or generates bomb_image """
     x = int(event.x / button_size)
     y = int(event.y / button_size)
+    previously_clicked_square.append((x, y))
     coordinate = (x, y)
 
     if len(mine_locations) == 0:
@@ -65,12 +68,15 @@ def flagging(event):
     """ Takes right click events, and places or removes flag_image.
     Adds placed flag positions with their flag id into a dict. """
     flag_coordinates = [] # TODO: Change to dict with x_flag, y_flag as key and flag_id as value
-    x_flag = int(event.x / button_size) * button_size
-    y_flag = int(event.y / button_size) * button_size
+    x_flag = int(event.x / button_size)
+    y_flag = int(event.y / button_size)
     flag_coordinates.append((x_flag, y_flag))
     #if (x_flag, y_flag) not in flag_coordinates:
-    canvas.create_image(int(event.x / button_size) * button_size + (button_size / 2),
-    int(event.y / button_size) * button_size + (button_size / 2), image=flag_image, anchor='center')
+    if (x_flag, y_flag) in previously_clicked_square:
+        return
+    else:
+        canvas.create_image(int(event.x / button_size) * button_size + (button_size / 2),
+        int(event.y / button_size) * button_size + (button_size / 2), image=flag_image, anchor='center')
     # TODO Else: remove flag_id
 
 canvas = tkinter.Canvas(big_frame, width = button_size * width,
