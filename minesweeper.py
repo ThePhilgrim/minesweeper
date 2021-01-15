@@ -30,6 +30,8 @@ big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
 def clicked_square(event):
+    """ Takes click events and prints number of adjacent mines,
+    or generates bomb_image """
     print(event.__dict__)
     x = int(event.x / 25)
     y = int(event.y / 25)
@@ -44,6 +46,7 @@ def clicked_square(event):
     if coordinate in mine_locations:
         statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
         canvas.create_image(int(event.x / 25)*25, int(event.y / 25)*25, image=bomb_image, anchor='nw')
+        # TODO: Should break the current game and offer user to start a new game
 
     else:
         statusbar.config(text=f"{random.choice(live_message)}")
@@ -56,11 +59,15 @@ def clicked_square(event):
         coordinate[1] * 25 + 12.5, text = str(mine_count))
 
 def flagging(event):
-    flag_coordinates = []
+    """ Takes right click events, and places or removes flag_image.
+    Adds placed flag positions with their flag id into a dict. """
+    flag_coordinates = [] # TODO: Change to dict with x_flag, y_flag as key and flag_id as value
     x_flag = int(event.x / 25) * 25
     y_flag = int(event.y / 25) * 25
-    canvas.create_image(int(event.x / 25) * 25 + 12.5, int(event.y / 25) * 25 + 12.5, image=flag_image, anchor='center')
-
+    flag_coordinates.append((x_flag, y_flag))
+    if (x_flag, y_flag) not in flag_coordinates:
+        canvas.create_image(int(event.x / 25) * 25 + 12.5, int(event.y / 25) * 25 + 12.5, image=flag_image, anchor='center')
+    # TODO Else: remove flag_id
 
 canvas = tkinter.Canvas(big_frame, width=25*width, height=25*height, highlightthickness=0, bg='black')
 canvas.pack(fill='both', expand=True)
@@ -110,10 +117,6 @@ def mines_around_square(mine_locations, coordinate):
                mine[0] == coordinate[0] +1)):
             adjacent_mines += 1
     return adjacent_mines
-
-### Test for function mines_around_square
-# mine_locations = [(2,3), (3,3), (4,3), (2,4), (4,4), (2,5), (3,5), (4,5)]
-# print(mines_around_square(mine_locations, (3,4)))   # should be 8
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
