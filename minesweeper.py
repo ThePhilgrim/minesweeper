@@ -41,6 +41,7 @@ def clicked_square(event):
     print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
 
     if coordinate in mine_locations:
+        canvas.create_image(int(event.x / 25)*25, int(event.y / 25)*25, image=bomb_image, anchor='nw')
         print("BOOOOOOOOOOOOOOOOOOOOOM\n")
         print(random.choice(fail_message))
     else:
@@ -66,6 +67,8 @@ where_this_file_is = pathlib.Path(__file__).parent
 button_image = PhotoImage(file=(where_this_file_is / 'button_small.png'))
 button_image_pressed = PhotoImage(file=(where_this_file_is / 'pressed_button_small.png'))
 flag_image = PhotoImage(file=(where_this_file_is / 'flag_small.png'))
+bomb_image = PhotoImage(file=(where_this_file_is / 'bomb_small.png'))
+
 
 for x in range(0, button_size*width, button_size):
     for y in (range(0, button_size*height, button_size)):
