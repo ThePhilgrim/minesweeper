@@ -6,6 +6,7 @@ from tkinter import PhotoImage
 
 width = 21
 height = width
+button_size = 25
 
 how_many_mines_user_wants = 300
 
@@ -43,8 +44,8 @@ canvas.bind('<Button-2>', coordinates_flag)
 where_this_file_is = pathlib.Path(__file__).parent
 button_image = PhotoImage(file=(where_this_file_is / 'button_small.png'))
 
-for x in (range(0, 21*25, 25)):
-    for y in (range(0, 21*25, 25)):
+for x in range(0, button_size*width, button_size):
+    for y in (range(0, button_size*height, button_size)):
         canvas.create_image((x, y), image=button_image, anchor='nw')
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
