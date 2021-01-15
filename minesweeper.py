@@ -46,8 +46,8 @@ def clicked_square(event):
     else:
         print(random.choice(live_message))
         mine_count = mines_around_square(mine_locations, coordinate)
-        canvas.create_text((coordinate[0] * 25 + 12.5),
-        (coordinate[1] * 25 + 12.5), text=(str(mines_around_square(mine_locations, clicked_square))))
+        canvas.create_text(coordinate[0] * 25 + 12.5,
+        coordinate[1] * 25 + 12.5, text = str(mine_count))
 
 
 
@@ -84,22 +84,23 @@ fail_message = ["Sorry bud, lost a couple of limbs there ..",
 statusbar=tkinter.Label(root, text=random.choice(live_message), bd=1, relief=tkinter.SUNKEN, anchor=tkinter.W)
 statusbar.pack(side=tkinter.BOTTOM, fill=tkinter.X)
 
-def mines_around_square(mine_locations, clicked_square):
+def mines_around_square(mine_locations, coordinate):
     """ Looks at the squares adjacent to current_square and counts
         how many mines there are """
     adjacent_mines = 0
     for mine in mine_locations:
-        if ((mine[0] == clicked_square[0] -1 or
-             mine[0] == clicked_square[0] +1) and
-            (mine[1] == clicked_square[1] or
-             mine[1] == clicked_square[1] -1 or
-             mine[1] == clicked_square[1] +1)):
+        print("*********", mine, coordinate, "********")
+        if ((mine[0] == coordinate[0] -1 or
+             mine[0] == coordinate[0] +1) and
+            (mine[1] == coordinate[1] or
+             mine[1] == coordinate[1] -1 or
+             mine[1] == coordinate[1] +1)):
             adjacent_mines += 1
-        elif ((mine[1] == clicked_square[1] -1 or
-               mine[1] == clicked_square[1] +1) and
-              (mine[0] == clicked_square[0] or
-               mine[0] == clicked_square[0] -1 or
-               mine[0] == clicked_square[0] +1)):
+        elif ((mine[1] == coordinate[1] -1 or
+               mine[1] == coordinate[1] +1) and
+              (mine[0] == coordinate[0] or
+               mine[0] == coordinate[0] -1 or
+               mine[0] == coordinate[0] +1)):
             adjacent_mines += 1
     return adjacent_mines
 
