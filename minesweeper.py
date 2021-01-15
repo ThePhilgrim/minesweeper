@@ -29,14 +29,15 @@ root.resizable(False, False)
 big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
-def coordinates(event):
+def clicked_square(event):
     x = int(event.x / 25)
     y = int(event.y / 25)
     coordinate = (x, y)
-    print_adjacent_mines(coordinate)
 
     canvas.create_image(int(event.x / 25)*25, int(event.y / 25)*25, image=button_image_pressed, anchor='nw')
     print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
+
+    print_adjacent_mines(coordinate)
 
 def coordinates_flag(event):
     print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
@@ -44,7 +45,7 @@ def coordinates_flag(event):
 
 canvas = tkinter.Canvas(big_frame, width=25*width, height=25*height, highlightthickness=0, bg='black')
 canvas.pack(fill='both', expand=True)
-canvas.bind('<Button-1>', coordinates)
+canvas.bind('<Button-1>', clicked_square)
 canvas.bind('<Button-2>', coordinates_flag)
 
 
@@ -60,7 +61,8 @@ for x in range(0, button_size*width, button_size):
 def print_adjacent_mines(coordinate):
     if coordinate not in mine_locations:
         mine_count = mines_around_square(mine_locations, coordinate)
-        canvas.create_text((coordinate[0] * 25), (coordinate[1] * 25), text = ('lol'))
+        canvas.create_text((coordinate[0] * 25 + 12.5),
+        (coordinate[1] * 25 + 12.5), text=(str(mines_around_square(mine_locations, clicked_square))))
 
 live_message = ["You're alive.. for now !", "You think you're smart, huh?",
     "Great.. now what?", "There's no mine in the top right corner! Promise!",
