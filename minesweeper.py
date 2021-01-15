@@ -36,7 +36,13 @@ def clicked_square(event):
     canvas.create_image(int(event.x / 25)*25, int(event.y / 25)*25, image=button_image_pressed, anchor='nw')
     print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
 
-    print_adjacent_mines(coordinate)
+    if coordinate not in mine_locations:
+        mine_count = mines_around_square(mine_locations, coordinate)
+        canvas.create_text((coordinate[0] * 25 + 12.5),
+        (coordinate[1] * 25 + 12.5), text=(str(mines_around_square(mine_locations, clicked_square))))
+
+
+
 
 def coordinates_flag(event):
     print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
@@ -57,11 +63,7 @@ for x in range(0, button_size*width, button_size):
     for y in (range(0, button_size*height, button_size)):
         canvas.create_image((x, y), image=button_image, anchor='nw')
 
-def print_adjacent_mines(coordinate):
-    if coordinate not in mine_locations:
-        mine_count = mines_around_square(mine_locations, coordinate)
-        canvas.create_text((coordinate[0] * 25 + 12.5),
-        (coordinate[1] * 25 + 12.5), text=(str(mines_around_square(mine_locations, clicked_square))))
+
 
 
 def mines_around_square(mine_locations, clicked_square):
