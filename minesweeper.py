@@ -7,7 +7,7 @@ from tkinter import PhotoImage
 width = 21
 height = width
 
-how_many_mines_user_wants = 150
+how_many_mines_user_wants = 300
 
 mine_locations = []
 
@@ -29,7 +29,7 @@ big_frame.pack(fill = 'both', expand = True)
 
 def coordinates(event):
     #coordinate['text'] =
-    print(f'x = {event.x} y = {event.y}')
+    print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
 
 def coordinates_flag(event):
     print(f'x = {event.x} y = {event.y}')
