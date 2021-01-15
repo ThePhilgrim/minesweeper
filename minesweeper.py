@@ -28,15 +28,15 @@ big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
 
-canvas = tkinter.Canvas(big_frame, width=500, height=500, bg='black')
+canvas = tkinter.Canvas(big_frame, width=25*width, height=25*height, bg='black')
 canvas.pack(fill='both', expand=True)
 
 where_this_file_is = pathlib.Path(__file__).parent
 button_image = PhotoImage(file=(where_this_file_is / 'button_small.png'))
 
-for x in (range(width)):
-    for y in (range(height)):
-        canvas.create_image(25, 25, image=button_image)
+for x in (range(0, 21*25, 25)):
+    for y in (range(0, 21*25, 25)):
+        canvas.create_image((x, y), image=button_image)
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
