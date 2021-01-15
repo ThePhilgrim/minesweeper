@@ -34,10 +34,17 @@ def clicked_square(event):
     y = int(event.y / 25)
     coordinate = (x, y)
 
+    if len(mine_locations) == 0:
+        generate_random_mine_locations(coordinate, how_many_mines_user_wants)
+
     canvas.create_image(int(event.x / 25)*25, int(event.y / 25)*25, image=button_image_pressed, anchor='nw')
     print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
 
-    if coordinate not in mine_locations:
+    if coordinate in mine_locations:
+        print("BOOOOOOOOOOOOOOOOOOOOOM\n")
+        print(random.choice(fail_message))
+    else:
+        print(random.choice(live_message))
         mine_count = mines_around_square(mine_locations, coordinate)
         canvas.create_text((coordinate[0] * 25 + 12.5),
         (coordinate[1] * 25 + 12.5), text=(str(mines_around_square(mine_locations, clicked_square))))
@@ -73,10 +80,10 @@ fail_message = ["Sorry bud, lost a couple of limbs there ..",
     "Aww, so unlucky! You almost didn't step on it!",
     "Ouch, that must've hurt..", "Dance, bitch!", "Happy birthday!",
     "Hasta la vista.. baby!"]
-    
+
 statusbar=tkinter.Label(root, text=random.choice(live_message), bd=1, relief=tkinter.SUNKEN, anchor=tkinter.W)
 statusbar.pack(side=tkinter.BOTTOM, fill=tkinter.X)
-               
+
 def mines_around_square(mine_locations, clicked_square):
     """ Looks at the squares adjacent to current_square and counts
         how many mines there are """
@@ -99,24 +106,6 @@ def mines_around_square(mine_locations, clicked_square):
 ### Test for function mines_around_square
 # mine_locations = [(2,3), (3,3), (4,3), (2,4), (4,4), (2,5), (3,5), (4,5)]
 # print(mines_around_square(mine_locations, (3,4)))   # should be 8
-
-def user_clicked_square(x, y):
-    """ Defines what happens when the user clicks on a square. """
-    if len(mine_locations) == 0:
-        generate_random_mine_locations((0,0), how_many_mines_user_wants)
-    clicked_square = (x, y)
-    if clicked_square in mine_locations:
-        print("BOOOOOOOOOOOOOOOOOOOOOM\n")
-        print(random.choice(fail_message))
-    else:
-        # TODO: add code to make button look like it's pressed down
-        # TODO: show mines_around_square number in the button
-        mines_around_square(mine_locations, clicked_square)
-        print(random.choice(live_message))
-# Should return adjacent_mines, but it's not defined (scope error). Need help
-# to solve it. Would like to keep adjacent_mines inside mines_around_square function.
-
-# user_clicked_square(3, 8)
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
