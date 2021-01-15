@@ -1,3 +1,4 @@
+import pathlib
 import random
 import tkinter
 from tkinter import ttk
@@ -30,7 +31,9 @@ big_frame.pack(fill = 'both', expand = True)
 canvas = tkinter.Canvas(big_frame, width=500, height=500, bg='black')
 canvas.pack(fill='both', expand=True)
 
-button_image = PhotoImage(file='button_small.png')   # must be outside loop
+where_this_file_is = pathlib.Path(__file__).parent
+button_image = PhotoImage(file=(where_this_file_is / 'button_small.png'))
+
 for x in (range(width)):
     for y in (range(height)):
         canvas.create_image(25, 25, image=button_image)
