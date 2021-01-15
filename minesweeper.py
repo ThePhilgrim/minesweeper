@@ -27,9 +27,18 @@ root.resizable(False, False)
 big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
+def coordinates(event):
+    #coordinate['text'] =
+    print(f'x = {event.x} y = {event.y}')
+
+def coordinates(event):
+    print(f'x = {event.x} y = {event.y}')
+
 
 canvas = tkinter.Canvas(big_frame, width=25*width, height=25*height, bg='black')
 canvas.pack(fill='both', expand=True)
+canvas.bind('<Button-1>', coordinates)
+canvas.bind('<Button-2>', coordinates_flag)
 
 where_this_file_is = pathlib.Path(__file__).parent
 button_image = PhotoImage(file=(where_this_file_is / 'button_small.png'))
