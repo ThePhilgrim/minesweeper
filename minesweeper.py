@@ -31,7 +31,7 @@ def coordinates(event):
     #coordinate['text'] =
     print(f'x = {event.x} y = {event.y}')
 
-def coordinates(event):
+def coordinates_flag(event):
     print(f'x = {event.x} y = {event.y}')
 
 
