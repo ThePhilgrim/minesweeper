@@ -32,7 +32,6 @@ big_frame.pack(fill = 'both', expand = True)
 def clicked_square(event):
     """ Takes click events and prints number of adjacent mines,
     or generates bomb_image """
-    print(event.__dict__)
     x = int(event.x / 25)
     y = int(event.y / 25)
     coordinate = (x, y)
@@ -41,7 +40,6 @@ def clicked_square(event):
         generate_random_mine_locations(coordinate, how_many_mines_user_wants)
 
     canvas.create_image(int(event.x / 25)*25, int(event.y / 25)*25, image=button_image_pressed, anchor='nw')
-    print(f'x = {int(event.x / 25)} y = {int(event.y / 25)}')
 
     if coordinate in mine_locations:
         statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
@@ -65,8 +63,8 @@ def flagging(event):
     x_flag = int(event.x / 25) * 25
     y_flag = int(event.y / 25) * 25
     flag_coordinates.append((x_flag, y_flag))
-    if (x_flag, y_flag) not in flag_coordinates:
-        canvas.create_image(int(event.x / 25) * 25 + 12.5, int(event.y / 25) * 25 + 12.5, image=flag_image, anchor='center')
+    #if (x_flag, y_flag) not in flag_coordinates:
+    canvas.create_image(int(event.x / 25) * 25 + 12.5, int(event.y / 25) * 25 + 12.5, image=flag_image, anchor='center')
     # TODO Else: remove flag_id
 
 canvas = tkinter.Canvas(big_frame, width=25*width, height=25*height, highlightthickness=0, bg='black')
