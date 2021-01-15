@@ -1,3 +1,4 @@
 button:          http://clipart-library.com/clipart/1171636.htm
 pressed_button:  edited version of button
 flag:            https://www.kisscc0.com/clipart/red-flag-flag-of-the-united-states-flag-of-canada-u52xa4/
+bomb:		https://findicons.com/files/icons/1332/danger_mouse/256/bomb.png
