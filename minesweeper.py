@@ -47,6 +47,9 @@ def clicked_square(event):
 
 def open_squares(x, y):
 
+    if x not in range(width) or y not in range(height):
+        return
+
     coordinate = (x, y)
 
     if coordinate in previously_clicked_square:
