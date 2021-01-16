@@ -36,7 +36,6 @@ def clicked_square(event):
     or generates bomb_image """
     x = int(event.x / button_size)
     y = int(event.y / button_size)
-    previously_clicked_square.append((x, y))
     coordinate = (x, y)
 
     if len(mine_locations) == 0:
@@ -50,21 +49,25 @@ def open_squares(x, y):
 
     coordinate = (x, y)
 
+    if coordinate in previously_clicked_square:
+        return
+
+    previously_clicked_square.append((x, y))
+
+
     canvas.create_image(int(x * button_size),
     int(y * button_size), image = button_image_pressed, anchor = 'nw')
+
 
     if coordinate in mine_locations:
         statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
         canvas.create_image(int(x * button_size),
         int(y * button_size), image = bomb_image, anchor = 'nw')
         # TODO: Should break the current game and offer user to start a new game
-
     else:
         statusbar.config(text = f"{random.choice(live_message)}")
         mine_count = mines_around_square(mine_locations, coordinate)
         #if mine_count == 0:
-
-
 
 #        canvas.create_text((coordinate[0] * 25 + 12.5),
 #        (coordinate[1] * 25 + 12.5), text=(str(mines_around_square(mine_locations, clicked_square))))
