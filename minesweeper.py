@@ -48,8 +48,8 @@ def clicked_square(event):
 
 
 def open_squares(x, y):
-
     if x not in range(width) or y not in range(height):
+        # Happens when auto-opening at edge buttons
         return
 
     coordinate = (x, y)
@@ -82,11 +82,6 @@ def open_squares(x, y):
             open_squares(x + 1, y)
             open_squares(x + 1, y + 1)
 
-
-#        canvas.create_text((coordinate[0] * 25 + 12.5),
-#        (coordinate[1] * 25 + 12.5), text=(str(mines_around_square(mine_locations, clicked_square))))
-
-        # TODO: Change font color depending on mine_count
         if mine_count > 0:
             canvas.create_text(coordinate[0] * button_size + (button_size / 2),
             coordinate[1] * button_size + (button_size / 2),
