@@ -8,7 +8,7 @@ width = 21
 height = width
 button_size = 25
 
-how_many_mines_user_wants = 80
+how_many_mines_user_wants = 120
 
 mine_locations = []
 
@@ -54,10 +54,6 @@ def clicked_square(event):
     else:
         statusbar.config(text = f"{random.choice(live_message)}")
         mine_count = mines_around_square(mine_locations, coordinate)
-        if mine_count == 0:
-            open_all_0(int(event.x / button_size) * button_size,
-            int(event.y / button_size) * button_size)
-
 
 #        canvas.create_text((coordinate[0] * 25 + 12.5),
 #        (coordinate[1] * 25 + 12.5), text=(str(mines_around_square(mine_locations, clicked_square))))
@@ -66,28 +62,6 @@ def clicked_square(event):
         canvas.create_text(coordinate[0] * button_size + (button_size / 2),
         coordinate[1] * button_size + (button_size / 2),
         text = str(mine_count), font=("helvetica", 22, 'bold'), fill='yellow')
-
-# TODO: This needs to become a while loop in some way
-def open_all_0(x, y):
-    """ if mine_count == 0, takes previously_clicked_square[-1]
-    and opens all adjacent squares """
-    print(x, y)
-    canvas.create_image((x - button_size), (y - button_size),
-    image = button_image_pressed, anchor = 'nw')
-    canvas.create_image((x - button_size), (y),
-    image = button_image_pressed, anchor = 'nw')
-    canvas.create_image((x - button_size), (y + button_size),
-    image = button_image_pressed, anchor = 'nw')
-    canvas.create_image((x), (y - button_size),
-    image = button_image_pressed, anchor = 'nw')
-    canvas.create_image((x), (y + button_size),
-    image = button_image_pressed, anchor = 'nw')
-    canvas.create_image((x + button_size), (y - button_size),
-    image = button_image_pressed, anchor = 'nw')
-    canvas.create_image((x + button_size), (y),
-    image = button_image_pressed, anchor = 'nw')
-    canvas.create_image((x + button_size), (y + button_size),
-    image = button_image_pressed, anchor = 'nw')
 
 
 def flagging(event):
