@@ -85,9 +85,10 @@ def open_squares(x, y):
 #        (coordinate[1] * 25 + 12.5), text=(str(mines_around_square(mine_locations, clicked_square))))
 
         # TODO: Change font color depending on mine_count
-        canvas.create_text(coordinate[0] * button_size + (button_size / 2),
-        coordinate[1] * button_size + (button_size / 2),
-        text = str(mine_count), font=("helvetica", 22, 'bold'), fill='yellow')
+        if mine_count > 0:
+            canvas.create_text(coordinate[0] * button_size + (button_size / 2),
+            coordinate[1] * button_size + (button_size / 2),
+            text = str(mine_count), font=("helvetica", 22, 'bold'), fill='yellow')
 
 
 
