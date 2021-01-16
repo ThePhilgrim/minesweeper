@@ -8,10 +8,10 @@ width = 21
 height = width
 button_size = 25
 
-how_many_mines_user_wants = 80
+how_many_mines_user_wants = 70
 mine_locations = []
-color_chart = {1: 'yellow green', 2: 'medium sea green', 3: 'yellow', 4: 'yellow',
-5: 'yellow', 6: 'yellow', 7: 'yellow', 8: 'yellow'}
+color_chart = {1: 'turquoise', 2: 'yellow green', 3: 'yellow', 4: 'gold',
+5: 'orange', 6: 'dark orange', 7: 'red2', 8: 'red4'}
 previously_clicked_square = []
 
 
