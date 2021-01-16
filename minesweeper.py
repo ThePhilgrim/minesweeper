@@ -8,7 +8,7 @@ width = 21
 height = width
 button_size = 25
 
-how_many_mines_user_wants = 80
+how_many_mines_user_wants = 40
 
 mine_locations = []
 
@@ -70,7 +70,16 @@ def open_squares(x, y):
     else:
         statusbar.config(text = f"{random.choice(live_message)}")
         mine_count = mines_around_square(mine_locations, coordinate)
-        #if mine_count == 0:
+        if mine_count == 0:
+            open_squares(x - 1, y - 1)
+            open_squares(x - 1, y)
+            open_squares(x - 1, y + 1)
+            open_squares(x, y - 1)
+            open_squares(x, y + 1)
+            open_squares(x + 1, y - 1)
+            open_squares(x + 1, y)
+            open_squares(x + 1, y + 1)
+
 
 #        canvas.create_text((coordinate[0] * 25 + 12.5),
 #        (coordinate[1] * 25 + 12.5), text=(str(mines_around_square(mine_locations, clicked_square))))
