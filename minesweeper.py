@@ -8,9 +8,11 @@ width = 21
 height = width
 button_size = 25
 
-how_many_mines_user_wants = 40
-
+how_many_mines_user_wants = 80
 mine_locations = []
+color_chart = {1: 'yellow green', 2: 'medium sea green', 3: 'yellow', 4: 'yellow',
+5: 'yellow', 6: 'yellow', 7: 'yellow', 8: 'yellow'}
+previously_clicked_square = []
 
 
 def generate_random_mine_locations(where_user_clicked, how_many_mines_user_wants):
@@ -29,7 +31,7 @@ root.resizable(False, False)
 big_frame = ttk.Frame(root)
 big_frame.pack(fill = 'both', expand = True)
 
-previously_clicked_square = []
+
 
 def clicked_square(event):
     """ Takes click events and prints number of adjacent mines,
@@ -88,7 +90,7 @@ def open_squares(x, y):
         if mine_count > 0:
             canvas.create_text(coordinate[0] * button_size + (button_size / 2),
             coordinate[1] * button_size + (button_size / 2),
-            text = str(mine_count), font=("helvetica", 22, 'bold'), fill='yellow')
+            text = str(mine_count), font=("helvetica", 22, 'bold'), fill = color_chart[mine_count])
 
 
 
