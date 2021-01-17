@@ -21,6 +21,8 @@ color_chart = {
     8: "red4",
 }
 previously_clicked_square = []
+flag_coordinates = []
+
 
 
 def generate_random_mine_locations(where_user_clicked, how_many_mines_user_wants):
@@ -63,6 +65,11 @@ def open_squares(x, y):
     if coordinate in previously_clicked_square:
         return
 
+    ### This is to prevent left clicks on flagged squares.
+    ### Leave commented until it's possible to remove flags
+    #if coordinate in flag_coordinates:
+    #    return
+
     previously_clicked_square.append((x, y))
 
     canvas.create_image(
@@ -104,9 +111,7 @@ def open_squares(x, y):
 def flagging(event):
     """Takes right click events, and places or removes flag_image.
     Adds placed flag positions with their flag id into a dict."""
-    flag_coordinates = (
-        []
-    )  # TODO: Change to dict with x_flag, y_flag as key and flag_id as value
+    # TODO: Change to dict with x_flag, y_flag as key and flag_id as value
     x_flag = int(event.x / button_size)
     y_flag = int(event.y / button_size)
     flag_coordinates.append((x_flag, y_flag))
@@ -120,6 +125,7 @@ def flagging(event):
             image=flag_image,
             anchor="center",
         )
+        print(flag_coordinates)
     # TODO Else: remove flag_id
 
 
