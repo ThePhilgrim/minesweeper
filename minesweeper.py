@@ -13,6 +13,59 @@ class Game:
         self.previously_clicked_square = []
         self.flag_coordinates = []
 
+    def open_squares(self, x, y):
+        if x not in range(self.width) or y not in range(self.height):
+            # Happens when auto-opening at edge buttons
+            return
+
+        coordinate = (x, y)
+
+        if coordinate in self.previously_clicked_square:
+            return
+
+        ### This is to prevent left clicks on flagged squares.
+        ### Leave commented until it's possible to remove flags
+        #if coordinate in current_game.flag_coordinates:
+        #    return
+
+        self.previously_clicked_square.append((x, y))
+
+        canvas.create_image(
+            int(x * button_size),
+            int(y * button_size),
+            image=button_image_pressed,
+            anchor="nw",
+        )
+
+        if coordinate in self.mine_locations:
+            statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
+            canvas.create_image(
+                int(x * button_size), int(y * button_size), image=bomb_image, anchor="nw"
+            )
+            # TODO: Should break the current game and offer user to start a new game
+        else:
+            statusbar.config(text=f"{random.choice(live_message)}")
+            mine_count = mines_around_square(coordinate)
+            if mine_count == 0:
+                self.open_squares(x - 1, y - 1)
+                self.open_squares(x - 1, y)
+                self.open_squares(x - 1, y + 1)
+                self.open_squares(x, y - 1)
+                self.open_squares(x, y + 1)
+                self.open_squares(x + 1, y - 1)
+                self.open_squares(x + 1, y)
+                self.open_squares(x + 1, y + 1)
+
+            if mine_count > 0:
+                canvas.create_text(
+                    coordinate[0] * button_size + (button_size / 2),
+                    coordinate[1] * button_size + (button_size / 2),
+                    text=str(mine_count),
+                    font=("helvetica", 22, "bold"),
+                    fill=color_chart[mine_count],
+                )
+
+
 current_game = Game()
 
 button_size = 25
@@ -55,60 +108,7 @@ def clicked_square(event):
     if len(current_game.mine_locations) == 0:
         generate_random_mine_locations(coordinate)
 
-    open_squares(x, y)
-
-
-def open_squares(x, y):
-    if x not in range(current_game.width) or y not in range(current_game.height):
-        # Happens when auto-opening at edge buttons
-        return
-
-    coordinate = (x, y)
-
-    if coordinate in current_game.previously_clicked_square:
-        return
-
-    ### This is to prevent left clicks on flagged squares.
-    ### Leave commented until it's possible to remove flags
-    #if coordinate in current_game.flag_coordinates:
-    #    return
-
-    current_game.previously_clicked_square.append((x, y))
-
-    canvas.create_image(
-        int(x * button_size),
-        int(y * button_size),
-        image=button_image_pressed,
-        anchor="nw",
-    )
-
-    if coordinate in current_game.mine_locations:
-        statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
-        canvas.create_image(
-            int(x * button_size), int(y * button_size), image=bomb_image, anchor="nw"
-        )
-        # TODO: Should break the current game and offer user to start a new game
-    else:
-        statusbar.config(text=f"{random.choice(live_message)}")
-        mine_count = mines_around_square(coordinate)
-        if mine_count == 0:
-            open_squares(x - 1, y - 1)
-            open_squares(x - 1, y)
-            open_squares(x - 1, y + 1)
-            open_squares(x, y - 1)
-            open_squares(x, y + 1)
-            open_squares(x + 1, y - 1)
-            open_squares(x + 1, y)
-            open_squares(x + 1, y + 1)
-
-        if mine_count > 0:
-            canvas.create_text(
-                coordinate[0] * button_size + (button_size / 2),
-                coordinate[1] * button_size + (button_size / 2),
-                text=str(mine_count),
-                font=("helvetica", 22, "bold"),
-                fill=color_chart[mine_count],
-            )
+    current_game.open_squares(x, y)
 
 
 def flagging(event):
