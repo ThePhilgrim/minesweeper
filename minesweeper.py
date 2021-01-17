@@ -4,12 +4,19 @@ import tkinter
 from tkinter import ttk
 from tkinter import PhotoImage
 
-width = 21
-height = width
+class Game:
+    def __init__(self):
+        self.width = 21
+        self.height = 21
+        self.how_many_mines_user_wants = 50
+        self.mine_locations = []
+        self.previously_clicked_square = []
+        self.flag_coordinates = []
+
+current_game = Game()
+
 button_size = 25
 
-how_many_mines_user_wants = 70
-mine_locations = []
 color_chart = {
     1: "turquoise",
     2: "yellow green",
@@ -20,19 +27,15 @@ color_chart = {
     7: "red2",
     8: "red4",
 }
-previously_clicked_square = []
-flag_coordinates = []
-
-
 
 def generate_random_mine_locations(where_user_clicked):
     """Generates mine locations across the board after the user
     clicks the first square"""
-    while len(mine_locations) < how_many_mines_user_wants:
-        x = random.randrange(width)
-        y = random.randrange(height)
-        if (x, y) != where_user_clicked and (x, y) not in mine_locations:
-            mine_locations.append((x, y))
+    while len(current_game.mine_locations) < current_game.how_many_mines_user_wants:
+        x = random.randrange(current_game.width)
+        y = random.randrange(current_game.height)
+        if (x, y) != where_user_clicked and (x, y) not in current_game.mine_locations:
+            current_game.mine_locations.append((x, y))
 
 
 root = tkinter.Tk()
@@ -49,28 +52,28 @@ def clicked_square(event):
     y = int(event.y / button_size)
     coordinate = (x, y)
 
-    if len(mine_locations) == 0:
+    if len(current_game.mine_locations) == 0:
         generate_random_mine_locations(coordinate)
 
     open_squares(x, y)
 
 
 def open_squares(x, y):
-    if x not in range(width) or y not in range(height):
+    if x not in range(current_game.width) or y not in range(current_game.height):
         # Happens when auto-opening at edge buttons
         return
 
     coordinate = (x, y)
 
-    if coordinate in previously_clicked_square:
+    if coordinate in current_game.previously_clicked_square:
         return
 
     ### This is to prevent left clicks on flagged squares.
     ### Leave commented until it's possible to remove flags
-    #if coordinate in flag_coordinates:
+    #if coordinate in current_game.flag_coordinates:
     #    return
 
-    previously_clicked_square.append((x, y))
+    current_game.previously_clicked_square.append((x, y))
 
     canvas.create_image(
         int(x * button_size),
@@ -79,7 +82,7 @@ def open_squares(x, y):
         anchor="nw",
     )
 
-    if coordinate in mine_locations:
+    if coordinate in current_game.mine_locations:
         statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
         canvas.create_image(
             int(x * button_size), int(y * button_size), image=bomb_image, anchor="nw"
@@ -114,9 +117,9 @@ def flagging(event):
     # TODO: Change to dict with x_flag, y_flag as key and flag_id as value
     x_flag = int(event.x / button_size)
     y_flag = int(event.y / button_size)
-    flag_coordinates.append((x_flag, y_flag))
+    current_game.flag_coordinates.append((x_flag, y_flag))
     # if (x_flag, y_flag) not in flag_coordinates:
-    if (x_flag, y_flag) in previously_clicked_square:
+    if (x_flag, y_flag) in current_game.previously_clicked_square:
         return
     else:
         canvas.create_image(
@@ -125,14 +128,13 @@ def flagging(event):
             image=flag_image,
             anchor="center",
         )
-        print(flag_coordinates)
     # TODO Else: remove flag_id
 
 
 canvas = tkinter.Canvas(
     big_frame,
-    width=button_size * width,
-    height=button_size * height,
+    width=button_size * current_game.width,
+    height=button_size * current_game.height,
     highlightthickness=0,
     bg="black",
 )
@@ -151,8 +153,8 @@ flag_image = PhotoImage(file=(where_this_file_is / "flag_small.png"))
 bomb_image = PhotoImage(file=(where_this_file_is / "bomb_small.png"))
 
 
-for x in range(0, button_size * width, button_size):
-    for y in range(0, button_size * height, button_size):
+for x in range(0, button_size * current_game.width, button_size):
+    for y in range(0, button_size * current_game.height, button_size):
         canvas.create_image((x, y), image=button_image, anchor="nw")
 
 live_message = [
@@ -183,7 +185,7 @@ def mines_around_square(coordinate):
     """Looks at the squares adjacent to current_square and counts
     how many mines there are"""
     adjacent_mines = 0
-    for mine in mine_locations:
+    for mine in current_game.mine_locations:
         if (mine[0] == coordinate[0] - 1 or mine[0] == coordinate[0] + 1) and (
             mine[1] == coordinate[1]
             or mine[1] == coordinate[1] - 1
