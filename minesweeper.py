@@ -58,6 +58,8 @@ class Game:
 
         if coordinate in self.mine_locations:
             statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
+            global game_state
+            game_state = False
             canvas.create_image(
                 int(x * button_size), int(y * button_size), image=bomb_image, anchor="nw"
             )
@@ -97,6 +99,7 @@ current_game = Game()
 
 button_size = 25
 
+game_state = True
 color_chart = {
     1: "turquoise",
     2: "yellow green",
@@ -108,6 +111,7 @@ color_chart = {
     8: "red4",
 }
 
+
 root = tkinter.Tk()
 root.resizable(False, False)
 
@@ -118,14 +122,15 @@ big_frame.pack(fill="both", expand=True)
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
     or generates bomb_image"""
-    x = int(event.x / button_size)
-    y = int(event.y / button_size)
-    coordinate = (x, y)
+    if game_state == True:
+        x = int(event.x / button_size)
+        y = int(event.y / button_size)
+        coordinate = (x, y)
 
-    if len(current_game.mine_locations) == 0:
-        current_game.generate_random_mine_locations(coordinate)
+        if len(current_game.mine_locations) == 0:
+            current_game.generate_random_mine_locations(coordinate)
 
-    current_game.open_squares(x, y)
+        current_game.open_squares(x, y)
 
 
 def flagging(event):
