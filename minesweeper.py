@@ -25,7 +25,7 @@ flag_coordinates = []
 
 
 
-def generate_random_mine_locations(where_user_clicked, how_many_mines_user_wants):
+def generate_random_mine_locations(where_user_clicked):
     """Generates mine locations across the board after the user
     clicks the first square"""
     while len(mine_locations) < how_many_mines_user_wants:
@@ -50,7 +50,7 @@ def clicked_square(event):
     coordinate = (x, y)
 
     if len(mine_locations) == 0:
-        generate_random_mine_locations(coordinate, how_many_mines_user_wants)
+        generate_random_mine_locations(coordinate)
 
     open_squares(x, y)
 
@@ -87,7 +87,7 @@ def open_squares(x, y):
         # TODO: Should break the current game and offer user to start a new game
     else:
         statusbar.config(text=f"{random.choice(live_message)}")
-        mine_count = mines_around_square(mine_locations, coordinate)
+        mine_count = mines_around_square(coordinate)
         if mine_count == 0:
             open_squares(x - 1, y - 1)
             open_squares(x - 1, y)
@@ -179,7 +179,7 @@ statusbar = tkinter.Label(
 statusbar.pack(side=tkinter.BOTTOM, fill=tkinter.X)
 
 
-def mines_around_square(mine_locations, coordinate):
+def mines_around_square(coordinate):
     """Looks at the squares adjacent to current_square and counts
     how many mines there are"""
     adjacent_mines = 0
