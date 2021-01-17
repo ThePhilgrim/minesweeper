@@ -13,6 +13,25 @@ class Game:
         self.previously_clicked_square = []
         self.flag_coordinates = []
 
+    def mines_around_square(self, coordinate):
+        """Looks at the squares adjacent to current_square and counts
+        how many mines there are"""
+        adjacent_mines = 0
+        for mine in self.mine_locations:
+            if (mine[0] == coordinate[0] - 1 or mine[0] == coordinate[0] + 1) and (
+                mine[1] == coordinate[1]
+                or mine[1] == coordinate[1] - 1
+                or mine[1] == coordinate[1] + 1
+            ):
+                adjacent_mines += 1
+            elif (mine[1] == coordinate[1] - 1 or mine[1] == coordinate[1] + 1) and (
+                mine[0] == coordinate[0]
+                or mine[0] == coordinate[0] - 1
+                or mine[0] == coordinate[0] + 1
+            ):
+                adjacent_mines += 1
+        return adjacent_mines
+
     def open_squares(self, x, y):
         if x not in range(self.width) or y not in range(self.height):
             # Happens when auto-opening at edge buttons
@@ -65,6 +84,14 @@ class Game:
                     fill=color_chart[mine_count],
                 )
 
+    def generate_random_mine_locations(self, where_user_clicked):
+        """Generates mine locations across the board after the user
+        clicks the first square"""
+        while len(self.mine_locations) < self.how_many_mines_user_wants:
+            x = random.randrange(self.width)
+            y = random.randrange(self.height)
+            if (x, y) != where_user_clicked and (x, y) not in self.mine_locations:
+                self.mine_locations.append((x, y))
 
 current_game = Game()
 
@@ -80,16 +107,6 @@ color_chart = {
     7: "red2",
     8: "red4",
 }
-
-def generate_random_mine_locations(where_user_clicked):
-    """Generates mine locations across the board after the user
-    clicks the first square"""
-    while len(current_game.mine_locations) < current_game.how_many_mines_user_wants:
-        x = random.randrange(current_game.width)
-        y = random.randrange(current_game.height)
-        if (x, y) != where_user_clicked and (x, y) not in current_game.mine_locations:
-            current_game.mine_locations.append((x, y))
-
 
 root = tkinter.Tk()
 root.resizable(False, False)
@@ -179,26 +196,6 @@ statusbar = tkinter.Label(
     root, bd=1, text="***Lets go!***", relief=tkinter.SUNKEN, anchor=tkinter.W
 )
 statusbar.pack(side=tkinter.BOTTOM, fill=tkinter.X)
-
-
-def mines_around_square(coordinate):
-    """Looks at the squares adjacent to current_square and counts
-    how many mines there are"""
-    adjacent_mines = 0
-    for mine in current_game.mine_locations:
-        if (mine[0] == coordinate[0] - 1 or mine[0] == coordinate[0] + 1) and (
-            mine[1] == coordinate[1]
-            or mine[1] == coordinate[1] - 1
-            or mine[1] == coordinate[1] + 1
-        ):
-            adjacent_mines += 1
-        elif (mine[1] == coordinate[1] - 1 or mine[1] == coordinate[1] + 1) and (
-            mine[0] == coordinate[0]
-            or mine[0] == coordinate[0] - 1
-            or mine[0] == coordinate[0] + 1
-        ):
-            adjacent_mines += 1
-    return adjacent_mines
 
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
