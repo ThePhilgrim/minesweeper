@@ -132,8 +132,8 @@ canvas = tkinter.Canvas(
 )
 canvas.pack(fill="both", expand=True)
 canvas.bind("<Button-1>", clicked_square)
-canvas.bind("<Button-2>", flagging)
-canvas.bind("<Button-3>", flagging)
+canvas.bind("<Button-2>", flagging)  # Mac
+canvas.bind("<Button-3>", flagging)  # Windows, Linux
 
 
 where_this_file_is = pathlib.Path(__file__).parent
