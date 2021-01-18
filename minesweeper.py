@@ -5,7 +5,7 @@ from tkinter import ttk
 from tkinter import PhotoImage
 
 class Game:
-    
+
     def __init__(self):
         self.width = 21
         self.height = 21
@@ -123,7 +123,7 @@ big_frame.pack(fill="both", expand=True)
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
     or generates bomb_image"""
-    
+
     if  not current_game.game_over:
         x = int(event.x / button_size)
         y = int(event.y / button_size)
@@ -201,10 +201,10 @@ fail_message = [
 ]
 
 
-statusbar = tkinter.Label(
-    root, bd=1, text="***Lets go!***", relief=tkinter.SUNKEN, anchor=tkinter.W
+statusbar = ttk.Label(
+    root, text="***Lets go!***", relief="sunken", anchor="w"
 )
-statusbar.pack(side=tkinter.BOTTOM, fill=tkinter.X)
+statusbar.pack(side="bottom", fill="x")
 
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
