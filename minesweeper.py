@@ -12,7 +12,7 @@ class Game:
         self.how_many_mines_user_wants = 50
         self.mine_locations = []
         self.previously_clicked_square = []
-        self.flag_coordinates = []
+        self.flag_coordinates = {}
         self.game_over = False
 
     def mines_around_square(self, coordinate):
@@ -141,20 +141,21 @@ def flagging(event):
     # TODO: Change to dict with x_flag, y_flag as key and flag_id as value
     if not current_game.game_over:
         x_flag = int(event.x / button_size)
-        y_flag = int(event.y / button_size)
-        current_game.flag_coordinates.append((x_flag, y_flag))
+        y_flag = int(event.y / button_size)    
         # if (x_flag, y_flag) not in flag_coordinates:
         if (x_flag, y_flag) in current_game.previously_clicked_square:
             return
+        elif (x_flag, y_flag) in current_game.flag_coordinates.keys():
+            canvas.delete(current_game.flag_coordinates[x_flag, y_flag])
+            current_game.flag_coordinates.pop((x_flag, y_flag))
         else:
-            canvas.create_image(
+            flag_id = canvas.create_image(
                 int(event.x / button_size) * button_size + (button_size / 2),
                 int(event.y / button_size) * button_size + (button_size / 2),
                 image=flag_image,
                 anchor="center",
-            )
-        # TODO Else: remove flag_id
-
+            )        
+            current_game.flag_coordinates[(x_flag, y_flag)] = flag_id
 
 canvas = tkinter.Canvas(
     big_frame,
