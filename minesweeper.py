@@ -12,7 +12,7 @@ class Game:
         self.how_many_mines_user_wants = 50
         self.mine_locations = []
         self.previously_clicked_square = []
-        self.flag_coordinates = {}
+        self.flag_dict = {}
         self.game_over = False
 
     def mines_around_square(self, coordinate):
@@ -46,7 +46,7 @@ class Game:
 
         ### This is to prevent left clicks on flagged squares.
         ### Leave commented until it's possible to remove flags
-        #if coordinate in current_game.flag_coordinates:
+        #if coordinate in current_game.flag_dict:
         #    return
 
         self.previously_clicked_square.append((x, y))
@@ -144,12 +144,12 @@ def flagging(event):
     if not current_game.game_over:
         x_flag = int(event.x / button_size)
         y_flag = int(event.y / button_size)    
-        # if (x_flag, y_flag) not in flag_coordinates:
+        # if (x_flag, y_flag) not in flag_dict:
         if (x_flag, y_flag) in current_game.previously_clicked_square:
             return
-        elif (x_flag, y_flag) in current_game.flag_coordinates.keys():
-            canvas.delete(current_game.flag_coordinates[x_flag, y_flag])
-            current_game.flag_coordinates.pop((x_flag, y_flag))
+        elif (x_flag, y_flag) in current_game.flag_dict.keys():
+            canvas.delete(current_game.flag_dict[x_flag, y_flag])
+            current_game.flag_dict.pop((x_flag, y_flag))
         else:
             flag_id = canvas.create_image(
                 int(event.x / button_size) * button_size + (button_size / 2),
@@ -157,7 +157,7 @@ def flagging(event):
                 image=flag_image,
                 anchor="center",
             )        
-            current_game.flag_coordinates[(x_flag, y_flag)] = flag_id
+            current_game.flag_dict[(x_flag, y_flag)] = flag_id
 
 canvas = tkinter.Canvas(
     top_frame,
