@@ -12,7 +12,7 @@ class Game:
         self.how_many_mines_user_wants = 50
         self.mine_locations = []
         self.previously_clicked_square = []
-        self.flag_coordinates = []
+        self.flag_dict = {}
         self.game_over = False
 
     def mines_around_square(self, coordinate):
@@ -46,7 +46,7 @@ class Game:
 
         ### This is to prevent left clicks on flagged squares.
         ### Leave commented until it's possible to remove flags
-        #if coordinate in current_game.flag_coordinates:
+        #if coordinate in current_game.flag_dict:
         #    return
 
         self.previously_clicked_square.append((x, y))
@@ -143,20 +143,21 @@ def flagging(event):
     # TODO: Change to dict with x_flag, y_flag as key and flag_id as value
     if not current_game.game_over:
         x_flag = int(event.x / button_size)
-        y_flag = int(event.y / button_size)
-        current_game.flag_coordinates.append((x_flag, y_flag))
-        # if (x_flag, y_flag) not in flag_coordinates:
+        y_flag = int(event.y / button_size)    
+        # if (x_flag, y_flag) not in flag_dict:
         if (x_flag, y_flag) in current_game.previously_clicked_square:
             return
+        elif (x_flag, y_flag) in current_game.flag_dict.keys():
+            canvas.delete(current_game.flag_dict[x_flag, y_flag])
+            current_game.flag_dict.pop((x_flag, y_flag))
         else:
-            canvas.create_image(
+            flag_id = canvas.create_image(
                 int(event.x / button_size) * button_size + (button_size / 2),
                 int(event.y / button_size) * button_size + (button_size / 2),
                 image=flag_image,
                 anchor="center",
-            )
-        # TODO Else: remove flag_id
-
+            )        
+            current_game.flag_dict[(x_flag, y_flag)] = flag_id
 
 canvas = tkinter.Canvas(
     top_frame,
@@ -205,9 +206,9 @@ def quit_print():
     statusbar['text'] = "NOOOOOOOO! STAY IN THE GAME!!!"
 
 statusbar = ttk.Label(
-    big_frame, text="***Lets go!***", anchor="w"
+    big_frame, text="***Lets go!***", anchor="w", relief="sunken"
 )
-statusbar.pack(side="left", fill="x")
+statusbar.pack(side="bottom", fill="x")
 
 sidebar = ttk.Frame(
     top_frame, width=100, borderwidth=2,
