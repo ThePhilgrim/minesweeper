@@ -203,9 +203,9 @@ fail_message = [
 
 
 statusbar = ttk.Label(
-    big_frame, text="***Lets go!***", anchor="w"
+    big_frame, text="***Lets go!***", anchor="w", relief="sunken"
 )
-statusbar.pack(side="left", fill="x")
+statusbar.pack(side="bottom", fill="x")
 
 sidebar = ttk.Frame(
     top_frame, width=100, borderwidth=2,
