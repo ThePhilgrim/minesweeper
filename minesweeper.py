@@ -118,6 +118,8 @@ root.resizable(False, False)
 
 big_frame = ttk.Frame(root)
 big_frame.pack(fill="both", expand=True)
+top_frame = ttk.Frame(big_frame)
+top_frame.pack(fill="both", expand=True)
 
 
 def clicked_square(event):
@@ -158,13 +160,13 @@ def flagging(event):
             current_game.flag_coordinates[(x_flag, y_flag)] = flag_id
 
 canvas = tkinter.Canvas(
-    big_frame,
+    top_frame,
     width=button_size * current_game.width,
     height=button_size * current_game.height,
     highlightthickness=0,
     bg="black",
 )
-canvas.pack(fill="both", expand=True)
+canvas.pack(fill="both", expand=True, side='left')
 canvas.bind("<Button-1>", clicked_square)
 canvas.bind("<Button-2>", flagging)  # Mac
 canvas.bind("<Button-3>", flagging)  # Windows, Linux
@@ -202,9 +204,16 @@ fail_message = [
 
 
 statusbar = ttk.Label(
-    root, text="***Lets go!***", relief="sunken", anchor="w"
+    big_frame, text="***Lets go!***", anchor="w"
 )
-statusbar.pack(side="bottom", fill="x")
+statusbar.pack(side="left", fill="x")
+
+sidebar = ttk.Frame(
+    top_frame, width=100, borderwidth=2,
+)
+sidebar.pack(side="right", fill="both", anchor="w",)
+new_game_button = ttk.Button(sidebar, text='New Game')
+new_game_button.pack()
 
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
