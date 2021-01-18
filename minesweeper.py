@@ -13,7 +13,7 @@ class Game:
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_coordinates = []
-        self.game_state = True
+        self.game_over = False
 
     def mines_around_square(self, coordinate):
         """Looks at the squares adjacent to current_square and counts
@@ -60,7 +60,7 @@ class Game:
 
         if coordinate in self.mine_locations:
             statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
-            current_game.game_state = False
+            current_game.game_over = True
             canvas.create_image(
                 int(x * button_size), int(y * button_size), image=bomb_image, anchor="nw"
             )
@@ -124,7 +124,7 @@ def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
     or generates bomb_image"""
     
-    if  current_game.game_state == True:
+    if  current_game.game_over == False:
         x = int(event.x / button_size)
         y = int(event.y / button_size)
         coordinate = (x, y)
