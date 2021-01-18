@@ -64,7 +64,7 @@ class Game:
             # TODO: Should break the current game and offer user to start a new game
         else:
             statusbar.config(text=f"{random.choice(live_message)}")
-            mine_count = mines_around_square(coordinate)
+            mine_count = current_game.mines_around_square(coordinate)
             if mine_count == 0:
                 self.open_squares(x - 1, y - 1)
                 self.open_squares(x - 1, y)
@@ -123,7 +123,7 @@ def clicked_square(event):
     coordinate = (x, y)
 
     if len(current_game.mine_locations) == 0:
-        generate_random_mine_locations(coordinate)
+        current_game.generate_random_mine_locations(coordinate)
 
     current_game.open_squares(x, y)
 
