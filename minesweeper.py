@@ -143,7 +143,7 @@ def flagging(event):
     # TODO: Change to dict with x_flag, y_flag as key and flag_id as value
     if not current_game.game_over:
         x_flag = int(event.x / button_size)
-        y_flag = int(event.y / button_size)    
+        y_flag = int(event.y / button_size)
         # if (x_flag, y_flag) not in flag_dict:
         if (x_flag, y_flag) in current_game.previously_clicked_square:
             return
@@ -156,7 +156,7 @@ def flagging(event):
                 int(event.y / button_size) * button_size + (button_size / 2),
                 image=flag_image,
                 anchor="center",
-            )        
+            )
             current_game.flag_dict[(x_flag, y_flag)] = flag_id
 
 canvas = tkinter.Canvas(
@@ -205,6 +205,20 @@ fail_message = [
 def quit_print():
     statusbar['text'] = "NOOOOOOOO! STAY IN THE GAME!!!"
 
+
+
+def new_game():
+    current_game.mine_locations.clear()
+    current_game.previously_clicked_square.clear()
+    current_game.flag_dict.clear()
+    for x in range(0, button_size * current_game.width, button_size):
+        for y in range(0, button_size * current_game.height, button_size):
+            canvas.create_image((x, y), image=button_image, anchor="nw")
+    current_game.game_over = False
+    statusbar['text'] = '***Lets go!***'
+
+
+
 statusbar = ttk.Label(
     big_frame, text="***Lets go!***", anchor="w", relief="sunken"
 )
@@ -214,7 +228,7 @@ sidebar = ttk.Frame(
     top_frame, width=100, borderwidth=2,
 )
 sidebar.pack(side="right", fill="both", anchor="w",)
-new_game_button = ttk.Button(sidebar, text='New Game', width=8)
+new_game_button = ttk.Button(sidebar, text='New Game', width=8, command=new_game)
 options_button = ttk.Button(sidebar, text='Options', width=8)
 quit_game_button = ttk.Button(sidebar, text="Quit game", width=8, command=quit_print)
 new_game_button.pack()
