@@ -50,14 +50,14 @@ class Game:
         #    return
 
         self.previously_clicked_square.append((x, y))
-                  
+
         canvas.create_image(
             int(x * button_size),
             int(y * button_size),
             image=button_image_pressed,
             anchor="nw",
         )
-            
+
         count_already_open=len(self.previously_clicked_square)
         count_mine_locations=len(self.mine_locations)
         if count_already_open + count_mine_locations == self.width*self.height:
@@ -67,14 +67,14 @@ class Game:
                 frame = frames[index]
                 index += 1
                 if index>=8:
-                    index = 0                
+                    index = 0
                 label.configure(image=frame)
                 root.after(100, update, index)
 
             label = ttk.Label(canvas, background='black')
             label.place(relx=0.5, rely=0.5, anchor='center')
-            root.after(0, update, 0)   
-        
+            root.after(0, update, 0)
+
         if coordinate in self.mine_locations:
             statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
             self.game_over = True
@@ -191,10 +191,6 @@ button_image_pressed = PhotoImage(
 flag_image = PhotoImage(file=(where_this_file_is / "flag_small.png"))
 bomb_image = PhotoImage(file=(where_this_file_is / "bomb_small.png"))
 
-for x in range(0, button_size * current_game.width, button_size):
-    for y in range(0, button_size * current_game.height, button_size):
-        canvas.create_image((x, y), image=button_image, anchor="nw")
-
 
 live_message = [
     "You're alive.. for now !",
@@ -230,7 +226,7 @@ def new_game():
 
 
 statusbar = ttk.Label(
-    big_frame, text="***Lets go!***", anchor="w", relief="sunken"
+    big_frame, anchor="w", relief="sunken"
 )
 statusbar.pack(side="bottom", fill="x")
 
@@ -245,6 +241,7 @@ new_game_button.pack()
 options_button.pack()
 quit_game_button.pack()
 
+new_game()
 
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
