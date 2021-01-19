@@ -14,7 +14,6 @@ class Game:
         self.previously_clicked_square = []
         self.flag_dict = {}
         self.game_over = False
-        self.label = None
 
     def mines_around_square(self, coordinate):
         """Looks at the squares adjacent to current_square and counts
@@ -63,17 +62,17 @@ class Game:
         count_mine_locations=len(self.mine_locations)
         if count_already_open + count_mine_locations == self.width*self.height:
             frames = [PhotoImage(file=where_this_file_is / 'doomguy.gif', format = 'gif -index %i' %(i)) for i in range(8)]
-#            gif= Button(f1, image=frames)
-            self.label = ttk.Label(canvas, background='black')
-            self.label.place(relx=0.5, rely=0.5, anchor='center')
+            gif_label.place(relx=0.5, rely=0.5, anchor='center')
 
             def update(index):
                 frame = frames[index]
                 index += 1
                 if index>=8:
                     index = 0                
-                self.label.configure(image=frame)
-                root.after(100, update, index)
+                gif_label.configure(image=frame)
+                if self is current_game:     # TODO: this check is ugly, get rid of it
+                    # New game not started yet, can keep animating
+                    root.after(100, update, index)
             root.after(0, update, 0)   
 
         if coordinate in self.mine_locations:
@@ -179,6 +178,7 @@ canvas.bind("<Button-1>", clicked_square)
 canvas.bind("<Button-2>", flagging)  # Mac
 canvas.bind("<Button-3>", flagging)  # Windows, Linux
 
+gif_label = ttk.Label(canvas, background='black')
 
 where_this_file_is = pathlib.Path(__file__).parent
 button_image = PhotoImage(file=(where_this_file_is / "button_small.png"))
@@ -210,18 +210,11 @@ def quit_print():
     statusbar['text'] = "NOOOOOOOO! STAY IN THE GAME!!!"
 
 
-current_game = None
-
-
 def new_game():
     global current_game
-
-    if current_game is not None and current_game.label is not None:
-        current_game.label.destroy()
-        current_game.label = None
-
     current_game = Game()
 
+    gif_label.place_forget()
     canvas['width']=button_size * current_game.width,
     canvas['height']=button_size * current_game.height,
 
