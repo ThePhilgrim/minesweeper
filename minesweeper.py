@@ -210,13 +210,16 @@ def quit_print():
     statusbar['text'] = "NOOOOOOOO! STAY IN THE GAME!!!"
 
 
+current_game = None
+
 
 def new_game():
-    if current_game.label is not None:
+    global current_game
+
+    if current_game is not None and current_game.label is not None:
         current_game.label.destroy()
         current_game.label = None
 
-    global current_game
     current_game = Game()
 
     canvas['width']=button_size * current_game.width,
