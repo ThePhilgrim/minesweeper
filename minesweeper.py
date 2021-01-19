@@ -61,10 +61,8 @@ class Game:
         count_already_open=len(self.previously_clicked_square)
         count_mine_locations=len(self.mine_locations)
         if count_already_open + count_mine_locations == self.width*self.height:
-#           f1 = tkinter.Frame(canvas, background='black')
-#           f1.place(in_=big_frame, anchor="c", relx=.5, rely=.5)
             frames = [PhotoImage(file=where_this_file_is / 'doomguy.gif', format = 'gif -index %i' %(i)) for i in range(8)]
-#            gif= Button(f1, image=frames)
+
             def update(index):
                 frame = frames[index]
                 index += 1
@@ -72,10 +70,10 @@ class Game:
                     index = 0                
                 label.configure(image=frame)
                 root.after(100, update, index)
+
             label = ttk.Label(canvas, background='black')
             label.place(relx=0.5, rely=0.5, anchor='center')
             root.after(0, update, 0)   
-            
         
         if coordinate in self.mine_locations:
             statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
