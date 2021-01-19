@@ -9,7 +9,7 @@ class Game:
     def __init__(self):
         self.width = 21
         self.height = 21
-        self.how_many_mines_user_wants = 5
+        self.how_many_mines_user_wants = 50
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
@@ -50,7 +50,6 @@ class Game:
         #    return
 
         self.previously_clicked_square.append((x, y))
-        print(len(self.previously_clicked_square)+len(self.mine_locations))
                   
         canvas.create_image(
             int(x * button_size),
@@ -144,9 +143,6 @@ all_squares=[]
 for x in range(0,21):
    for y in range(0,21):
       all_squares.append((x,y))
-print(len(all_squares))
-      
-
 
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
