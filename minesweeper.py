@@ -205,8 +205,8 @@ fail_message = [
     "Hasta la vista.. baby!",
 ]
 
-def quit_print():
-    statusbar['text'] = "NOOOOOOOO! STAY IN THE GAME!!!"
+def quit_game():
+    root.destroy()
 
 
 
@@ -235,7 +235,7 @@ sidebar = ttk.Frame(
 sidebar.pack(side="right", fill="both", anchor="w",)
 new_game_button = ttk.Button(sidebar, text='New Game', width=8, command=new_game)
 options_button = ttk.Button(sidebar, text='Options', width=8)
-quit_game_button = ttk.Button(sidebar, text="Quit game", width=8, command=quit_print)
+quit_game_button = ttk.Button(sidebar, text="Quit game", width=8, command=quit_game)
 new_game_button.pack()
 options_button.pack()
 quit_game_button.pack()
