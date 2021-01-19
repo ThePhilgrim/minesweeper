@@ -58,35 +58,34 @@ class Game:
             anchor="nw",
         )
             
-        a=len(current_game.previously_clicked_square)
-        b=len(current_game.mine_locations)
-        if a + b == len(all_squares):
-#            f1 = ttk.Frame(width=200, height=200)
-#            f1.place(in_=big_frame, anchor="c", relx=.5, rely=.5)
-            frames = [PhotoImage(file=where_this_file_is / '01.gif', format = 'gif -index %i' %(i)) for i in range(8)]
+        count_already_open=len(self.previously_clicked_square)
+        count_mine_locations=len(self.mine_locations)
+        if count_already_open + count_mine_locations == self.width*self.height:
+#           f1 = tkinter.Frame(canvas, background='black')
+#           f1.place(in_=big_frame, anchor="c", relx=.5, rely=.5)
+            frames = [PhotoImage(file=where_this_file_is / 'doomguy.gif', format = 'gif -index %i' %(i)) for i in range(8)]
 #            gif= Button(f1, image=frames)
-            def update(a):
-                frame = frames[a]
-                a += 1
-                if a>=8:
-                    a = 0                
+            def update(index):
+                frame = frames[index]
+                index += 1
+                if index>=8:
+                    index = 0                
                 label.configure(image=frame)
-                root.after(100, update, a)
-            label = ttk.Label(root)
-            label.pack()
-            root.after(0, update, 0)
-            root.mainloop()    
+                root.after(100, update, index)
+            label = ttk.Label(canvas, background='black')
+            label.place(relx=0.5, rely=0.5, anchor='center')
+            root.after(0, update, 0)   
             
         
         if coordinate in self.mine_locations:
             statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
-            current_game.game_over = True
+            self.game_over = True
             canvas.create_image(
                 int(x * button_size), int(y * button_size), image=bomb_image, anchor="nw"
             )
         else:
             statusbar.config(text=f"{random.choice(live_message)}")
-            mine_count = current_game.mines_around_square(coordinate)
+            mine_count = self.mines_around_square(coordinate)
             if mine_count == 0:
                 self.open_squares(x - 1, y - 1)
                 self.open_squares(x - 1, y)
@@ -138,11 +137,6 @@ big_frame = ttk.Frame(root)
 big_frame.pack(fill="both", expand=True)
 top_frame = ttk.Frame(big_frame)
 top_frame.pack(fill="both", expand=True)
-
-all_squares=[]
-for x in range(0,21):
-   for y in range(0,21):
-      all_squares.append((x,y))
 
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
