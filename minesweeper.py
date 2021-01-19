@@ -219,13 +219,12 @@ def quit_print():
 
 
 def new_game():
-    current_game.mine_locations.clear()
-    current_game.previously_clicked_square.clear()
-    current_game.flag_dict.clear()
+    global current_game
+    current_game = Game()
+
     for x in range(0, button_size * current_game.width, button_size):
         for y in range(0, button_size * current_game.height, button_size):
             canvas.create_image((x, y), image=button_image, anchor="nw")
-    current_game.game_over = False
     statusbar['text'] = '***Lets go!***'
 
 
