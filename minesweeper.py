@@ -9,11 +9,12 @@ class Game:
     def __init__(self):
         self.width = 21
         self.height = 21
-        self.how_many_mines_user_wants = 50
+        self.how_many_mines_user_wants = 5
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
         self.game_over = False
+        self.label = None
 
     def mines_around_square(self, coordinate):
         """Looks at the squares adjacent to current_square and counts
@@ -58,6 +59,7 @@ class Game:
             anchor="nw",
         )
             
+        
         count_already_open=len(self.previously_clicked_square)
         count_mine_locations=len(self.mine_locations)
         if count_already_open + count_mine_locations == self.width*self.height:
@@ -65,17 +67,18 @@ class Game:
 #           f1.place(in_=big_frame, anchor="c", relx=.5, rely=.5)
             frames = [PhotoImage(file=where_this_file_is / 'doomguy.gif', format = 'gif -index %i' %(i)) for i in range(8)]
 #            gif= Button(f1, image=frames)
+            self.label = ttk.Label(canvas, background='black')
+            self.label.place(relx=0.5, rely=0.5, anchor='center')
             def update(index):
                 frame = frames[index]
                 index += 1
                 if index>=8:
                     index = 0                
-                label.configure(image=frame)
+                self.label.configure(image=frame)
                 root.after(100, update, index)
-            label = ttk.Label(canvas, background='black')
-            label.place(relx=0.5, rely=0.5, anchor='center')
             root.after(0, update, 0)   
             
+        
         
         if coordinate in self.mine_locations:
             statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
@@ -224,6 +227,9 @@ def new_game():
     current_game.mine_locations.clear()
     current_game.previously_clicked_square.clear()
     current_game.flag_dict.clear()
+    if current_game.label is not None:
+        current_game.label.destroy()
+        current_game.label = None
     for x in range(0, button_size * current_game.width, button_size):
         for y in range(0, button_size * current_game.height, button_size):
             canvas.create_image((x, y), image=button_image, anchor="nw")
