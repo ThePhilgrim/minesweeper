@@ -9,7 +9,7 @@ class Game:
     def __init__(self):
         self.width = 21
         self.height = 21
-        self.how_many_mines_user_wants = 50
+        self.how_many_mines_user_wants = 5
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
@@ -50,14 +50,35 @@ class Game:
         #    return
 
         self.previously_clicked_square.append((x, y))
-
+        print(len(self.previously_clicked_square)+len(self.mine_locations))
+                  
         canvas.create_image(
             int(x * button_size),
             int(y * button_size),
             image=button_image_pressed,
             anchor="nw",
         )
-
+            
+        a=len(current_game.previously_clicked_square)
+        b=len(current_game.mine_locations)
+        if a + b == len(all_squares):
+#            f1 = ttk.Frame(width=200, height=200)
+#            f1.place(in_=big_frame, anchor="c", relx=.5, rely=.5)
+            frames = [PhotoImage(file=where_this_file_is / '01.gif', format = 'gif -index %i' %(i)) for i in range(8)]
+#            gif= Button(f1, image=frames)
+            def update(a):
+                frame = frames[a]
+                a += 1
+                if a>=8:
+                    a = 0                
+                label.configure(image=frame)
+                root.after(100, update, a)
+            label = ttk.Label(root)
+            label.pack()
+            root.after(0, update, 0)
+            root.mainloop()    
+            
+        
         if coordinate in self.mine_locations:
             statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
             current_game.game_over = True
@@ -83,7 +104,7 @@ class Game:
                     coordinate[0] * button_size + (button_size / 2),
                     coordinate[1] * button_size + (button_size / 2),
                     text=str(mine_count),
-                    font=("helvetica", 22, "bold"),
+                    font=("helvetica", 17, "bold"),
                     fill=color_chart[mine_count],
                 )
 
@@ -98,8 +119,7 @@ class Game:
 
 current_game = Game()
 
-button_size = 25
-
+button_size = 23
 
 color_chart = {
     1: "turquoise",
@@ -121,11 +141,17 @@ big_frame.pack(fill="both", expand=True)
 top_frame = ttk.Frame(big_frame)
 top_frame.pack(fill="both", expand=True)
 
+all_squares=[]
+for x in range(0,21):
+   for y in range(0,21):
+      all_squares.append((x,y))
+print(len(all_squares))
+      
+
 
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
     or generates bomb_image"""
-
     if  not current_game.game_over:
         x = int(event.x / button_size)
         y = int(event.y / button_size)
@@ -180,10 +206,10 @@ button_image_pressed = PhotoImage(
 flag_image = PhotoImage(file=(where_this_file_is / "flag_small.png"))
 bomb_image = PhotoImage(file=(where_this_file_is / "bomb_small.png"))
 
-
 for x in range(0, button_size * current_game.width, button_size):
     for y in range(0, button_size * current_game.height, button_size):
         canvas.create_image((x, y), image=button_image, anchor="nw")
+
 
 live_message = [
     "You're alive.. for now !",
