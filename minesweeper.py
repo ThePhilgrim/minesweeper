@@ -9,11 +9,12 @@ class Game:
     def __init__(self):
         self.width = 21
         self.height = 21
-        self.how_many_mines_user_wants = 50
+        self.how_many_mines_user_wants = 5
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
         self.game_over = False
+        self.label = None
 
     def mines_around_square(self, coordinate):
         """Looks at the squares adjacent to current_square and counts
@@ -62,18 +63,18 @@ class Game:
         count_mine_locations=len(self.mine_locations)
         if count_already_open + count_mine_locations == self.width*self.height:
             frames = [PhotoImage(file=where_this_file_is / 'doomguy.gif', format = 'gif -index %i' %(i)) for i in range(8)]
+#            gif= Button(f1, image=frames)
+            self.label = ttk.Label(canvas, background='black')
+            self.label.place(relx=0.5, rely=0.5, anchor='center')
 
             def update(index):
                 frame = frames[index]
                 index += 1
                 if index>=8:
-                    index = 0
-                label.configure(image=frame)
+                    index = 0                
+                self.label.configure(image=frame)
                 root.after(100, update, index)
-
-            label = ttk.Label(canvas, background='black')
-            label.place(relx=0.5, rely=0.5, anchor='center')
-            root.after(0, update, 0)
+            root.after(0, update, 0)   
 
         if coordinate in self.mine_locations:
             statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
@@ -211,6 +212,10 @@ def quit_print():
 
 
 def new_game():
+    if current_game.label is not None:
+        current_game.label.destroy()
+        current_game.label = None
+
     global current_game
     current_game = Game()
 
