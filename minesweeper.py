@@ -64,7 +64,6 @@ class Game:
             canvas.create_image(
                 int(x * button_size), int(y * button_size), image=bomb_image, anchor="nw"
             )
-            # TODO: Should break the current game and offer user to start a new game
         else:
             statusbar.config(text=f"{random.choice(live_message)}")
             mine_count = current_game.mines_around_square(coordinate)
@@ -140,11 +139,9 @@ def clicked_square(event):
 def flagging(event):
     """Takes right click events, and places or removes flag_image.
     Adds placed flag positions with their flag id into a dict."""
-    # TODO: Change to dict with x_flag, y_flag as key and flag_id as value
     if not current_game.game_over:
         x_flag = int(event.x / button_size)
         y_flag = int(event.y / button_size)
-        # if (x_flag, y_flag) not in flag_dict:
         if (x_flag, y_flag) in current_game.previously_clicked_square:
             return
         elif (x_flag, y_flag) in current_game.flag_dict.keys():
