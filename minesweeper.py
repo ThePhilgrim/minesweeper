@@ -112,8 +112,6 @@ class Game:
             if (x, y) != where_user_clicked and (x, y) not in self.mine_locations:
                 self.mine_locations.append((x, y))
 
-current_game = Game()
-
 button_size = 23
 
 color_chart = {
@@ -172,8 +170,6 @@ def flagging(event):
 
 canvas = tkinter.Canvas(
     top_frame,
-    width=button_size * current_game.width,
-    height=button_size * current_game.height,
     highlightthickness=0,
     bg="black",
 )
@@ -217,6 +213,9 @@ def quit_print():
 def new_game():
     global current_game
     current_game = Game()
+
+    canvas['width']=button_size * current_game.width,
+    canvas['height']=button_size * current_game.height,
 
     for x in range(0, button_size * current_game.width, button_size):
         for y in range(0, button_size * current_game.height, button_size):
