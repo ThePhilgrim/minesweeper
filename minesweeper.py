@@ -60,7 +60,7 @@ class Game:
 
         count_already_open=len(self.previously_clicked_square)
         count_mine_locations=len(self.mine_locations)
-        if count_already_open + count_mine_locations == self.width*self.height:
+        if count_already_open + count_mine_locations == self.width*self.height and coordinate not in self.mine_locations:
             frames = [PhotoImage(file=where_this_file_is / 'doomguy.gif', format = 'gif -index %i' %(i)) for i in range(8)]
             gif_label.place(relx=0.5, rely=0.5, anchor='center')
 
@@ -178,7 +178,7 @@ canvas.bind("<Button-1>", clicked_square)
 canvas.bind("<Button-2>", flagging)  # Mac
 canvas.bind("<Button-3>", flagging)  # Windows, Linux
 
-gif_label = ttk.Label(canvas, background='black')
+gif_label = ttk.Label(canvas, background='black', text='Congratulations!', compound='top', font='Helvetica 20', foreground='orange')
 
 where_this_file_is = pathlib.Path(__file__).parent
 button_image = PhotoImage(file=(where_this_file_is / "button_small.png"))
@@ -211,6 +211,7 @@ def quit_game():
 
 
 def new_game():
+    canvas.delete('all')
     global current_game
     current_game = Game()
 
