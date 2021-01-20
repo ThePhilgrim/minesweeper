@@ -242,9 +242,6 @@ sidebar = ttk.Frame(
     top_frame, width=300, borderwidth=2,
 )
 sidebar.pack(side="right", fill="both", anchor="w",)
-new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
-options_button = ttk.Button(sidebar, text='Options')
-quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 
 new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
 options_button = ttk.Button(sidebar, text='Options')
