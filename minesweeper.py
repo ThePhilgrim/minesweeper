@@ -48,7 +48,6 @@ class Game:
             return
 
         self.previously_clicked_square.append((x, y))
-
         canvas.create_image(
             int(x * button_size),
             int(y * button_size),
@@ -74,13 +73,13 @@ class Game:
             root.after(0, update, 0)   
 
         if coordinate in self.mine_locations:
-            statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
+            statusbar_action.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
             self.game_over = True
             canvas.create_image(
                 int(x * button_size), int(y * button_size), image=bomb_image, anchor="nw"
             )
         else:
-            statusbar.config(text=f"{random.choice(live_message)}")
+            statusbar_action.config(text=f"{random.choice(live_message)}")
             mine_count = self.mines_around_square(coordinate)
             if mine_count == 0:
                 self.open_squares(x - 1, y - 1)
@@ -109,6 +108,8 @@ class Game:
             y = random.randrange(self.height)
             if (x, y) != where_user_clicked and (x, y) not in self.mine_locations:
                 self.mine_locations.append((x, y))
+                
+        
 
 button_size = 23
 
@@ -157,6 +158,7 @@ def flagging(event):
         elif (x_flag, y_flag) in current_game.flag_dict.keys():
             canvas.delete(current_game.flag_dict[x_flag, y_flag])
             current_game.flag_dict.pop((x_flag, y_flag))
+            statusbar_count['text']=(current_game.how_many_mines_user_wants - len(current_game.flag_dict))
         else:
             flag_id = canvas.create_image(
                 int(event.x / button_size) * button_size + (button_size / 2),
@@ -165,6 +167,7 @@ def flagging(event):
                 anchor="center",
             )
             current_game.flag_dict[(x_flag, y_flag)] = flag_id
+            statusbar_count['text']=(current_game.how_many_mines_user_wants - len(current_game.flag_dict))
 
 canvas = tkinter.Canvas(
     top_frame,
@@ -220,22 +223,28 @@ def new_game():
     for x in range(0, button_size * current_game.width, button_size):
         for y in range(0, button_size * current_game.height, button_size):
             canvas.create_image((x, y), image=button_image, anchor="nw")
-    statusbar['text'] = '***Lets go!***'
+    statusbar_action['text'] = '***Lets go!***'
+    statusbar_count['text'] = current_game.how_many_mines_user_wants
 
 
 
-statusbar = ttk.Label(
+statusbar_action = ttk.Label(
     big_frame, anchor="w", relief="sunken"
 )
-statusbar.pack(side="bottom", fill="x")
+statusbar_action.pack(side="bottom", fill='x')
+
+statusbar_count = ttk.Label(
+    statusbar_action, anchor='s', relief='sunken', width='13' 
+    )
+statusbar_count.pack(side='right', fill='x')
 
 sidebar = ttk.Frame(
     top_frame, width=100, borderwidth=2,
 )
 sidebar.pack(side="right", fill="both", anchor="w",)
-new_game_button = ttk.Button(sidebar, text='New Game', width=8, command=new_game)
-options_button = ttk.Button(sidebar, text='Options', width=8)
-quit_game_button = ttk.Button(sidebar, text="Quit game", width=8, command=quit_game)
+new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
+options_button = ttk.Button(sidebar, text='Options')
+quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 new_game_button.pack()
 options_button.pack()
 quit_game_button.pack()
