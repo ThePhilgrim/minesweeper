@@ -108,8 +108,8 @@ class Game:
             y = random.randrange(self.height)
             if (x, y) != where_user_clicked and (x, y) not in self.mine_locations:
                 self.mine_locations.append((x, y))
-                
-        
+
+
 
 button_size = 23
 
@@ -234,7 +234,7 @@ statusbar_action = ttk.Label(
 statusbar_action.pack(side="bottom", fill='x')
 
 statusbar_count = ttk.Label(
-    statusbar_action, anchor='s', relief='sunken', width='13' 
+    statusbar_action, anchor='s', relief='sunken', width='13'
     )
 statusbar_count.pack(side='right', fill='x')
 
@@ -246,13 +246,13 @@ new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
 options_button = ttk.Button(sidebar, text='Options')
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 
-new_game_button = ttk.Button(sidebar, text='New Game', width=11, command=new_game)
-options_button = ttk.Button(sidebar, text='Options', width=11)
-quit_game_button = ttk.Button(sidebar, text="Quit game", width=11, command=quit_game)
+new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
+options_button = ttk.Button(sidebar, text='Options')
+quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 
-new_game_button.pack()
-options_button.pack()
-quit_game_button.pack()
+new_game_button.pack(fill='x')
+options_button.pack(fill='x')
+quit_game_button.pack(fill='x')
 
 new_game()
 
