@@ -158,7 +158,7 @@ def flagging(event):
         elif (x_flag, y_flag) in current_game.flag_dict.keys():
             canvas.delete(current_game.flag_dict[x_flag, y_flag])
             current_game.flag_dict.pop((x_flag, y_flag))
-            statusbar_count['text']=(current_game.how_many_mines_user_wants - len(current_game.flag_dict))
+            statusbar_count['text']=f'{current_game.how_many_mines_user_wants - len(current_game.flag_dict)} mines left'
         else:
             flag_id = canvas.create_image(
                 int(event.x / button_size) * button_size + (button_size / 2),
@@ -167,7 +167,7 @@ def flagging(event):
                 anchor="center",
             )
             current_game.flag_dict[(x_flag, y_flag)] = flag_id
-            statusbar_count['text']=(current_game.how_many_mines_user_wants - len(current_game.flag_dict))
+            statusbar_count['text']=f'{current_game.how_many_mines_user_wants - len(current_game.flag_dict)} mines left'
 
 canvas = tkinter.Canvas(
     top_frame,
@@ -224,7 +224,7 @@ def new_game():
         for y in range(0, button_size * current_game.height, button_size):
             canvas.create_image((x, y), image=button_image, anchor="nw")
     statusbar_action['text'] = '***Lets go!***'
-    statusbar_count['text'] = current_game.how_many_mines_user_wants
+    statusbar_count['text'] = f'{current_game.how_many_mines_user_wants} mines left'
 
 
 
@@ -245,10 +245,6 @@ sidebar.pack(side="right", fill="both", anchor="w",)
 new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
 options_button = ttk.Button(sidebar, text='Options')
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
-
-new_game_button = ttk.Button(sidebar, text='New Game', width=11, command=new_game)
-options_button = ttk.Button(sidebar, text='Options', width=11)
-quit_game_button = ttk.Button(sidebar, text="Quit game", width=11, command=quit_game)
 
 new_game_button.pack()
 options_button.pack()
