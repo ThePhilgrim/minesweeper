@@ -215,8 +215,8 @@ def new_game():
     current_game = Game()
 
     gif_label.place_forget()
-    canvas['width']=button_size * current_game.width,
-    canvas['height']=button_size * current_game.height,
+    canvas['width']=button_size * current_game.width
+    canvas['height']=button_size * current_game.height
 
     for x in range(0, button_size * current_game.width, button_size):
         for y in range(0, button_size * current_game.height, button_size):
