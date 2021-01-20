@@ -68,7 +68,7 @@ class Game:
                 if index>=8:
                     index = 0
                 gif_label.configure(image=frame)
-                if self is current_game:     # TODO: this check is ugly, get rid of it
+                if self is current_game:
                     # New game not started yet, can keep animating
                     root.after(100, update, index)
             root.after(0, update, 0)
