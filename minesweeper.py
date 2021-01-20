@@ -66,12 +66,12 @@ class Game:
                 frame = frames[index]
                 index += 1
                 if index>=8:
-                    index = 0                
+                    index = 0
                 gif_label.configure(image=frame)
                 if self is current_game:     # TODO: this check is ugly, get rid of it
                     # New game not started yet, can keep animating
                     root.after(100, update, index)
-            root.after(0, update, 0)   
+            root.after(0, update, 0)
 
         if coordinate in self.mine_locations:
             statusbar.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
@@ -230,12 +230,12 @@ statusbar = ttk.Label(
 statusbar.pack(side="bottom", fill="x")
 
 sidebar = ttk.Frame(
-    top_frame, width=100, borderwidth=2,
+    top_frame, width=300, borderwidth=2,
 )
 sidebar.pack(side="right", fill="both", anchor="w",)
-new_game_button = ttk.Button(sidebar, text='New Game', width=8, command=new_game)
-options_button = ttk.Button(sidebar, text='Options', width=8)
-quit_game_button = ttk.Button(sidebar, text="Quit game", width=8, command=quit_game)
+new_game_button = ttk.Button(sidebar, text='New Game', width=11, command=new_game)
+options_button = ttk.Button(sidebar, text='Options', width=11)
+quit_game_button = ttk.Button(sidebar, text="Quit game", width=11, command=quit_game)
 new_game_button.pack()
 options_button.pack()
 quit_game_button.pack()
