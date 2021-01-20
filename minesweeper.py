@@ -9,7 +9,7 @@ class Game:
     def __init__(self):
         self.width = 21
         self.height = 21
-        self.how_many_mines_user_wants = 5
+        self.how_many_mines_user_wants = 50
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
@@ -44,10 +44,8 @@ class Game:
         if coordinate in self.previously_clicked_square:
             return
 
-        ### This is to prevent left clicks on flagged squares.
-        ### Leave commented until it's possible to remove flags
-        #if coordinate in current_game.flag_dict:
-        #    return
+        if coordinate in self.flag_dict:
+            return
 
         self.previously_clicked_square.append((x, y))
 
