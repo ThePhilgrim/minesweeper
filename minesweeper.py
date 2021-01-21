@@ -6,19 +6,14 @@ from tkinter import PhotoImage
 
 class Game:
 
-    def __init__(self):
-        self.width = 21
-        self.height = 21
-        self.how_many_mines_user_wants = 75
+    def __init__(self, percentage, width, height):
+        self.width = width
+        self.height = height
+        self.how_many_mines_user_wants = percentage
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
         self.game_over = False
-
-    percent = (self.width * self.height / 100) * #SLIDER VALUE
-    def mine_percentage(self):
-
-
 
     def mines_around_square(self, coordinate):
         """Looks at the squares adjacent to current_square and counts
@@ -216,10 +211,16 @@ def quit_game():
     root.destroy()
 
 
+
 def new_game():
     canvas.delete('all')
+
     global current_game
-    current_game = Game()
+
+    percentage = int(current_game.width * current_game.height / 100) * slider_value
+    slider_value = int(difficulty_slider.scale.get())
+
+    current_game = Game(percentage, width=21, height=2)
 
     gif_label.place_forget()
     canvas['width']=button_size * current_game.width
@@ -230,10 +231,6 @@ def new_game():
             canvas.create_image((x, y), image=button_image, anchor="nw")
     statusbar_action['text'] = '***Lets go!***'
     statusbar_count['text'] = f'{current_game.how_many_mines_user_wants} mines left'
-
-
-
-
 
 
 
@@ -254,11 +251,8 @@ sidebar = ttk.Frame(
 sidebar.pack(side="right", fill="both", anchor="w",)
 
 
-
 new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
 difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=60)
-
-
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 
 sidebar_difficulty_text = ttk.Label(sidebar, text="Difficulty:")
@@ -267,6 +261,7 @@ new_game_button.pack(fill='x', pady=10)
 sidebar_difficulty_text.pack(pady=20)
 difficulty_slider.pack(padx = 5)
 quit_game_button.pack(fill='x', side='bottom', pady=10)
+
 
 new_game()
 
