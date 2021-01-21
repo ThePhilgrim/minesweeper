@@ -215,11 +215,13 @@ def quit_game():
 def new_game():
     canvas.delete('all')
 
-    width = 21
-    height = 2
+    width = 23
+    height = 23
 
     slider_value = int(difficulty_slider.scale.get())
-    percentage = int(width * height / 100) * slider_value
+    real_percentage = (width * height / 100) * slider_value
+    percentage = round(real_percentage)
+
 
     global current_game
     current_game = Game(percentage, width, height)
@@ -257,10 +259,11 @@ new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
 difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=60)
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 
-sidebar_difficulty_text = ttk.Label(sidebar, text="Difficulty:")
+sidebar_difficulty_text = ttk.Label(sidebar, text="Mine Percentage:")
 
 new_game_button.pack(fill='x', pady=10)
 sidebar_difficulty_text.pack(pady=20)
+difficulty_slider.value=20
 difficulty_slider.pack(padx = 5)
 quit_game_button.pack(fill='x', side='bottom', pady=10)
 
