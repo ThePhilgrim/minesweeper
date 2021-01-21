@@ -9,11 +9,16 @@ class Game:
     def __init__(self):
         self.width = 21
         self.height = 21
-        self.how_many_mines_user_wants = 50
+        self.how_many_mines_user_wants = 75
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
         self.game_over = False
+
+    percent = (self.width * self.height / 100) * #SLIDER VALUE
+    def mine_percentage(self):
+
+
 
     def mines_around_square(self, coordinate):
         """Looks at the squares adjacent to current_square and counts
@@ -228,6 +233,11 @@ def new_game():
 
 
 
+
+
+
+
+
 statusbar_action = ttk.Label(
     big_frame, anchor="w", relief="sunken"
 )
@@ -243,13 +253,20 @@ sidebar = ttk.Frame(
 )
 sidebar.pack(side="right", fill="both", anchor="w",)
 
+
+
 new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
-options_button = ttk.Button(sidebar, text='Options')
+difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=60)
+
+
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 
-new_game_button.pack(fill='x')
-options_button.pack(fill='x')
-quit_game_button.pack(fill='x')
+sidebar_difficulty_text = ttk.Label(sidebar, text="Difficulty:")
+
+new_game_button.pack(fill='x', pady=10)
+sidebar_difficulty_text.pack(pady=20)
+difficulty_slider.pack(padx = 5)
+quit_game_button.pack(fill='x', side='bottom', pady=10)
 
 new_game()
 
