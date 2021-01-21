@@ -1,6 +1,7 @@
 import pathlib
 import random
 import tkinter
+import datetime
 from tkinter import ttk
 from tkinter import PhotoImage
 
@@ -9,11 +10,12 @@ class Game:
     def __init__(self):
         self.width = 21
         self.height = 21
-        self.how_many_mines_user_wants = 50
+        self.how_many_mines_user_wants = 5
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
         self.game_over = False
+        self.game_time = datetime.datetime(2021, 1, 1)
 
     def mines_around_square(self, coordinate):
         """Looks at the squares adjacent to current_square and counts
@@ -33,6 +35,7 @@ class Game:
             ):
                 adjacent_mines += 1
         return adjacent_mines
+
 
     def open_squares(self, x, y):
         if x not in range(self.width) or y not in range(self.height):
@@ -100,6 +103,13 @@ class Game:
                     fill=color_chart[mine_count],
                 )
 
+    def timer(self, game_time):
+        if self is current_game:
+            print(game_time)
+            game_time += datetime.timedelta(seconds=1)
+            root.after(1000, self.timer)
+           
+
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
         clicks the first square"""
@@ -108,8 +118,19 @@ class Game:
             y = random.randrange(self.height)
             if (x, y) != where_user_clicked and (x, y) not in self.mine_locations:
                 self.mine_locations.append((x, y))
+                
+def clicked_square(event):
+    """Takes click events and prints number of adjacent mines,
+    or generates bomb_image"""
+    if  not current_game.game_over:
+        x = int(event.x / button_size)
+        y = int(event.y / button_size)
+        coordinate = (x, y)
 
+        if len(current_game.mine_locations) == 0:
+            current_game.generate_random_mine_locations(coordinate)
 
+        current_game.open_squares(x, y)
 
 button_size = 23
 
@@ -124,7 +145,6 @@ color_chart = {
     8: "red4",
 }
 
-
 root = tkinter.Tk()
 root.resizable(False, False)
 
@@ -132,20 +152,6 @@ big_frame = ttk.Frame(root)
 big_frame.pack(fill="both", expand=True)
 top_frame = ttk.Frame(big_frame)
 top_frame.pack(fill="both", expand=True)
-
-def clicked_square(event):
-    """Takes click events and prints number of adjacent mines,
-    or generates bomb_image"""
-    if  not current_game.game_over:
-        x = int(event.x / button_size)
-        y = int(event.y / button_size)
-        coordinate = (x, y)
-
-        if len(current_game.mine_locations) == 0:
-            current_game.generate_random_mine_locations(coordinate)
-
-        current_game.open_squares(x, y)
-
 
 def flagging(event):
     """Takes right click events, and places or removes flag_image.
@@ -179,7 +185,7 @@ canvas.bind("<Button-1>", clicked_square)
 canvas.bind("<Button-2>", flagging)  # Mac
 canvas.bind("<Button-3>", flagging)  # Windows, Linux
 
-gif_label = ttk.Label(canvas, background='black', text='Congratulations!', compound='top', font='Helvetica 20', foreground='orange')
+gif_label = ttk.Label(canvas, background='black', text='Congratulations!', compound='top', font='Impact 20', foreground='sienna3')
 
 where_this_file_is = pathlib.Path(__file__).parent
 button_image = PhotoImage(file=(where_this_file_is / "button_small.png"))
@@ -215,7 +221,6 @@ def new_game():
     canvas.delete('all')
     global current_game
     current_game = Game()
-
     gif_label.place_forget()
     canvas['width']=button_size * current_game.width
     canvas['height']=button_size * current_game.height
@@ -226,22 +231,20 @@ def new_game():
     statusbar_action['text'] = '***Lets go!***'
     statusbar_count['text'] = f'{current_game.how_many_mines_user_wants} mines left'
 
-
-
 statusbar_action = ttk.Label(
-    big_frame, anchor="w", relief="sunken"
+    big_frame, anchor="w", relief="flat"
 )
 statusbar_action.pack(side="bottom", fill='x')
 
 statusbar_count = ttk.Label(
-    statusbar_action, anchor='s', relief='sunken', width='13'
+    statusbar_action, anchor='s', relief='flat', width='13'
     )
 statusbar_count.pack(side='right', fill='x')
 
 sidebar = ttk.Frame(
     top_frame, width=300, borderwidth=2,
 )
-sidebar.pack(side="right", fill="both", anchor="w",)
+sidebar.pack(side="right", fill="both", anchor="w")
 
 new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
 options_button = ttk.Button(sidebar, text='Options')
@@ -253,5 +256,6 @@ quit_game_button.pack(fill='x')
 
 new_game()
 
+current_game.timer()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
