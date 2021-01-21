@@ -7,10 +7,10 @@ from tkinter import PhotoImage
 
 class Game:
 
-    def __init__(self):
-        self.width = 21
-        self.height = 21
-        self.how_many_mines_user_wants = 5
+    def __init__(self, percentage, width, height):
+        self.width = width
+        self.height = height
+        self.how_many_mines_user_wants = percentage
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
@@ -60,7 +60,7 @@ class Game:
         count_already_open=len(self.previously_clicked_square)
         count_mine_locations=len(self.mine_locations)
         if count_already_open + count_mine_locations == self.width*self.height and coordinate not in self.mine_locations:
-            
+
             frames = [PhotoImage(file=where_this_file_is / 'doomguy.gif', format = 'gif -index %i' %(i)) for i in range(8)]
             gif_label.place(relx=0.5, rely=0.5, anchor='center')
 
@@ -108,7 +108,7 @@ class Game:
             statusbar_time.config(text=self.game_time.strftime('%M:%S'))
             self.game_time += datetime.timedelta(seconds=1)
             root.after(1000, self.timer)
-           
+
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
         clicks the first square"""
@@ -117,7 +117,7 @@ class Game:
             y = random.randrange(self.height)
             if (x, y) != where_user_clicked and (x, y) not in self.mine_locations:
                 self.mine_locations.append((x, y))
-                
+
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
     or generates bomb_image"""
@@ -216,10 +216,21 @@ def quit_game():
     root.destroy()
 
 
+
 def new_game():
     canvas.delete('all')
+
+    width = 23
+    height = 23
+
+    slider_value = int(difficulty_slider.scale.get())
+    real_percentage = (width * height / 100) * slider_value
+    percentage = round(real_percentage)
+
+
     global current_game
-    current_game = Game()
+    current_game = Game(percentage, width, height)
+
     gif_label.place_forget()
     current_game.game_time = datetime.datetime(2021, 1, 1)
     current_game.timer()
@@ -232,8 +243,11 @@ def new_game():
     statusbar_action['text'] = '***Lets go!***'
     statusbar_count['text'] = f'{current_game.how_many_mines_user_wants} mines left'
 
+
+
+
 statusbar = ttk.Label(
-    big_frame, anchor="w", relief="flat"
+    big_frame, anchor="w", relief="sunken"
 )
 statusbar.pack(side="bottom", fill='x')
 
@@ -257,13 +271,19 @@ sidebar = ttk.Frame(
 )
 sidebar.pack(side="right", fill="both", anchor="w")
 
+
 new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
-options_button = ttk.Button(sidebar, text='Options')
+difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=60)
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 
-new_game_button.pack(fill='x')
-options_button.pack(fill='x')
-quit_game_button.pack(fill='x')
+sidebar_difficulty_text = ttk.Label(sidebar, text="Mine Percentage:")
+
+new_game_button.pack(fill='x', pady=10)
+sidebar_difficulty_text.pack(pady=20)
+difficulty_slider.value=20
+difficulty_slider.pack(padx = 5)
+quit_game_button.pack(fill='x', side='bottom', pady=10)
+
 
 new_game()
 
