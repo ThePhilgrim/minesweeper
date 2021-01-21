@@ -215,12 +215,14 @@ def quit_game():
 def new_game():
     canvas.delete('all')
 
-    global current_game
+    width = 21
+    height = 2
 
-    percentage = int(current_game.width * current_game.height / 100) * slider_value
     slider_value = int(difficulty_slider.scale.get())
+    percentage = int(width * height / 100) * slider_value
 
-    current_game = Game(percentage, width=21, height=2)
+    global current_game
+    current_game = Game(percentage, width, height)
 
     gif_label.place_forget()
     canvas['width']=button_size * current_game.width
