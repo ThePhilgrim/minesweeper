@@ -15,7 +15,6 @@ class Game:
         self.previously_clicked_square = []
         self.flag_dict = {}
         self.game_over = False
-        self.game_time = datetime.datetime(2021, 1, 1)
 
     def mines_around_square(self, coordinate):
         """Looks at the squares adjacent to current_square and counts
@@ -61,6 +60,7 @@ class Game:
         count_already_open=len(self.previously_clicked_square)
         count_mine_locations=len(self.mine_locations)
         if count_already_open + count_mine_locations == self.width*self.height and coordinate not in self.mine_locations:
+            
             frames = [PhotoImage(file=where_this_file_is / 'doomguy.gif', format = 'gif -index %i' %(i)) for i in range(8)]
             gif_label.place(relx=0.5, rely=0.5, anchor='center')
 
@@ -103,13 +103,12 @@ class Game:
                     fill=color_chart[mine_count],
                 )
 
-    def timer(self, game_time):
+    def timer(self):
         if self is current_game:
-            print(game_time)
-            game_time += datetime.timedelta(seconds=1)
+            statusbar_time.config(text=self.game_time.strftime('%M:%S'))
+            self.game_time += datetime.timedelta(seconds=1)
             root.after(1000, self.timer)
            
-
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
         clicks the first square"""
@@ -222,6 +221,8 @@ def new_game():
     global current_game
     current_game = Game()
     gif_label.place_forget()
+    current_game.game_time = datetime.datetime(2021, 1, 1)
+    current_game.timer()
     canvas['width']=button_size * current_game.width
     canvas['height']=button_size * current_game.height
 
@@ -231,15 +232,25 @@ def new_game():
     statusbar_action['text'] = '***Lets go!***'
     statusbar_count['text'] = f'{current_game.how_many_mines_user_wants} mines left'
 
-statusbar_action = ttk.Label(
+statusbar = ttk.Label(
     big_frame, anchor="w", relief="flat"
 )
-statusbar_action.pack(side="bottom", fill='x')
+statusbar.pack(side="bottom", fill='x')
 
 statusbar_count = ttk.Label(
-    statusbar_action, anchor='s', relief='flat', width='13'
-    )
+    statusbar, anchor='s', relief='flat', width='13'
+)
 statusbar_count.pack(side='right', fill='x')
+
+statusbar_time = ttk.Label(
+    statusbar, anchor='w', relief='flat', width='15'
+)
+statusbar_time.pack(padx='5', side='left', fill='both')
+
+statusbar_action = ttk.Label(
+    statusbar, anchor='s', relief='flat', width='50'
+)
+statusbar_action.pack(side='left', fill='x')
 
 sidebar = ttk.Frame(
     top_frame, width=300, borderwidth=2,
@@ -256,6 +267,5 @@ quit_game_button.pack(fill='x')
 
 new_game()
 
-current_game.timer()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
