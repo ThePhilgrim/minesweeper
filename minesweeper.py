@@ -243,34 +243,20 @@ def new_game():
     statusbar_action['text'] = '***Lets go!***'
     statusbar_count['text'] = f'{current_game.how_many_mines_user_wants} mines left'
 
-
-
-
-statusbar = ttk.Label(
-    big_frame, anchor="w", relief="sunken"
-)
+statusbar = ttk.Label(big_frame, anchor="w", relief="flat")
 statusbar.pack(side="bottom", fill='x')
 
-statusbar_count = ttk.Label(
-    statusbar, anchor='s', relief='flat', width='13'
-)
-statusbar_count.pack(side='right', fill='x')
+statusbar_count = ttk.Label(statusbar, anchor='s', relief='flat', width='15')
+statusbar_count.pack(side='right', fill='x', expand=10)
 
-statusbar_time = ttk.Label(
-    statusbar, anchor='w', relief='flat', width='15'
-)
-statusbar_time.pack(padx='5', side='left', fill='both')
+statusbar_time = ttk.Label(statusbar, anchor='w', relief='flat', width='15')
+statusbar_time.pack(padx='5', side='left', fill='x', expand=10)
 
-statusbar_action = ttk.Label(
-    statusbar, anchor='s', relief='flat', width='50'
-)
-statusbar_action.pack(side='left', fill='x')
+statusbar_action = ttk.Label(statusbar, anchor='s', relief='flat', width='70')
+statusbar_action.pack(side='left', fill='x', expand=10)
 
-sidebar = ttk.Frame(
-    top_frame, width=300, borderwidth=2,
-)
+sidebar = ttk.Frame(top_frame, width=300, borderwidth=2)
 sidebar.pack(side="right", fill="both", anchor="w")
-
 
 new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
 difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=60)
