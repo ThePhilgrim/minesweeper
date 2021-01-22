@@ -7,10 +7,10 @@ from tkinter import PhotoImage
 
 
 class Game:
-    def __init__(self, percentage, width, height):
+    def __init__(self, rounded_percentage, width, height):
         self.width = width
         self.height = height
-        self.how_many_mines_user_wants = percentage
+        self.how_many_mines_user_wants = rounded_percentage
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
@@ -250,12 +250,12 @@ def new_game():
     height = int(height_slider.scale.get())
     width = int(width_slider.scale.get())
 
-    slider_value = int(difficulty_slider.scale.get())
-    real_percentage = (width * height / 100) * slider_value
-    percentage = round(real_percentage)
+    slider_value = difficulty_slider_callback()
+    percentage = (width * height / 100) * slider_value
+    rounded_percentage = round(percentage)
 
     global current_game
-    current_game = Game(percentage, width, height)
+    current_game = Game(rounded_percentage, width, height)
 
     gif_label.place_forget()
     current_game.game_time = datetime.datetime(2021, 1, 1)
@@ -307,24 +307,35 @@ sidebar_percentage_text.pack(pady=[40, 0])
 sidebar_difficulty_text = ttk.Label(sidebar, text="Easy")
 sidebar_difficulty_text.pack()
 
-difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=60)
+def difficulty_slider_callback(*args):
+    if int(slider_variable.get()) <= 10:
+        sidebar_difficulty_text["text"]="Easy"
+    elif int(slider_variable.get()) <= 20:
+        sidebar_difficulty_text["text"]="Medium"
+    elif int(slider_variable.get()) <= 35:
+        sidebar_difficulty_text["text"]="Hard"
+    else:
+        sidebar_difficulty_text["text"]="HELL!"
+    return slider_variable.get()
+
+slider_variable = tkinter.IntVar()
+slider_variable.trace_variable('w', difficulty_slider_callback)
+
+difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=50, variable=slider_variable)
 difficulty_slider.value = 15
 difficulty_slider.pack(padx=5)
 
-if int(difficulty_slider.scale.get()) <= 15:
-    sidebar_difficulty_text["text"]="Easy"
-elif int(difficulty_slider.scale.get()) <= 25:
-    sidebar_difficulty_text["text"]="Medium"
-elif int(difficulty_slider.scale.get()) <= 40:
-    sidebar_difficulty_text["text"]="Hard"
-else:
-    sidebar_difficulty_text["text"]="HELL!"
+
+
+
+
+
 
 
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 quit_game_button.pack(fill="x", side="bottom", pady=10)
 
 new_game()
-
+print(ttk)
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
