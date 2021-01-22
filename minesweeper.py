@@ -116,7 +116,7 @@ class Game:
                 )
 
     def timer(self):
-        if self is current_game:
+        if self is current_game and self.game_over == False:
             statusbar_time.config(text=self.game_time.strftime("%M:%S"))
             self.game_time += datetime.timedelta(seconds=1)
             root.after(1000, self.timer)
