@@ -301,12 +301,25 @@ width_slider = ttk.LabeledScale(sidebar, from_=5, to=55)
 width_slider.value = 15
 width_slider.pack(padx=5)
 
-sidebar_difficulty_text = ttk.Label(sidebar, text="Mine Percentage:")
-sidebar_difficulty_text.pack(pady=[40, 0])
+sidebar_percentage_text = ttk.Label(sidebar, text="Mine Percentage:")
+sidebar_percentage_text.pack(pady=[40, 0])
+
+sidebar_difficulty_text = ttk.Label(sidebar, text="Easy")
+sidebar_difficulty_text.pack()
 
 difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=60)
-difficulty_slider.value = 20
+difficulty_slider.value = 15
 difficulty_slider.pack(padx=5)
+
+if int(difficulty_slider.scale.get()) <= 15:
+    sidebar_difficulty_text["text"]="Easy"
+elif int(difficulty_slider.scale.get()) <= 25:
+    sidebar_difficulty_text["text"]="Medium"
+elif int(difficulty_slider.scale.get()) <= 40:
+    sidebar_difficulty_text["text"]="Hard"
+else:
+    sidebar_difficulty_text["text"]="HELL!"
+
 
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 quit_game_button.pack(fill="x", side="bottom", pady=10)
