@@ -5,8 +5,8 @@ import datetime
 from tkinter import ttk
 from tkinter import PhotoImage
 
-class Game:
 
+class Game:
     def __init__(self, percentage, width, height):
         self.width = width
         self.height = height
@@ -35,7 +35,6 @@ class Game:
                 adjacent_mines += 1
         return adjacent_mines
 
-
     def open_squares(self, x, y):
         if x not in range(self.width) or y not in range(self.height):
             # Happens when auto-opening at edge buttons
@@ -57,29 +56,42 @@ class Game:
             anchor="nw",
         )
 
-        count_already_open=len(self.previously_clicked_square)
-        count_mine_locations=len(self.mine_locations)
-        if count_already_open + count_mine_locations == self.width*self.height and coordinate not in self.mine_locations:
+        count_already_open = len(self.previously_clicked_square)
+        count_mine_locations = len(self.mine_locations)
+        if (
+            count_already_open + count_mine_locations == self.width * self.height
+            and coordinate not in self.mine_locations
+        ):
 
-            frames = [PhotoImage(file=where_this_file_is / 'doomguy.gif', format = 'gif -index %i' %(i)) for i in range(8)]
-            gif_label.place(relx=0.5, rely=0.5, anchor='center')
+            frames = [
+                PhotoImage(
+                    file=where_this_file_is / "doomguy.gif",
+                    format="gif -index %i" % (i),
+                )
+                for i in range(8)
+            ]
+            gif_label.place(relx=0.5, rely=0.5, anchor="center")
 
             def update(index):
                 frame = frames[index]
                 index += 1
-                if index>=8:
+                if index >= 8:
                     index = 0
                 gif_label.configure(image=frame)
                 if self is current_game:
                     # New game not started yet, can keep animating
                     root.after(100, update, index)
+
             root.after(0, update, 0)
 
         if coordinate in self.mine_locations:
             statusbar_action.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
             self.game_over = True
             canvas.create_image(
-                int(x * button_size), int(y * button_size), image=bomb_image, anchor="nw"
+                int(x * button_size),
+                int(y * button_size),
+                image=bomb_image,
+                anchor="nw",
             )
         else:
             statusbar_action.config(text=f"{random.choice(live_message)}")
@@ -105,7 +117,7 @@ class Game:
 
     def timer(self):
         if self is current_game:
-            statusbar_time.config(text=self.game_time.strftime('%M:%S'))
+            statusbar_time.config(text=self.game_time.strftime("%M:%S"))
             self.game_time += datetime.timedelta(seconds=1)
             root.after(1000, self.timer)
 
@@ -118,10 +130,11 @@ class Game:
             if (x, y) != where_user_clicked and (x, y) not in self.mine_locations:
                 self.mine_locations.append((x, y))
 
+
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
     or generates bomb_image"""
-    if  not current_game.game_over:
+    if not current_game.game_over:
         x = int(event.x / button_size)
         y = int(event.y / button_size)
         coordinate = (x, y)
@@ -130,6 +143,7 @@ def clicked_square(event):
             current_game.generate_random_mine_locations(coordinate)
 
         current_game.open_squares(x, y)
+
 
 button_size = 23
 
@@ -152,6 +166,7 @@ big_frame.pack(fill="both", expand=True)
 top_frame = ttk.Frame(big_frame)
 top_frame.pack(fill="both", expand=True)
 
+
 def flagging(event):
     """Takes right click events, and places or removes flag_image.
     Adds placed flag positions with their flag id into a dict."""
@@ -163,7 +178,9 @@ def flagging(event):
         elif (x_flag, y_flag) in current_game.flag_dict.keys():
             canvas.delete(current_game.flag_dict[x_flag, y_flag])
             current_game.flag_dict.pop((x_flag, y_flag))
-            statusbar_count['text']=f'{current_game.how_many_mines_user_wants - len(current_game.flag_dict)} mines left'
+            statusbar_count[
+                "text"
+            ] = f"{current_game.how_many_mines_user_wants - len(current_game.flag_dict)} mines left"
         else:
             flag_id = canvas.create_image(
                 int(event.x / button_size) * button_size + (button_size / 2),
@@ -172,19 +189,29 @@ def flagging(event):
                 anchor="center",
             )
             current_game.flag_dict[(x_flag, y_flag)] = flag_id
-            statusbar_count['text']=f'{current_game.how_many_mines_user_wants - len(current_game.flag_dict)} mines left'
+            statusbar_count[
+                "text"
+            ] = f"{current_game.how_many_mines_user_wants - len(current_game.flag_dict)} mines left"
+
 
 canvas = tkinter.Canvas(
     top_frame,
     highlightthickness=0,
     bg="black",
 )
-canvas.pack(fill="both", expand=True, side='left')
+canvas.pack(fill="both", expand=True, side="left")
 canvas.bind("<Button-1>", clicked_square)
 canvas.bind("<Button-2>", flagging)  # Mac
 canvas.bind("<Button-3>", flagging)  # Windows, Linux
 
-gif_label = ttk.Label(canvas, background='black', text='Congratulations!', compound='top', font='Impact 20', foreground='sienna3')
+gif_label = ttk.Label(
+    canvas,
+    background="black",
+    text="Congratulations!",
+    compound="top",
+    font="Impact 20",
+    foreground="sienna3",
+)
 
 where_this_file_is = pathlib.Path(__file__).parent
 button_image = PhotoImage(file=(where_this_file_is / "button_small.png"))
@@ -212,21 +239,20 @@ fail_message = [
     "Hasta la vista.. baby!",
 ]
 
+
 def quit_game():
     root.destroy()
 
 
-
 def new_game():
-    canvas.delete('all')
+    canvas.delete("all")
 
-    width = 23
-    height = 23
+    height = 20
+    width = int(height * 1.5)
 
     slider_value = int(difficulty_slider.scale.get())
     real_percentage = (width * height / 100) * slider_value
     percentage = round(real_percentage)
-
 
     global current_game
     current_game = Game(percentage, width, height)
@@ -234,14 +260,15 @@ def new_game():
     gif_label.place_forget()
     current_game.game_time = datetime.datetime(2021, 1, 1)
     current_game.timer()
-    canvas['width']=button_size * current_game.width
-    canvas['height']=button_size * current_game.height
+    canvas["width"] = button_size * current_game.width
+    canvas["height"] = button_size * current_game.height
 
     for x in range(0, button_size * current_game.width, button_size):
         for y in range(0, button_size * current_game.height, button_size):
             canvas.create_image((x, y), image=button_image, anchor="nw")
-    statusbar_action['text'] = '***Lets go!***'
-    statusbar_count['text'] = f'{current_game.how_many_mines_user_wants} mines left'
+    statusbar_action["text"] = "***Lets go!***"
+    statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
+
 
 statusbar = ttk.Label(big_frame, anchor="w", relief="flat")
 statusbar.pack(side="bottom", fill='x')
@@ -255,20 +282,30 @@ statusbar_time.pack(padx='5', side='left', fill='x', expand=10)
 statusbar_action = ttk.Label(statusbar, anchor='s', relief='flat', width='70')
 statusbar_action.pack(side='left', fill='x', expand=10)
 
-sidebar = ttk.Frame(top_frame, width=300, borderwidth=2)
+sidebar = ttk.Frame(top_frame, borderwidth=2)
 sidebar.pack(side="right", fill="both", anchor="w")
 
 new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
+
+sidebar = ttk.Frame(
+    top_frame,
+    borderwidth=2,
+)
+sidebar.pack(side="right", fill="both", anchor="w")
+
+
+new_game_button = ttk.Button(sidebar, text="New Game", command=new_game)
+
 difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=60)
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 
 sidebar_difficulty_text = ttk.Label(sidebar, text="Mine Percentage:")
 
-new_game_button.pack(fill='x', pady=10)
+new_game_button.pack(fill="x", pady=10)
 sidebar_difficulty_text.pack(pady=20)
-difficulty_slider.value=20
-difficulty_slider.pack(padx = 5)
-quit_game_button.pack(fill='x', side='bottom', pady=10)
+difficulty_slider.value = 20
+difficulty_slider.pack(padx=5)
+quit_game_button.pack(fill="x", side="bottom", pady=10)
 
 
 new_game()
