@@ -247,8 +247,8 @@ def quit_game():
 def new_game():
     canvas.delete("all")
 
-    height = 20
-    width = int(height * 1.5)
+    height = int(height_slider.scale.get())
+    width = int(width_slider.scale.get())
 
     slider_value = int(difficulty_slider.scale.get())
     real_percentage = (width * height / 100) * slider_value
@@ -269,7 +269,6 @@ def new_game():
     statusbar_action["text"] = "***Lets go!***"
     statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
 
-
 statusbar_frame = ttk.Frame(big_frame, padding=2, relief='sunken')
 statusbar_frame.pack(side="bottom", fill='x')
 
@@ -285,28 +284,32 @@ statusbar_count.pack(padx='15', side='left', fill='x')
 sidebar = ttk.Frame(top_frame, borderwidth=2)
 sidebar.pack(side="right", fill="both", anchor="w")
 
-new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
-
-sidebar = ttk.Frame(
-    top_frame,
-    borderwidth=2,
-)
-sidebar.pack(side="right", fill="both", anchor="w")
-
-
 new_game_button = ttk.Button(sidebar, text="New Game", command=new_game)
+new_game_button.pack(fill="x", pady=10)
 
-difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=60)
-quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
+sidebar_height_text = ttk.Label(sidebar, text="Board Height:")
+sidebar_height_text.pack(pady=[40, 0])
+
+height_slider = ttk.LabeledScale(sidebar, from_=5, to=35)
+height_slider.value = 10
+height_slider.pack(padx=5)
+
+sidebar_width_text = ttk.Label(sidebar, text="Board Width:")
+sidebar_width_text.pack(pady=[10, 0])
+
+width_slider = ttk.LabeledScale(sidebar, from_=5, to=55)
+width_slider.value = 15
+width_slider.pack(padx=5)
 
 sidebar_difficulty_text = ttk.Label(sidebar, text="Mine Percentage:")
+sidebar_difficulty_text.pack(pady=[40, 0])
 
-new_game_button.pack(fill="x", pady=10)
-sidebar_difficulty_text.pack(pady=20)
+difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=60)
 difficulty_slider.value = 20
 difficulty_slider.pack(padx=5)
-quit_game_button.pack(fill="x", side="bottom", pady=10)
 
+quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
+quit_game_button.pack(fill="x", side="bottom", pady=10)
 
 new_game()
 
