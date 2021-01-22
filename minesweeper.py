@@ -270,17 +270,16 @@ def new_game():
     statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
 
 
-statusbar = ttk.Label(big_frame, anchor="w", relief="flat")
-statusbar.pack(side="bottom", fill='x')
+statusbar_frame = ttk.Frame(big_frame)
+statusbar_frame.pack(side="bottom", fill='x')
 
-statusbar_count = ttk.Label(statusbar, anchor='s', relief='flat', width='15')
-statusbar_count.pack(side='right', fill='x', expand=10)
+statusbar_time = ttk.Label(statusbar_frame, anchor='w', width='15')
+statusbar_action = ttk.Label(statusbar_frame, anchor='center')
+statusbar_count = ttk.Label(statusbar_frame, anchor='e', width='15')
 
-statusbar_time = ttk.Label(statusbar, anchor='w', relief='flat', width='15')
-statusbar_time.pack(padx='5', side='left', fill='x', expand=10)
-
-statusbar_action = ttk.Label(statusbar, anchor='s', relief='flat', width='70')
-statusbar_action.pack(side='left', fill='x', expand=10)
+statusbar_time.pack(padx='5', side='left')
+statusbar_action.pack(side='left', fill='x', expand=True)
+statusbar_count.pack(padx='5', side='left')
 
 sidebar = ttk.Frame(top_frame, borderwidth=2)
 sidebar.pack(side="right", fill="both", anchor="w")
