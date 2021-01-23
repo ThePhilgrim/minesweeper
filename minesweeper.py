@@ -344,17 +344,9 @@ difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=50, variable=slider_va
 difficulty_slider.value = 15
 difficulty_slider.pack(padx=5)
 
-
-
-
-
-
-
-
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 quit_game_button.pack(fill="x", side="bottom", pady=10)
 
 new_game()
-print(ttk)
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
