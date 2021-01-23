@@ -2,12 +2,12 @@ import pathlib
 import random
 import tkinter
 import datetime
+import json
 from tkinter import ttk
 from tkinter import PhotoImage
 from enum import Enum
 
 GameStatus = Enum('GameStatus', 'in_progress, game_lost, game_won')
-hs_list=[]
 
 class Game:
     def __init__(self, percentage, width, height):
@@ -124,7 +124,8 @@ class Game:
             self.game_time += datetime.timedelta(seconds=1)
             root.after(1000, self.timer)
         elif self.game_status == GameStatus.game_won:
-            hs_list.append(self.game_time.strftime("%M:%S"))
+            with open("high_scores.json", "w") as high_scores:
+                json.dump(self.game_time.strftime("%M:%S"), high_scores)
 
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
@@ -248,7 +249,6 @@ def quit_game():
 
 def new_game():
     canvas.delete("all")
-    print(hs_list)
     height = 20
     width = int(height * 1.5)
 
