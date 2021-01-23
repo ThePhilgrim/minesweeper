@@ -46,10 +46,7 @@ class Game:
 
         coordinate = (x, y)
 
-        if coordinate in self.previously_clicked_square:
-            return
-
-        if coordinate in self.flag_dict:
+        if coordinate in self.previously_clicked_square or coordinate in self.flag_dict:
             return
 
         self.previously_clicked_square.append((x, y))
