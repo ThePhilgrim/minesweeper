@@ -5,7 +5,10 @@ import datetime
 import json
 from tkinter import ttk
 from tkinter import PhotoImage
+from enum import Enum
 
+GameStatus = Enum('GameStatus', 'in_progress, game_lost, game_won')
+hs_list=[]
 
 class Game:
     def __init__(self, rounded_percentage, width, height):
@@ -15,8 +18,8 @@ class Game:
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
-        self.game_over = False
-
+        self.game_status = GameStatus.in_progress
+        
     def mines_around_square(self, coordinate):
         """Looks at the squares adjacent to current_square and counts
         how many mines there are"""
@@ -63,7 +66,7 @@ class Game:
             count_already_open + count_mine_locations == self.width * self.height
             and coordinate not in self.mine_locations
         ):
-
+            self.game_status = GameStatus.game_won
             frames = [
                 PhotoImage(
                     file=where_this_file_is / "doomguy.gif",
@@ -87,7 +90,7 @@ class Game:
 
         if coordinate in self.mine_locations:
             statusbar_action.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
-            self.game_over = True
+            self.game_status = GameStatus.game_lost
             canvas.create_image(
                 int(x * button_size),
                 int(y * button_size),
@@ -117,7 +120,7 @@ class Game:
                 )
 
     def timer(self):
-        if self is current_game and self.game_over == False:
+        if self.game_status == GameStatus.in_progress:
             statusbar_time.config(text=self.game_time.strftime("%M:%S"))
             self.game_time += datetime.timedelta(seconds=1)
             root.after(1000, self.timer)
@@ -138,7 +141,7 @@ class Game:
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
     or generates bomb_image"""
-    if not current_game.game_over:
+    if current_game.game_status.in_progress:
         x = int(event.x / button_size)
         y = int(event.y / button_size)
         coordinate = (x, y)
@@ -147,7 +150,6 @@ def clicked_square(event):
             current_game.generate_random_mine_locations(coordinate)
 
         current_game.open_squares(x, y)
-
 
 button_size = 23
 
@@ -174,7 +176,7 @@ top_frame.pack(fill="both", expand=True)
 def flagging(event):
     """Takes right click events, and places or removes flag_image.
     Adds placed flag positions with their flag id into a dict."""
-    if not current_game.game_over:
+    if current_game.game_status.in_progress:
         x_flag = int(event.x / button_size)
         y_flag = int(event.y / button_size)
         if (x_flag, y_flag) in current_game.previously_clicked_square:
@@ -261,7 +263,6 @@ def highscore(mins, secs):
 def quit_game():
     root.destroy()
 
-
 def new_game():
     canvas.delete("all")
 
@@ -291,7 +292,7 @@ statusbar_frame = ttk.Frame(big_frame, padding=2, relief='sunken')
 statusbar_frame.pack(side="bottom", fill='x')
 
 statusbar_time = ttk.Label(statusbar_frame, anchor='w', width='15')
-statusbar_time.pack(padx='5', side='left')
+statusbar_time.pack(padx='10', side='left')
 
 statusbar_action = ttk.Label(statusbar_frame, anchor='center')
 statusbar_action.pack(side='left', fill='x', expand=True)
