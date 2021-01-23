@@ -349,4 +349,5 @@ quit_game_button.pack(fill="x", side="bottom", pady=10)
 
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
+root.iconphoto(False, tkinter.PhotoImage(file=where_this_file_is / "bomb.png"))
 root.mainloop()
