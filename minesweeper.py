@@ -5,20 +5,18 @@ import datetime
 import json
 from tkinter import ttk
 from tkinter import PhotoImage
-from enum import Enum
 
-GameStatus = Enum('GameStatus', 'in_progress, game_lost, game_won')
 
 class Game:
-    def __init__(self, percentage, width, height):
+    def __init__(self, rounded_percentage, width, height):
         self.width = width
         self.height = height
-        self.how_many_mines_user_wants = percentage
+        self.how_many_mines_user_wants = rounded_percentage
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
-        self.game_status = GameStatus.in_progress
-        
+        self.game_over = False
+
     def mines_around_square(self, coordinate):
         """Looks at the squares adjacent to current_square and counts
         how many mines there are"""
@@ -65,7 +63,7 @@ class Game:
             count_already_open + count_mine_locations == self.width * self.height
             and coordinate not in self.mine_locations
         ):
-            self.game_status = GameStatus.game_won
+
             frames = [
                 PhotoImage(
                     file=where_this_file_is / "doomguy.gif",
@@ -89,7 +87,7 @@ class Game:
 
         if coordinate in self.mine_locations:
             statusbar_action.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
-            self.game_status = GameStatus.game_lost
+            self.game_over = True
             canvas.create_image(
                 int(x * button_size),
                 int(y * button_size),
@@ -119,7 +117,7 @@ class Game:
                 )
 
     def timer(self):
-        if self.game_status == GameStatus.in_progress:
+        if self is current_game and self.game_over == False:
             statusbar_time.config(text=self.game_time.strftime("%M:%S"))
             self.game_time += datetime.timedelta(seconds=1)
             root.after(1000, self.timer)
@@ -140,7 +138,7 @@ class Game:
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
     or generates bomb_image"""
-    if current_game.game_status.in_progress:
+    if not current_game.game_over:
         x = int(event.x / button_size)
         y = int(event.y / button_size)
         coordinate = (x, y)
@@ -149,6 +147,7 @@ def clicked_square(event):
             current_game.generate_random_mine_locations(coordinate)
 
         current_game.open_squares(x, y)
+
 
 button_size = 23
 
@@ -175,7 +174,7 @@ top_frame.pack(fill="both", expand=True)
 def flagging(event):
     """Takes right click events, and places or removes flag_image.
     Adds placed flag positions with their flag id into a dict."""
-    if current_game.game_status.in_progress:
+    if not current_game.game_over:
         x_flag = int(event.x / button_size)
         y_flag = int(event.y / button_size)
         if (x_flag, y_flag) in current_game.previously_clicked_square:
@@ -244,20 +243,37 @@ fail_message = [
     "Hasta la vista.. baby!",
 ]
 
+# This is a starting idea of how a high score list could look. For now it only considers time,
+# It takes the time, converts it to seconds, and loops through top_10_times to see if the current score
+# is lower than a previous time at that index. It will then insert that score to the index of top_10_times.
+# # TODO: ADD THE SCORE TO TOP_10_TIMES AS (CONVERTED_TO_SECONDS % 60) TO FORMAT IT IN MINS & SECS.
+# # TAKE INTO CONSIDERATION THE DIFFICULTY. EX, 50 MINUTES ON MEDIUM IS HIGHER THAN 10 MINUTES ON EASY.
+top_10_times = []
+def highscore(mins, secs):
+    converted_to_seconds = mins * 60 + secs
+    for time in top_10_times:
+        if converted_to_seconds < time and len(top_10_times) < 10:
+            top_10_times.insert(index, converted_to_seconds) # HOW DO I GET THE INDEX OF "TIME" IN FOR LOOP?
+        elif converted_to_seconds < time and len(top_10_times >= 10):
+            top_10_times.remove(top_10_times[-1])
+            top_10_times.insert(index, converted_to_seconds) # SAME AS ABOVE
+
 def quit_game():
     root.destroy()
 
+
 def new_game():
     canvas.delete("all")
-    height = 20
-    width = int(height * 1.5)
 
-    slider_value = int(difficulty_slider.scale.get())
-    real_percentage = (width * height / 100) * slider_value
-    percentage = round(real_percentage)
+    height = int(height_slider.scale.get())
+    width = int(width_slider.scale.get())
+
+    slider_value = difficulty_slider_callback()
+    percentage = (width * height / 100) * slider_value
+    rounded_percentage = round(percentage)
 
     global current_game
-    current_game = Game(percentage, width, height)
+    current_game = Game(rounded_percentage, width, height)
 
     gif_label.place_forget()
     current_game.game_time = datetime.datetime(2021, 1, 1)
@@ -271,12 +287,11 @@ def new_game():
     statusbar_action["text"] = "***Lets go!***"
     statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
 
-
 statusbar_frame = ttk.Frame(big_frame, padding=2, relief='sunken')
 statusbar_frame.pack(side="bottom", fill='x')
 
 statusbar_time = ttk.Label(statusbar_frame, anchor='w', width='15')
-statusbar_time.pack(padx='10', side='left')
+statusbar_time.pack(padx='5', side='left')
 
 statusbar_action = ttk.Label(statusbar_frame, anchor='center')
 statusbar_action.pack(side='left', fill='x', expand=True)
@@ -287,28 +302,58 @@ statusbar_count.pack(padx='15', side='left', fill='x')
 sidebar = ttk.Frame(top_frame, borderwidth=2)
 sidebar.pack(side="right", fill="both", anchor="w")
 
-new_game_button = ttk.Button(sidebar, text='New Game', command=new_game)
-
-sidebar = ttk.Frame(
-    top_frame,
-    borderwidth=2,
-)
-sidebar.pack(side="right", fill="both", anchor="w")
-
 new_game_button = ttk.Button(sidebar, text="New Game", command=new_game)
-
-difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=60)
-quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
-
-sidebar_difficulty_text = ttk.Label(sidebar, text="Mine Percentage:")
-
 new_game_button.pack(fill="x", pady=10)
-sidebar_difficulty_text.pack(pady=20)
-difficulty_slider.value = 5
+
+sidebar_height_text = ttk.Label(sidebar, text="Board Height:")
+sidebar_height_text.pack(pady=[40, 0])
+
+height_slider = ttk.LabeledScale(sidebar, from_=5, to=35)
+height_slider.value = 10
+height_slider.pack(padx=5)
+
+sidebar_width_text = ttk.Label(sidebar, text="Board Width:")
+sidebar_width_text.pack(pady=[10, 0])
+
+width_slider = ttk.LabeledScale(sidebar, from_=5, to=55)
+width_slider.value = 15
+width_slider.pack(padx=5)
+
+sidebar_percentage_text = ttk.Label(sidebar, text="Mine Percentage:")
+sidebar_percentage_text.pack(pady=[40, 0])
+
+sidebar_difficulty_text = ttk.Label(sidebar, text="Easy")
+sidebar_difficulty_text.pack()
+
+def difficulty_slider_callback(*args):
+    if int(slider_variable.get()) <= 10:
+        sidebar_difficulty_text["text"]="Easy"
+    elif int(slider_variable.get()) <= 20:
+        sidebar_difficulty_text["text"]="Medium"
+    elif int(slider_variable.get()) <= 35:
+        sidebar_difficulty_text["text"]="Hard"
+    else:
+        sidebar_difficulty_text["text"]="HELL!"
+    return slider_variable.get()
+
+slider_variable = tkinter.IntVar()
+slider_variable.trace_variable('w', difficulty_slider_callback)
+
+difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=50, variable=slider_variable)
+difficulty_slider.value = 15
 difficulty_slider.pack(padx=5)
+
+
+
+
+
+
+
+
+quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 quit_game_button.pack(fill="x", side="bottom", pady=10)
 
 new_game()
-
+print(ttk)
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.mainloop()
