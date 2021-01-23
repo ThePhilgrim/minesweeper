@@ -291,7 +291,7 @@ statusbar_frame.pack(side="bottom", fill='x')
 statusbar_time = ttk.Label(statusbar_frame, anchor='w')
 statusbar_time.pack(side='left')
 
-statusbar_action = ttk.Label(statusbar_frame, anchor='center')
+statusbar_action = ttk.Label(statusbar_frame, anchor='center', wraplength=200)
 statusbar_action.pack(side='left', fill='x', expand=True)
 
 statusbar_count = ttk.Label(statusbar_frame, anchor='e')
