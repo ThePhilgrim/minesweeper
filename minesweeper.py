@@ -123,7 +123,7 @@ class Game:
             statusbar_time.config(text=self.game_time.strftime("%M:%S"))
             self.game_time += datetime.timedelta(seconds=1)
             root.after(1000, self.timer)
-        elif self.game_status == GameStatus.game_lost:
+        elif self.game_status == GameStatus.game_won:
             hs_list.append(self.game_time.strftime("%M:%S"))
 
     def generate_random_mine_locations(self, where_user_clicked):
