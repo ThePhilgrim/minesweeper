@@ -19,7 +19,7 @@ class Game:
         self.previously_clicked_square = []
         self.flag_dict = {}
         self.game_status = GameStatus.in_progress
-        
+
     def mines_around_square(self, coordinate):
         """Looks at the squares adjacent to current_square and counts
         how many mines there are"""
@@ -141,7 +141,7 @@ class Game:
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
     or generates bomb_image"""
-    if current_game.game_status.in_progress:
+    if current_game.game_status == GameStatus.in_progress:
         x = int(event.x / button_size)
         y = int(event.y / button_size)
         coordinate = (x, y)
@@ -176,7 +176,7 @@ top_frame.pack(fill="both", expand=True)
 def flagging(event):
     """Takes right click events, and places or removes flag_image.
     Adds placed flag positions with their flag id into a dict."""
-    if current_game.game_status.in_progress:
+    if current_game.game_status == GameStatus.in_progress:
         x_flag = int(event.x / button_size)
         y_flag = int(event.y / button_size)
         if (x_flag, y_flag) in current_game.previously_clicked_square:
