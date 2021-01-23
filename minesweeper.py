@@ -239,6 +239,20 @@ fail_message = [
     "Hasta la vista.. baby!",
 ]
 
+# This is a starting idea of how a high score list could look. For now it only considers time,
+# It takes the time, converts it to seconds, and loops through top_10_times to see if the current score
+# is lower than a previous time at that index. It will then insert that score to the index of top_10_times.
+# # TODO: ADD THE SCORE TO TOP_10_TIMES AS (CONVERTED_TO_SECONDS % 60) TO FORMAT IT IN MINS & SECS.
+# # TAKE INTO CONSIDERATION THE DIFFICULTY. EX, 50 MINUTES ON MEDIUM IS HIGHER THAN 10 MINUTES ON EASY.
+top_10_times = []
+def highscore(mins, secs):
+    converted_to_seconds = mins * 60 + secs
+    for time in top_10_times:
+        if converted_to_seconds < time and len(top_10_times) < 10:
+            top_10_times.insert(index, converted_to_seconds) # HOW DO I GET THE INDEX OF "TIME" IN FOR LOOP?
+        elif converted_to_seconds < time and len(top_10_times >= 10):
+            top_10_times.remove(top_10_times[-1])
+            top_10_times.insert(index, converted_to_seconds) # SAME AS ABOVE
 
 def quit_game():
     root.destroy()
