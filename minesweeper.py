@@ -296,7 +296,7 @@ statusbar_time = ttk.Label(statusbar_frame)
 statusbar_time.pack(side='left')
 
 statusbar_action = ttk.Label(statusbar_frame, anchor='center')
-statusbar_action.pack(side='left', padx=5, fill='x', expand=True)
+statusbar_action.pack(side='left', fill='x', expand=True)
 
 statusbar_count = ttk.Label(statusbar_frame)
 statusbar_count.pack(side='left', fill='x')
@@ -355,7 +355,7 @@ def update_statusbar_wraplength(event):
         + sidebar.winfo_reqwidth()
         - statusbar_time.winfo_reqwidth()
         - statusbar_count.winfo_reqwidth()
-        - 15  # Padding and some extra
+        - 15  # Leave gaps between the status bar labels
     )
 
 root.bind('<Configure>', update_statusbar_wraplength)
