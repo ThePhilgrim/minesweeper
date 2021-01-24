@@ -14,6 +14,7 @@ On Windows you likely need `py` instead of `python3`.
 ## Notes about developing
 
 New changes should usually be made with pull requests.
+Before merging, your pull request must be reviewed and approved by at least one other person.
 When merging a pull request, choose "Squash and merge" from the little arrow in the merge button.
 This way, each pull request shows up as one commit when looking at the commit log of `main` branch.
 
