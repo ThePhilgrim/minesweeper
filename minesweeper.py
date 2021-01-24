@@ -63,6 +63,7 @@ class Game:
             count_already_open + count_mine_locations == self.width * self.height
             and coordinate not in self.mine_locations
         ):
+            statusbar_action.config(text=f"{random.choice(win_message)}")
             self.game_status = GameStatus.game_won
             frames = [
                 PhotoImage(
@@ -232,6 +233,9 @@ live_message = [
     "There's no mine in the top right corner! Promise!",
     "Wait, why are there even mines everywhere??",
     "Feeling lucky, punk?",
+    "Why so serious?",
+    "Life is like a box of chocolate ...",
+    "Nobody puts Baby in a corner."
 ]
 fail_message = [
     "Sorry bud, lost a couple of limbs there ..",
@@ -240,6 +244,17 @@ fail_message = [
     "Dance, bitch!",
     "Happy birthday!",
     "Hasta la vista.. baby!",
+    "Houston, we have a problem.",
+    "Luca Brasi is sleeping with the fishes.",
+    "I love the smell of napalm in the morning.",
+    "Say 'hello' to my little friend."
+]
+win_message = [
+    "I am proud of you, young padawan.",
+    "The student has become the master.",
+    "The force is strong with this one.",
+
+
 ]
 
 # This is a starting idea of how a high score list could look. For now it only considers time,
