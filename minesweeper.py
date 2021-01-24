@@ -285,6 +285,16 @@ def new_game():
     statusbar_action["text"] = "***Lets go!***"
     statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
 
+# Creates a top menu
+top_menu = tkinter.Menu(root)
+root.config(menu=top_menu)
+
+
+top_menu_game = tkinter.Menu(top_menu)
+#if root.tk.call('tk', 'windowingsystem') == 'aqua':
+top_menu.add_cascade(label="Game", menu=top_menu_game)
+top_menu_game.add_command(label="New Game   F2", command=new_game)
+top_menu_game.add_command(label="Quit Game  F10", command=quit_game)
 
 statusbar_frame = ttk.Frame(big_frame, padding=2, relief='sunken')
 statusbar_frame.pack(side="bottom", fill='x')
@@ -305,24 +315,24 @@ sidebar = ttk.Frame(top_frame, borderwidth=2)
 sidebar.pack(side="right", fill="both", anchor="w")
 
 new_game_button = ttk.Button(sidebar, text="New Game", command=new_game)
-new_game_button.pack(fill="x", pady=10)
+new_game_button.pack(fill="x", pady=5)
 
 sidebar_height_text = ttk.Label(sidebar, text="Board Height:")
-sidebar_height_text.pack(pady=[40, 0])
+sidebar_height_text.pack(pady=[10, 0])
 
 height_slider = ttk.LabeledScale(sidebar, from_=5, to=35)
 height_slider.value = 10
 height_slider.pack(padx=5)
 
 sidebar_width_text = ttk.Label(sidebar, text="Board Width:")
-sidebar_width_text.pack(pady=[10, 0])
+sidebar_width_text.pack(pady=[5, 0])
 
 width_slider = ttk.LabeledScale(sidebar, from_=5, to=55)
 width_slider.value = 15
 width_slider.pack(padx=5)
 
 sidebar_percentage_text = ttk.Label(sidebar, text="Mine Percentage:")
-sidebar_percentage_text.pack(pady=[40, 0])
+sidebar_percentage_text.pack(pady=[10, 0])
 
 sidebar_difficulty_text = ttk.Label(sidebar, text="Easy")
 sidebar_difficulty_text.pack()
@@ -345,7 +355,7 @@ difficulty_slider.value = 15
 difficulty_slider.pack(padx=5)
 
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
-quit_game_button.pack(fill="x", side="bottom", pady=10)
+quit_game_button.pack(fill="x", side="bottom", pady=5)
 
 
 # Make sure that text in status bar is wrapped correctly
@@ -359,6 +369,7 @@ def update_statusbar_wraplength(event):
 
 root.bind('<Configure>', update_statusbar_wraplength)
 
+print(root.tk.call('tk', 'windowingsystem'))
 
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
