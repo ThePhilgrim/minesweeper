@@ -59,32 +59,6 @@ class Game:
 
         count_already_open = len(self.previously_clicked_square)
         count_mine_locations = len(self.mine_locations)
-        if (
-            count_already_open + count_mine_locations == self.width * self.height
-            and coordinate not in self.mine_locations
-        ):
-            statusbar_action.config(text=f"{random.choice(win_message)}")
-            self.game_status = GameStatus.game_won
-            frames = [
-                PhotoImage(
-                    file=where_this_file_is / "doomguy.gif",
-                    format="gif -index %i" % (i),
-                )
-                for i in range(8)
-            ]
-            gif_label.place(relx=0.5, rely=0.5, anchor="center")
-
-            def update(index):
-                frame = frames[index]
-                index += 1
-                if index >= 8:
-                    index = 0
-                gif_label.configure(image=frame)
-                if self is current_game:
-                    # New game not started yet, can keep animating
-                    root.after(100, update, index)
-
-            root.after(0, update, 0)
 
         if coordinate in self.mine_locations:
             statusbar_action.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
@@ -96,26 +70,50 @@ class Game:
                 anchor="nw",
             )
         else:
-            statusbar_action.config(text=f"{random.choice(live_message)}")
-            mine_count = self.mines_around_square(coordinate)
-            if mine_count == 0:
-                self.open_squares(x - 1, y - 1)
-                self.open_squares(x - 1, y)
-                self.open_squares(x - 1, y + 1)
-                self.open_squares(x, y - 1)
-                self.open_squares(x, y + 1)
-                self.open_squares(x + 1, y - 1)
-                self.open_squares(x + 1, y)
-                self.open_squares(x + 1, y + 1)
+            if (count_already_open + count_mine_locations == self.width * self.height):
+                self.game_status = GameStatus.game_won
+                statusbar_action.config(text=f"{random.choice(win_message)}")
+                frames = [
+                    PhotoImage(
+                        file=where_this_file_is / "doomguy.gif",
+                        format="gif -index %i" % (i),
+                    )
+                    for i in range(8)
+                ]
+                gif_label.place(relx=0.5, rely=0.5, anchor="center")
 
-            if mine_count > 0:
-                canvas.create_text(
-                    coordinate[0] * button_size + (button_size / 2),
-                    coordinate[1] * button_size + (button_size / 2),
-                    text=str(mine_count),
-                    font=("helvetica", 17, "bold"),
-                    fill=color_chart[mine_count],
-                )
+                def update(index):
+                    frame = frames[index]
+                    index += 1
+                    if index >= 8:
+                        index = 0
+                    gif_label.configure(image=frame)
+                    if self is current_game:
+                        # New game not started yet, can keep animating
+                        root.after(100, update, index)
+
+                root.after(0, update, 0)
+            else:
+                statusbar_action.config(text=f"{random.choice(live_message)}")
+                mine_count = self.mines_around_square(coordinate)
+                if mine_count == 0:
+                    self.open_squares(x - 1, y - 1)
+                    self.open_squares(x - 1, y)
+                    self.open_squares(x - 1, y + 1)
+                    self.open_squares(x, y - 1)
+                    self.open_squares(x, y + 1)
+                    self.open_squares(x + 1, y - 1)
+                    self.open_squares(x + 1, y)
+                    self.open_squares(x + 1, y + 1)
+
+                if mine_count > 0:
+                    canvas.create_text(
+                        coordinate[0] * button_size + (button_size / 2),
+                        coordinate[1] * button_size + (button_size / 2),
+                        text=str(mine_count),
+                        font=("helvetica", 17, "bold"),
+                        fill=color_chart[mine_count],
+                    )
 
     def timer(self):
         if self.game_status == GameStatus.in_progress:
@@ -252,9 +250,7 @@ fail_message = [
 win_message = [
     "I am proud of you, young padawan.",
     "The student has become the master.",
-    "The force is strong with this one.",
-
-
+    "The force is strong with this one."
 ]
 
 # This is a starting idea of how a high score list could look. For now it only considers time,
