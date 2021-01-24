@@ -269,7 +269,7 @@ def new_game():
     height = int(height_slider.scale.get())
     width = int(width_slider.scale.get())
 
-    slider_value = difficulty_slider_callback()
+    slider_value = slider_variable.get()
     percentage = (width * height / 100) * slider_value
     rounded_percentage = round(percentage)
 
@@ -327,15 +327,14 @@ sidebar_difficulty_text = ttk.Label(sidebar, text="Easy")
 sidebar_difficulty_text.pack()
 
 def difficulty_slider_callback(*args):
-    if int(slider_variable.get()) <= 10:
+    if slider_variable.get() <= 10:
         sidebar_difficulty_text["text"]="Easy"
-    elif int(slider_variable.get()) <= 20:
+    elif slider_variable.get() <= 20:
         sidebar_difficulty_text["text"]="Medium"
-    elif int(slider_variable.get()) <= 35:
+    elif slider_variable.get() <= 35:
         sidebar_difficulty_text["text"]="Hard"
     else:
         sidebar_difficulty_text["text"]="HELL!"
-    return slider_variable.get()
 
 slider_variable = tkinter.IntVar()
 slider_variable.trace_variable('w', difficulty_slider_callback)
