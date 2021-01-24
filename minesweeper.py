@@ -285,14 +285,31 @@ def new_game():
     statusbar_action["text"] = "***Lets go!***"
     statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
 
+
+statusbar_padding = 5
+
+
+# Make sure that text in status bar is wrapped correctly
+def update_statusbar_wraplength(event):
+    statusbar_action['wraplength'] = (
+        int(canvas['width'])
+        + sidebar.winfo_reqwidth()
+        - statusbar_time.winfo_reqwidth()
+        - statusbar_count.winfo_reqwidth()
+        - 2*statusbar_padding
+    )
+
+root.bind('<Configure>', update_statusbar_wraplength)
+
+
 statusbar_frame = ttk.Frame(big_frame, padding=2, relief='sunken')
 statusbar_frame.pack(side="bottom", fill='x')
 
 statusbar_time = ttk.Label(statusbar_frame)
 statusbar_time.pack(side='left')
 
-statusbar_action = ttk.Label(statusbar_frame, anchor='center', wraplength=200)
-statusbar_action.pack(side='left', fill='x', expand=True)
+statusbar_action = ttk.Label(statusbar_frame, anchor='center')
+statusbar_action.pack(side='left', padx=statusbar_padding, fill='x', expand=True)
 
 statusbar_count = ttk.Label(statusbar_frame)
 statusbar_count.pack(side='left', fill='x')
