@@ -351,8 +351,7 @@ quit_game_button.pack(fill="x", side="bottom", pady=10)
 # Make sure that text in status bar is wrapped correctly
 def update_statusbar_wraplength(event):
     statusbar_action['wraplength'] = (
-        int(canvas['width'])
-        + sidebar.winfo_reqwidth()
+        top_frame.winfo_reqwidth()
         - statusbar_time.winfo_reqwidth()
         - statusbar_count.winfo_reqwidth()
         - 15  # Leave gaps between the status bar labels
