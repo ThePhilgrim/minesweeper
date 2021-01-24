@@ -11,10 +11,10 @@ GameStatus = Enum('GameStatus', 'in_progress, game_lost, game_won')
 hs_list=[]
 
 class Game:
-    def __init__(self, rounded_percentage, width, height):
+    def __init__(self, mine_count, width, height):
         self.width = width
         self.height = height
-        self.how_many_mines_user_wants = rounded_percentage
+        self.how_many_mines_user_wants = mine_count
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
@@ -46,10 +46,7 @@ class Game:
 
         coordinate = (x, y)
 
-        if coordinate in self.previously_clicked_square:
-            return
-
-        if coordinate in self.flag_dict:
+        if coordinate in self.previously_clicked_square or coordinate in self.flag_dict:
             return
 
         self.previously_clicked_square.append((x, y))
@@ -270,11 +267,11 @@ def new_game():
     width = int(width_slider.scale.get())
 
     slider_value = difficulty_slider_callback()
-    percentage = (width * height / 100) * slider_value
-    rounded_percentage = round(percentage)
+    percentage_to_mine_count = (width * height / 100) * slider_value
+    mine_count = round(percentage_to_mine_count)
 
     global current_game
-    current_game = Game(rounded_percentage, width, height)
+    current_game = Game(mine_count, width, height)
 
     gif_label.place_forget()
     current_game.game_time = datetime.datetime(2021, 1, 1)
