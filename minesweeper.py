@@ -285,17 +285,21 @@ def new_game():
     statusbar_action["text"] = "***Lets go!***"
     statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
 
+
 statusbar_frame = ttk.Frame(big_frame, padding=2, relief='sunken')
 statusbar_frame.pack(side="bottom", fill='x')
 
-statusbar_time = ttk.Label(statusbar_frame, anchor='w', width='15')
-statusbar_time.pack(padx='10', side='left')
+# Make sure that statusbar is always 2 lines tall
+ttk.Label(statusbar_frame, text='\n').pack(side='left')
 
-statusbar_action = ttk.Label(statusbar_frame, anchor='center')
+statusbar_time = ttk.Label(statusbar_frame)
+statusbar_time.pack(side='left')
+
+statusbar_action = ttk.Label(statusbar_frame, anchor='center', justify='center')
 statusbar_action.pack(side='left', fill='x', expand=True)
 
-statusbar_count = ttk.Label(statusbar_frame, anchor='e', width='15')
-statusbar_count.pack(padx='15', side='left', fill='x')
+statusbar_count = ttk.Label(statusbar_frame)
+statusbar_count.pack(side='left', fill='x')
 
 sidebar = ttk.Frame(top_frame, borderwidth=2)
 sidebar.pack(side="right", fill="both", anchor="w")
@@ -342,6 +346,19 @@ difficulty_slider.pack(padx=5)
 
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 quit_game_button.pack(fill="x", side="bottom", pady=10)
+
+
+# Make sure that text in status bar is wrapped correctly
+def update_statusbar_wraplength(event):
+    statusbar_action['wraplength'] = (
+        top_frame.winfo_reqwidth()
+        - statusbar_time.winfo_reqwidth()
+        - statusbar_count.winfo_reqwidth()
+        - 15  # Leave gaps between the status bar labels
+    )
+
+root.bind('<Configure>', update_statusbar_wraplength)
+
 
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
