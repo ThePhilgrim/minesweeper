@@ -13,6 +13,10 @@ On Windows you likely need `py` instead of `python3`.
 
 ## Notes about developing
 
+New changes should usually be made with pull requests.
+When merging a pull request, choose "Squash and merge" from the little arrow in the merge button.
+This way, each pull request shows up as one commit when looking at the commit log of `main` branch.
+
 This project uses [black](https://github.com/psf/black) to clean up code style.
 Run these commands to use it:
 
