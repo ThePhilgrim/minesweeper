@@ -117,13 +117,14 @@ class Game:
                 )
 
     def timer(self):
-        if self.game_status == GameStatus.in_progress:
-            statusbar_time.config(text=self.game_time.strftime("%M:%S"))
-            self.game_time += datetime.timedelta(seconds=1)
-            root.after(1000, self.timer)
-        elif self.game_status == GameStatus.game_won:
-            with open("high_scores.json", "w") as high_scores:
-                json.dump(self.game_time.strftime("%M:%S"), high_scores)
+        if self == current_game:
+            if self.game_status == GameStatus.in_progress:
+                statusbar_time.config(text=self.game_time.strftime("%M:%S"))
+                self.game_time += datetime.timedelta(seconds=1)
+                root.after(1000, self.timer)
+            elif self.game_status == GameStatus.game_won:
+                with open("high_scores.json", "w") as high_scores:
+                    json.dump(self.game_time.strftime("%M:%S"), high_scores)
 
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
