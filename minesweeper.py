@@ -293,11 +293,12 @@ root.config(menu=top_menu)
 top_menu_game = tkinter.Menu(top_menu)
 if root.tk.call('tk', 'windowingsystem') == 'aqua':
     top_menu.add_cascade(label="Game", menu=top_menu_game)
-    top_menu_game.add_command(label="New Game        F2", command=new_game)
-    top_menu_game.add_command(label="Quit Game       F10", command=quit_game)
+    top_menu_game.add_command(label="New Game", accelerator="F2", command=new_game)
+    top_menu_game.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 else:
-    top_menu_game.add_command(label="New Game", command=new_game)
-    top_menu_game.add_command(label="Quit Game", command=quit_game)
+    top_menu.add_command(label="New Game", command=new_game)
+    top_menu.add_command(label="Quit Game", command=quit_game)
+
 
 statusbar_frame = ttk.Frame(big_frame, padding=2, relief='sunken')
 statusbar_frame.pack(side="bottom", fill='x')
