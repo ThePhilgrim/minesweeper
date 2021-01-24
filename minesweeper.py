@@ -288,20 +288,6 @@ def new_game():
 
 statusbar_padding = 5
 
-
-# Make sure that text in status bar is wrapped correctly
-def update_statusbar_wraplength(event):
-    statusbar_action['wraplength'] = (
-        int(canvas['width'])
-        + sidebar.winfo_reqwidth()
-        - statusbar_time.winfo_reqwidth()
-        - statusbar_count.winfo_reqwidth()
-        - 2*statusbar_padding
-    )
-
-root.bind('<Configure>', update_statusbar_wraplength)
-
-
 statusbar_frame = ttk.Frame(big_frame, padding=2, relief='sunken')
 statusbar_frame.pack(side="bottom", fill='x')
 
@@ -359,6 +345,20 @@ difficulty_slider.pack(padx=5)
 
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 quit_game_button.pack(fill="x", side="bottom", pady=10)
+
+
+# Make sure that text in status bar is wrapped correctly
+def update_statusbar_wraplength(event):
+    statusbar_action['wraplength'] = (
+        int(canvas['width'])
+        + sidebar.winfo_reqwidth()
+        - statusbar_time.winfo_reqwidth()
+        - statusbar_count.winfo_reqwidth()
+        - 2*statusbar_padding
+    )
+
+root.bind('<Configure>', update_statusbar_wraplength)
+
 
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
