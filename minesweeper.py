@@ -130,7 +130,6 @@ class Game:
             if (x, y) != where_user_clicked and (x, y) not in self.mine_locations:
                 self.mine_locations.append((x, y))
 
-
     def update_statusbar_mines_left(self):
         statusbar_count[
             "text"
