@@ -355,6 +355,10 @@ difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=50, variable=slider_va
 difficulty_slider.value = 15
 difficulty_slider.pack(padx=5)
 
+# Tkinter's LabeledScale is broken: https://bugs.python.org/issue40219
+height_slider.label.lift()
+width_slider.label.lift()
+difficulty_slider.label.lift()
 
 # Make sure that text in status bar is wrapped correctly
 def update_statusbar_wraplength(event):
