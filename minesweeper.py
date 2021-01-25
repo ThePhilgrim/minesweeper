@@ -41,13 +41,6 @@ class Game:
         return adjacent_mines
 
     def win_animation(self):
-        frames = [
-            PhotoImage(
-                file=where_this_file_is / "doomguy.gif",
-                format="gif -index %i" % (i),
-            )
-            for i in range(8)
-        ]
         gif_label.place(relx=0.5, rely=0.5, anchor="center")
 
         def update(index):
@@ -61,7 +54,6 @@ class Game:
                 root.after(100, update, index)
 
         root.after(0, update, 0)
-
 
     def open_squares(self, x, y):
         if x not in range(self.width) or y not in range(self.height):
@@ -227,6 +219,13 @@ button_image_pressed = PhotoImage(
 )
 flag_image = PhotoImage(file=(where_this_file_is / "flag_small.png"))
 bomb_image = PhotoImage(file=(where_this_file_is / "bomb_small.png"))
+frames = [
+    PhotoImage(
+        file=where_this_file_is / "doomguy.gif",
+        format="gif -index %i" % (i),
+    )
+    for i in range(8)
+]
 
 
 live_message = [
@@ -281,6 +280,7 @@ def highscore(mins, secs):
 def quit_game(event=None):
     root.destroy()
 
+
 def new_game(event=None):
     canvas.delete("all")
 
@@ -306,12 +306,13 @@ def new_game(event=None):
     statusbar_action["text"] = "***Lets go!***"
     statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
 
+
 top_menu = tkinter.Menu(root)
 root.config(menu=top_menu)
 
 
 top_menu_game = tkinter.Menu(top_menu)
-if root.tk.call('tk', 'windowingsystem') == 'aqua':
+if root.tk.call("tk", "windowingsystem") == "aqua":
     top_menu.add_cascade(label="Game", menu=top_menu_game)
     top_menu_game.add_command(label="New Game", accelerator="F2", command=new_game)
     top_menu_game.add_command(label="Quit Game", accelerator="F10", command=quit_game)
@@ -391,9 +392,10 @@ def update_statusbar_wraplength(event):
         - 15  # Leave gaps between the status bar labels
     )
 
-root.bind('<Configure>', update_statusbar_wraplength)
-root.bind('<F2>', new_game)
-root.bind('<F10>', quit_game)
+
+root.bind("<Configure>", update_statusbar_wraplength)
+root.bind("<F2>", new_game)
+root.bind("<F10>", quit_game)
 
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
