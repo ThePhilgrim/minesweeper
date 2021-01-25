@@ -73,7 +73,7 @@ class Game:
         else:
             if count_already_open + count_mine_locations == self.width * self.height:
                 self.game_status = GameStatus.game_won
-                statusbar_action.config(text=f"{random.choice(win_message)}")
+                statusbar_action.config(text=random.choice(win_message))
                 frames = [
                     PhotoImage(
                         file=where_this_file_is / "doomguy.gif",
@@ -95,7 +95,7 @@ class Game:
 
                 root.after(0, update, 0)
             else:
-                statusbar_action.config(text=f"{random.choice(live_message)}")
+                statusbar_action.config(text=random.choice(live_message))
             mine_count = self.mines_around_square(coordinate)
             if mine_count == 0:
                 self.open_squares(x - 1, y - 1)
