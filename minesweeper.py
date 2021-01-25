@@ -275,11 +275,10 @@ def highscore(mins, secs):
             top_10_times.insert(index, converted_to_seconds)  # SAME AS ABOVE
 
 
-def quit_game():
+def quit_game(event=None):
     root.destroy()
 
-
-def new_game():
+def new_game(event=None):
     canvas.delete("all")
 
     height = int(height_slider.scale.get())
@@ -304,6 +303,19 @@ def new_game():
     statusbar_action["text"] = "***Lets go!***"
     statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
 
+top_menu = tkinter.Menu(root)
+root.config(menu=top_menu)
+
+
+top_menu_game = tkinter.Menu(top_menu)
+if root.tk.call('tk', 'windowingsystem') == 'aqua':
+    top_menu.add_cascade(label="Game", menu=top_menu_game)
+    top_menu_game.add_command(label="New Game", accelerator="F2", command=new_game)
+    top_menu_game.add_command(label="Quit Game", accelerator="F10", command=quit_game)
+else:
+    top_menu.add_command(label="New Game", accelerator="F2", command=new_game)
+    top_menu.add_command(label="Quit Game", accelerator="F10", command=quit_game)
+
 
 statusbar_frame = ttk.Frame(big_frame, padding=2, relief="sunken")
 statusbar_frame.pack(side="bottom", fill="x")
@@ -323,25 +335,22 @@ statusbar_count.pack(side="left", fill="x")
 sidebar = ttk.Frame(top_frame, borderwidth=2)
 sidebar.pack(side="right", fill="both", anchor="w")
 
-new_game_button = ttk.Button(sidebar, text="New Game", command=new_game)
-new_game_button.pack(fill="x", pady=10)
-
 sidebar_height_text = ttk.Label(sidebar, text="Board Height:")
-sidebar_height_text.pack(pady=[40, 0])
+sidebar_height_text.pack(pady=[5, 0])
 
-height_slider = ttk.LabeledScale(sidebar, from_=5, to=35)
+height_slider = ttk.LabeledScale(sidebar, from_=10, to=35)
 height_slider.value = 10
 height_slider.pack(padx=5)
 
 sidebar_width_text = ttk.Label(sidebar, text="Board Width:")
-sidebar_width_text.pack(pady=[10, 0])
+sidebar_width_text.pack(pady=[5, 0])
 
-width_slider = ttk.LabeledScale(sidebar, from_=5, to=55)
+width_slider = ttk.LabeledScale(sidebar, from_=10, to=55)
 width_slider.value = 15
 width_slider.pack(padx=5)
 
 sidebar_percentage_text = ttk.Label(sidebar, text="Mine Percentage:")
-sidebar_percentage_text.pack(pady=[40, 0])
+sidebar_percentage_text.pack(pady=[5, 0])
 
 sidebar_difficulty_text = ttk.Label(sidebar, text="Easy")
 sidebar_difficulty_text.pack()
@@ -370,10 +379,6 @@ height_slider.label.lift()
 width_slider.label.lift()
 difficulty_slider.label.lift()
 
-quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
-quit_game_button.pack(fill="x", side="bottom", pady=10)
-
-
 # Make sure that text in status bar is wrapped correctly
 def update_statusbar_wraplength(event):
     statusbar_action["wraplength"] = (
@@ -383,9 +388,9 @@ def update_statusbar_wraplength(event):
         - 15  # Leave gaps between the status bar labels
     )
 
-
-root.bind("<Configure>", update_statusbar_wraplength)
-
+root.bind('<Configure>', update_statusbar_wraplength)
+root.bind('<F2>', new_game)
+root.bind('<F10>', quit_game)
 
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
