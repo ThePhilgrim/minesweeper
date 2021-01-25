@@ -40,6 +40,29 @@ class Game:
                 adjacent_mines += 1
         return adjacent_mines
 
+    def win_animation(self):
+        frames = [
+            PhotoImage(
+                file=where_this_file_is / "doomguy.gif",
+                format="gif -index %i" % (i),
+            )
+            for i in range(8)
+        ]
+        gif_label.place(relx=0.5, rely=0.5, anchor="center")
+
+        def update(index):
+            frame = frames[index]
+            index += 1
+            if index >= 8:
+                index = 0
+            gif_label.configure(image=frame)
+            if self is current_game:
+                # New game not started yet, can keep animating
+                root.after(100, update, index)
+
+        root.after(0, update, 0)
+
+
     def open_squares(self, x, y):
         if x not in range(self.width) or y not in range(self.height):
             # Happens when auto-opening at edge buttons
@@ -74,26 +97,7 @@ class Game:
             if count_already_open + count_mine_locations == self.width * self.height:
                 self.game_status = GameStatus.game_won
                 statusbar_action.config(text=f"{random.choice(win_message)}")
-                frames = [
-                    PhotoImage(
-                        file=where_this_file_is / "doomguy.gif",
-                        format="gif -index %i" % (i),
-                    )
-                    for i in range(8)
-                ]
-                gif_label.place(relx=0.5, rely=0.5, anchor="center")
-
-                def update(index):
-                    frame = frames[index]
-                    index += 1
-                    if index >= 8:
-                        index = 0
-                    gif_label.configure(image=frame)
-                    if self is current_game:
-                        # New game not started yet, can keep animating
-                        root.after(100, update, index)
-
-                root.after(0, update, 0)
+                self.win_animation()
             else:
                 statusbar_action.config(text=f"{random.choice(live_message)}")
             mine_count = self.mines_around_square(coordinate)
@@ -145,7 +149,6 @@ def clicked_square(event):
 
         if len(current_game.mine_locations) == 0:
             current_game.generate_random_mine_locations(coordinate)
-
         current_game.open_squares(x, y)
 
 
