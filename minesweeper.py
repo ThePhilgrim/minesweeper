@@ -46,7 +46,7 @@ class Game:
         def update(index):
             frame = frames[index]
             index += 1
-            if index >= 8:
+            if index %= len(frames):
                 index = 0
             gif_label.configure(image=frame)
             if self is current_game:
