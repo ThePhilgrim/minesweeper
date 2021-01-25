@@ -7,8 +7,9 @@ from tkinter import ttk
 from tkinter import PhotoImage
 from enum import Enum
 
-GameStatus = Enum('GameStatus', 'in_progress, game_lost, game_won')
-hs_list=[]
+GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
+hs_list = []
+
 
 class Game:
     def __init__(self, mine_count, width, height):
@@ -39,6 +40,20 @@ class Game:
                 adjacent_mines += 1
         return adjacent_mines
 
+    def win_animation(self):
+        gif_label.place(relx=0.5, rely=0.5, anchor="center")
+
+        def update(index):
+            frame = gif_frames[index]
+            index += 1
+            index %= len(gif_frames)
+            gif_label.configure(image=frame)
+            if self is current_game:
+                # New game not started yet, can keep animating
+                root.after(100, update, index)
+
+        root.after(0, update, 0)
+
     def open_squares(self, x, y):
         if x not in range(self.width) or y not in range(self.height):
             # Happens when auto-opening at edge buttons
@@ -59,24 +74,6 @@ class Game:
 
         count_already_open = len(self.previously_clicked_square)
         count_mine_locations = len(self.mine_locations)
-        if (
-            count_already_open + count_mine_locations == self.width * self.height
-            and coordinate not in self.mine_locations):
-            self.game_status = GameStatus.game_won
-            frames = [PhotoImage(file=where_this_file_is / "doomguy.gif", format="gif -index %i" % (i),) for i in range(8)]
-            gif_label.place(relx=0.5, rely=0.5, anchor="center")
-
-            def update(index):
-                frame = frames[index]
-                index += 1
-                if index >= 8:
-                    index = 0
-                gif_label.configure(image=frame)
-                if self is current_game:
-                    # New game not started yet, can keep animating
-                    root.after(100, update, index)
-
-            root.after(0, update, 0)
 
         if coordinate in self.mine_locations:
             statusbar_action.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
@@ -88,7 +85,12 @@ class Game:
                 anchor="nw",
             )
         else:
-            statusbar_action.config(text=f"{random.choice(live_message)}")
+            if count_already_open + count_mine_locations == self.width * self.height:
+                self.game_status = GameStatus.game_won
+                statusbar_action.config(text=random.choice(win_message))
+                self.win_animation()
+            else:
+                statusbar_action.config(text=random.choice(live_message))
             mine_count = self.mines_around_square(coordinate)
             if mine_count == 0:
                 self.open_squares(x - 1, y - 1)
@@ -139,8 +141,8 @@ def clicked_square(event):
 
         if len(current_game.mine_locations) == 0:
             current_game.generate_random_mine_locations(coordinate)
-
         current_game.open_squares(x, y)
+
 
 button_size = 23
 
@@ -217,6 +219,13 @@ button_image_pressed = PhotoImage(
 )
 flag_image = PhotoImage(file=(where_this_file_is / "flag_small.png"))
 bomb_image = PhotoImage(file=(where_this_file_is / "bomb_small.png"))
+gif_frames = [
+    PhotoImage(
+        file=where_this_file_is / "doomguy.gif",
+        format=f"gif -index {i}",
+    )
+    for i in range(8)
+]
 
 
 live_message = [
@@ -226,6 +235,9 @@ live_message = [
     "There's no mine in the top right corner! Promise!",
     "Wait, why are there even mines everywhere??",
     "Feeling lucky, punk?",
+    "Why so serious?",
+    "Life is like a box of chocolate ...",
+    "Nobody puts Baby in a corner.",
 ]
 fail_message = [
     "Sorry bud, lost a couple of limbs there ..",
@@ -234,6 +246,15 @@ fail_message = [
     "Dance, bitch!",
     "Happy birthday!",
     "Hasta la vista.. baby!",
+    "Houston, we have a problem.",
+    "Luca Brasi is sleeping with the fishes.",
+    "I love the smell of napalm in the morning.",
+    "Say 'hello' to my little friend.",
+]
+win_message = [
+    "I am proud of you, young padawan.",
+    "The student has become the master.",
+    "The force is strong with this one.",
 ]
 
 # This is a starting idea of how a high score list could look. For now it only considers time,
@@ -242,20 +263,25 @@ fail_message = [
 # # TODO: ADD THE SCORE TO TOP_10_TIMES AS (CONVERTED_TO_SECONDS % 60) TO FORMAT IT IN MINS & SECS.
 # # TAKE INTO CONSIDERATION THE DIFFICULTY. EX, 50 MINUTES ON MEDIUM IS HIGHER THAN 10 MINUTES ON EASY.
 top_10_times = []
+
+
 def highscore(mins, secs):
     converted_to_seconds = mins * 60 + secs
     for time in top_10_times:
         if converted_to_seconds < time and len(top_10_times) < 10:
-            top_10_times.insert(index, converted_to_seconds) # HOW DO I GET THE INDEX OF "TIME" IN FOR LOOP?
+            top_10_times.insert(
+                index, converted_to_seconds
+            )  # HOW DO I GET THE INDEX OF "TIME" IN FOR LOOP?
         elif converted_to_seconds < time and len(top_10_times >= 10):
             top_10_times.remove(top_10_times[-1])
-            top_10_times.insert(index, converted_to_seconds) # SAME AS ABOVE
-            
+            top_10_times.insert(index, converted_to_seconds)  # SAME AS ABOVE
 
-def quit_game():
+
+def quit_game(event=None):
     root.destroy()
 
-def new_game():
+
+def new_game(event=None):
     canvas.delete("all")
 
     height = int(height_slider.scale.get())
@@ -281,77 +307,95 @@ def new_game():
     statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
 
 
-statusbar_frame = ttk.Frame(big_frame, padding=2, relief='sunken')
-statusbar_frame.pack(side="bottom", fill='x')
+top_menu = tkinter.Menu(root)
+root.config(menu=top_menu)
+
+
+top_menu_game = tkinter.Menu(top_menu)
+if root.tk.call("tk", "windowingsystem") == "aqua":
+    top_menu.add_cascade(label="Game", menu=top_menu_game)
+    top_menu_game.add_command(label="New Game", accelerator="F2", command=new_game)
+    top_menu_game.add_command(label="Quit Game", accelerator="F10", command=quit_game)
+else:
+    top_menu.add_command(label="New Game", accelerator="F2", command=new_game)
+    top_menu.add_command(label="Quit Game", accelerator="F10", command=quit_game)
+
+
+statusbar_frame = ttk.Frame(big_frame, padding=2, relief="sunken")
+statusbar_frame.pack(side="bottom", fill="x")
 
 # Make sure that statusbar is always 2 lines tall
-ttk.Label(statusbar_frame, text='\n').pack(side='left')
+ttk.Label(statusbar_frame, text="\n").pack(side="left")
 
 statusbar_time = ttk.Label(statusbar_frame)
-statusbar_time.pack(side='left')
+statusbar_time.pack(side="left")
 
-statusbar_action = ttk.Label(statusbar_frame, anchor='center', justify='center')
-statusbar_action.pack(side='left', fill='x', expand=True)
+statusbar_action = ttk.Label(statusbar_frame, anchor="center", justify="center")
+statusbar_action.pack(side="left", fill="x", expand=True)
 
 statusbar_count = ttk.Label(statusbar_frame)
-statusbar_count.pack(side='left', fill='x')
+statusbar_count.pack(side="left", fill="x")
 
 sidebar = ttk.Frame(top_frame, borderwidth=2)
 sidebar.pack(side="right", fill="both", anchor="w")
 
-new_game_button = ttk.Button(sidebar, text="New Game", command=new_game)
-new_game_button.pack(fill="x", pady=10)
-
 sidebar_height_text = ttk.Label(sidebar, text="Board Height:")
-sidebar_height_text.pack(pady=[40, 0])
+sidebar_height_text.pack(pady=[5, 0])
 
-height_slider = ttk.LabeledScale(sidebar, from_=5, to=35)
+height_slider = ttk.LabeledScale(sidebar, from_=10, to=35)
 height_slider.value = 10
 height_slider.pack(padx=5)
 
 sidebar_width_text = ttk.Label(sidebar, text="Board Width:")
-sidebar_width_text.pack(pady=[10, 0])
+sidebar_width_text.pack(pady=[5, 0])
 
-width_slider = ttk.LabeledScale(sidebar, from_=5, to=55)
+width_slider = ttk.LabeledScale(sidebar, from_=10, to=55)
 width_slider.value = 15
 width_slider.pack(padx=5)
 
 sidebar_percentage_text = ttk.Label(sidebar, text="Mine Percentage:")
-sidebar_percentage_text.pack(pady=[40, 0])
+sidebar_percentage_text.pack(pady=[5, 0])
 
 sidebar_difficulty_text = ttk.Label(sidebar, text="Easy")
 sidebar_difficulty_text.pack()
 
+
 def difficulty_slider_callback(*args):
     if slider_variable.get() <= 10:
-        sidebar_difficulty_text["text"]="Easy"
+        sidebar_difficulty_text["text"] = "Easy"
     elif slider_variable.get() <= 20:
-        sidebar_difficulty_text["text"]="Medium"
+        sidebar_difficulty_text["text"] = "Medium"
     elif slider_variable.get() <= 35:
-        sidebar_difficulty_text["text"]="Hard"
+        sidebar_difficulty_text["text"] = "Hard"
     else:
-        sidebar_difficulty_text["text"]="HELL!"
+        sidebar_difficulty_text["text"] = "HELL!"
+
 
 slider_variable = tkinter.IntVar()
-slider_variable.trace_variable('w', difficulty_slider_callback)
+slider_variable.trace_variable("w", difficulty_slider_callback)
 
 difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=50, variable=slider_variable)
 difficulty_slider.value = 15
 difficulty_slider.pack(padx=5)
 
-quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
-quit_game_button.pack(fill="x", side="bottom", pady=10)
-
+# Tkinter's LabeledScale is broken: https://bugs.python.org/issue40219
+height_slider.label.lift()
+width_slider.label.lift()
+difficulty_slider.label.lift()
 
 # Make sure that text in status bar is wrapped correctly
 def update_statusbar_wraplength(event):
-    statusbar_action['wraplength'] = (
-        top_frame.winfo_reqwidth() - statusbar_time.winfo_reqwidth() 
-        - statusbar_count.winfo_reqwidth() - 15  # Leave gaps between the status bar labels
+    statusbar_action["wraplength"] = (
+        top_frame.winfo_reqwidth()
+        - statusbar_time.winfo_reqwidth()
+        - statusbar_count.winfo_reqwidth()
+        - 15  # Leave gaps between the status bar labels
     )
 
-root.bind('<Configure>', update_statusbar_wraplength)
 
+root.bind("<Configure>", update_statusbar_wraplength)
+root.bind("<F2>", new_game)
+root.bind("<F10>", quit_game)
 
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
