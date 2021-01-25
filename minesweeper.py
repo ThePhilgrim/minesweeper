@@ -131,7 +131,7 @@ class Game:
                 self.mine_locations.append((x, y))
 
     def update_statusbar_mines_left(self):
-        """ Prints out how many mines are left when flagging squares """
+        """ Prints out how many mines are left """
         statusbar_count[
             "text"
         ] = f"{self.how_many_mines_user_wants - len(self.flag_dict)} mines left"
