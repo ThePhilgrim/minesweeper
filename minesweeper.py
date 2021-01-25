@@ -61,16 +61,9 @@ class Game:
         count_mine_locations = len(self.mine_locations)
         if (
             count_already_open + count_mine_locations == self.width * self.height
-            and coordinate not in self.mine_locations
-        ):
+            and coordinate not in self.mine_locations):
             self.game_status = GameStatus.game_won
-            frames = [
-                PhotoImage(
-                    file=where_this_file_is / "doomguy.gif",
-                    format="gif -index %i" % (i),
-                )
-                for i in range(8)
-            ]
+            frames = [PhotoImage(file=where_this_file_is / "doomguy.gif", format="gif -index %i" % (i),) for i in range(8)]
             gif_label.place(relx=0.5, rely=0.5, anchor="center")
 
             def update(index):
@@ -117,7 +110,7 @@ class Game:
                 )
 
     def timer(self):
-        if self == current_game:
+        if self is current_game:
             if self.game_status == GameStatus.in_progress:
                 statusbar_time.config(text=self.game_time.strftime("%M:%S"))
                 self.game_time += datetime.timedelta(seconds=1)
@@ -257,6 +250,7 @@ def highscore(mins, secs):
         elif converted_to_seconds < time and len(top_10_times >= 10):
             top_10_times.remove(top_10_times[-1])
             top_10_times.insert(index, converted_to_seconds) # SAME AS ABOVE
+            
 
 def quit_game():
     root.destroy()
@@ -352,10 +346,8 @@ quit_game_button.pack(fill="x", side="bottom", pady=10)
 # Make sure that text in status bar is wrapped correctly
 def update_statusbar_wraplength(event):
     statusbar_action['wraplength'] = (
-        top_frame.winfo_reqwidth()
-        - statusbar_time.winfo_reqwidth()
-        - statusbar_count.winfo_reqwidth()
-        - 15  # Leave gaps between the status bar labels
+        top_frame.winfo_reqwidth() - statusbar_time.winfo_reqwidth() 
+        - statusbar_count.winfo_reqwidth() - 15  # Leave gaps between the status bar labels
     )
 
 root.bind('<Configure>', update_statusbar_wraplength)
