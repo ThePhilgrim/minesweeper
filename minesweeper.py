@@ -222,7 +222,7 @@ bomb_image = PhotoImage(file=(where_this_file_is / "bomb_small.png"))
 frames = [
     PhotoImage(
         file=where_this_file_is / "doomguy.gif",
-        format="gif -index %i" % (i),
+        format=f"gif -index {i}",
     )
     for i in range(8)
 ]
