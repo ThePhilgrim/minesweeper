@@ -90,7 +90,7 @@ class Game:
                 statusbar_action.config(text=f"{random.choice(win_message)}")
                 self.win_animation()
             else:
-                statusbar_action.config(text=f"{random.choice(live_message)}")
+                statusbar_action.config(text=random.choice(live_message))
             mine_count = self.mines_around_square(coordinate)
             if mine_count == 0:
                 self.open_squares(x - 1, y - 1)
