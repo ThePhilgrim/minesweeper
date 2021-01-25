@@ -166,6 +166,12 @@ top_frame = ttk.Frame(big_frame)
 top_frame.pack(fill="both", expand=True)
 
 
+def update_statusbar():
+    statusbar_count[
+        "text"
+    ] = f"{current_game.how_many_mines_user_wants - len(current_game.flag_dict)} mines left"
+
+
 def flagging(event):
     """Takes right click events, and places or removes flag_image.
     Adds placed flag positions with their flag id into a dict."""
@@ -177,9 +183,7 @@ def flagging(event):
         elif (x_flag, y_flag) in current_game.flag_dict.keys():
             canvas.delete(current_game.flag_dict[x_flag, y_flag])
             current_game.flag_dict.pop((x_flag, y_flag))
-            statusbar_count[
-                "text"
-            ] = f"{current_game.how_many_mines_user_wants - len(current_game.flag_dict)} mines left"
+            update_statusbar()
         else:
             flag_id = canvas.create_image(
                 int(event.x / button_size) * button_size + (button_size / 2),
@@ -188,9 +192,7 @@ def flagging(event):
                 anchor="center",
             )
             current_game.flag_dict[(x_flag, y_flag)] = flag_id
-            statusbar_count[
-                "text"
-            ] = f"{current_game.how_many_mines_user_wants - len(current_game.flag_dict)} mines left"
+            update_statusbar()
 
 
 canvas = tkinter.Canvas(
@@ -304,7 +306,7 @@ def new_game(event=None):
         for y in range(0, button_size * current_game.height, button_size):
             canvas.create_image((x, y), image=button_image, anchor="nw")
     statusbar_action["text"] = "***Lets go!***"
-    statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
+    update_statusbar()
 
 
 top_menu = tkinter.Menu(root)
