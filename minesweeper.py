@@ -344,6 +344,11 @@ difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=50, variable=slider_va
 difficulty_slider.value = 15
 difficulty_slider.pack(padx=5)
 
+# Tkinter's LabeledScale is broken: https://bugs.python.org/issue40219
+height_slider.label.lift()
+width_slider.label.lift()
+difficulty_slider.label.lift()
+
 quit_game_button = ttk.Button(sidebar, text="Quit game", command=quit_game)
 quit_game_button.pack(fill="x", side="bottom", pady=10)
 
