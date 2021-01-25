@@ -257,10 +257,10 @@ def highscore(mins, secs):
             top_10_times.remove(top_10_times[-1])
             top_10_times.insert(index, converted_to_seconds) # SAME AS ABOVE
 
-def quit_game():
+def quit_game(event=None):
     root.destroy()
 
-def new_game():
+def new_game(event=None):
     canvas.delete("all")
 
     height = int(height_slider.scale.get())
@@ -285,7 +285,6 @@ def new_game():
     statusbar_action["text"] = "***Lets go!***"
     statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
 
-# Creates a top menu
 top_menu = tkinter.Menu(root)
 root.config(menu=top_menu)
 
@@ -296,8 +295,8 @@ if root.tk.call('tk', 'windowingsystem') == 'aqua':
     top_menu_game.add_command(label="New Game", accelerator="F2", command=new_game)
     top_menu_game.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 else:
-    top_menu.add_command(label="New Game", command=new_game)
-    top_menu.add_command(label="Quit Game", command=quit_game)
+    top_menu.add_command(label="New Game", accelerator="F2", command=new_game)
+    top_menu.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 
 
 statusbar_frame = ttk.Frame(big_frame, padding=2, relief='sunken')
@@ -370,6 +369,8 @@ def update_statusbar_wraplength(event):
     )
 
 root.bind('<Configure>', update_statusbar_wraplength)
+root.bind('<F2>', new_game)
+root.bind('<F10>', quit_game)
 
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
