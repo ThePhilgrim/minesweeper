@@ -18,6 +18,14 @@ Before merging, your pull request must be reviewed and approved by at least one 
 When merging a pull request, choose "Squash and merge" from the little arrow in the merge button.
 This way, each pull request shows up as one commit when looking at the commit log of `main` branch.
 
+Run these commands to start working on a new pull request:
+
+```
+git checkout main
+git pull
+git checkout -b put_name_of_new_branch_here
+```
+
 This project uses [black](https://github.com/psf/black) to clean up code style.
 Run these commands to use it:
 
