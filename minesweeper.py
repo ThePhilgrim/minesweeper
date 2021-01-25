@@ -7,8 +7,9 @@ from tkinter import ttk
 from tkinter import PhotoImage
 from enum import Enum
 
-GameStatus = Enum('GameStatus', 'in_progress, game_lost, game_won')
-hs_list=[]
+GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
+hs_list = []
+
 
 class Game:
     def __init__(self, mine_count, width, height):
@@ -70,7 +71,7 @@ class Game:
                 anchor="nw",
             )
         else:
-            if (count_already_open + count_mine_locations == self.width * self.height):
+            if count_already_open + count_mine_locations == self.width * self.height:
                 self.game_status = GameStatus.game_won
                 statusbar_action.config(text=f"{random.choice(win_message)}")
                 frames = [
@@ -95,25 +96,25 @@ class Game:
                 root.after(0, update, 0)
             else:
                 statusbar_action.config(text=f"{random.choice(live_message)}")
-                mine_count = self.mines_around_square(coordinate)
-                if mine_count == 0:
-                    self.open_squares(x - 1, y - 1)
-                    self.open_squares(x - 1, y)
-                    self.open_squares(x - 1, y + 1)
-                    self.open_squares(x, y - 1)
-                    self.open_squares(x, y + 1)
-                    self.open_squares(x + 1, y - 1)
-                    self.open_squares(x + 1, y)
-                    self.open_squares(x + 1, y + 1)
+            mine_count = self.mines_around_square(coordinate)
+            if mine_count == 0:
+                self.open_squares(x - 1, y - 1)
+                self.open_squares(x - 1, y)
+                self.open_squares(x - 1, y + 1)
+                self.open_squares(x, y - 1)
+                self.open_squares(x, y + 1)
+                self.open_squares(x + 1, y - 1)
+                self.open_squares(x + 1, y)
+                self.open_squares(x + 1, y + 1)
 
-                if mine_count > 0:
-                    canvas.create_text(
-                        coordinate[0] * button_size + (button_size / 2),
-                        coordinate[1] * button_size + (button_size / 2),
-                        text=str(mine_count),
-                        font=("helvetica", 17, "bold"),
-                        fill=color_chart[mine_count],
-                    )
+            if mine_count > 0:
+                canvas.create_text(
+                    coordinate[0] * button_size + (button_size / 2),
+                    coordinate[1] * button_size + (button_size / 2),
+                    text=str(mine_count),
+                    font=("helvetica", 17, "bold"),
+                    fill=color_chart[mine_count],
+                )
 
     def timer(self):
         if self.game_status == GameStatus.in_progress:
@@ -146,6 +147,7 @@ def clicked_square(event):
             current_game.generate_random_mine_locations(coordinate)
 
         current_game.open_squares(x, y)
+
 
 button_size = 23
 
@@ -233,7 +235,7 @@ live_message = [
     "Feeling lucky, punk?",
     "Why so serious?",
     "Life is like a box of chocolate ...",
-    "Nobody puts Baby in a corner."
+    "Nobody puts Baby in a corner.",
 ]
 fail_message = [
     "Sorry bud, lost a couple of limbs there ..",
@@ -245,12 +247,12 @@ fail_message = [
     "Houston, we have a problem.",
     "Luca Brasi is sleeping with the fishes.",
     "I love the smell of napalm in the morning.",
-    "Say 'hello' to my little friend."
+    "Say 'hello' to my little friend.",
 ]
 win_message = [
     "I am proud of you, young padawan.",
     "The student has become the master.",
-    "The force is strong with this one."
+    "The force is strong with this one.",
 ]
 
 # This is a starting idea of how a high score list could look. For now it only considers time,
@@ -259,17 +261,23 @@ win_message = [
 # # TODO: ADD THE SCORE TO TOP_10_TIMES AS (CONVERTED_TO_SECONDS % 60) TO FORMAT IT IN MINS & SECS.
 # # TAKE INTO CONSIDERATION THE DIFFICULTY. EX, 50 MINUTES ON MEDIUM IS HIGHER THAN 10 MINUTES ON EASY.
 top_10_times = []
+
+
 def highscore(mins, secs):
     converted_to_seconds = mins * 60 + secs
     for time in top_10_times:
         if converted_to_seconds < time and len(top_10_times) < 10:
-            top_10_times.insert(index, converted_to_seconds) # HOW DO I GET THE INDEX OF "TIME" IN FOR LOOP?
+            top_10_times.insert(
+                index, converted_to_seconds
+            )  # HOW DO I GET THE INDEX OF "TIME" IN FOR LOOP?
         elif converted_to_seconds < time and len(top_10_times >= 10):
             top_10_times.remove(top_10_times[-1])
-            top_10_times.insert(index, converted_to_seconds) # SAME AS ABOVE
+            top_10_times.insert(index, converted_to_seconds)  # SAME AS ABOVE
+
 
 def quit_game():
     root.destroy()
+
 
 def new_game():
     canvas.delete("all")
@@ -297,20 +305,20 @@ def new_game():
     statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
 
 
-statusbar_frame = ttk.Frame(big_frame, padding=2, relief='sunken')
-statusbar_frame.pack(side="bottom", fill='x')
+statusbar_frame = ttk.Frame(big_frame, padding=2, relief="sunken")
+statusbar_frame.pack(side="bottom", fill="x")
 
 # Make sure that statusbar is always 2 lines tall
-ttk.Label(statusbar_frame, text='\n').pack(side='left')
+ttk.Label(statusbar_frame, text="\n").pack(side="left")
 
 statusbar_time = ttk.Label(statusbar_frame)
-statusbar_time.pack(side='left')
+statusbar_time.pack(side="left")
 
-statusbar_action = ttk.Label(statusbar_frame, anchor='center', justify='center')
-statusbar_action.pack(side='left', fill='x', expand=True)
+statusbar_action = ttk.Label(statusbar_frame, anchor="center", justify="center")
+statusbar_action.pack(side="left", fill="x", expand=True)
 
 statusbar_count = ttk.Label(statusbar_frame)
-statusbar_count.pack(side='left', fill='x')
+statusbar_count.pack(side="left", fill="x")
 
 sidebar = ttk.Frame(top_frame, borderwidth=2)
 sidebar.pack(side="right", fill="both", anchor="w")
@@ -338,18 +346,20 @@ sidebar_percentage_text.pack(pady=[40, 0])
 sidebar_difficulty_text = ttk.Label(sidebar, text="Easy")
 sidebar_difficulty_text.pack()
 
+
 def difficulty_slider_callback(*args):
     if slider_variable.get() <= 10:
-        sidebar_difficulty_text["text"]="Easy"
+        sidebar_difficulty_text["text"] = "Easy"
     elif slider_variable.get() <= 20:
-        sidebar_difficulty_text["text"]="Medium"
+        sidebar_difficulty_text["text"] = "Medium"
     elif slider_variable.get() <= 35:
-        sidebar_difficulty_text["text"]="Hard"
+        sidebar_difficulty_text["text"] = "Hard"
     else:
-        sidebar_difficulty_text["text"]="HELL!"
+        sidebar_difficulty_text["text"] = "HELL!"
+
 
 slider_variable = tkinter.IntVar()
-slider_variable.trace_variable('w', difficulty_slider_callback)
+slider_variable.trace_variable("w", difficulty_slider_callback)
 
 difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=50, variable=slider_variable)
 difficulty_slider.value = 15
@@ -361,14 +371,15 @@ quit_game_button.pack(fill="x", side="bottom", pady=10)
 
 # Make sure that text in status bar is wrapped correctly
 def update_statusbar_wraplength(event):
-    statusbar_action['wraplength'] = (
+    statusbar_action["wraplength"] = (
         top_frame.winfo_reqwidth()
         - statusbar_time.winfo_reqwidth()
         - statusbar_count.winfo_reqwidth()
         - 15  # Leave gaps between the status bar labels
     )
 
-root.bind('<Configure>', update_statusbar_wraplength)
+
+root.bind("<Configure>", update_statusbar_wraplength)
 
 
 new_game()
