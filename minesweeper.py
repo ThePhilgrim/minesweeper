@@ -130,6 +130,11 @@ class Game:
             if (x, y) != where_user_clicked and (x, y) not in self.mine_locations:
                 self.mine_locations.append((x, y))
 
+    def update_statusbar_mines_left(self):
+        statusbar_count[
+            "text"
+        ] = f"{self.how_many_mines_user_wants - len(self.flag_dict)} mines left"
+
 
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
@@ -177,9 +182,7 @@ def flagging(event):
         elif (x_flag, y_flag) in current_game.flag_dict.keys():
             canvas.delete(current_game.flag_dict[x_flag, y_flag])
             current_game.flag_dict.pop((x_flag, y_flag))
-            statusbar_count[
-                "text"
-            ] = f"{current_game.how_many_mines_user_wants - len(current_game.flag_dict)} mines left"
+            current_game.update_statusbar_mines_left()
         else:
             flag_id = canvas.create_image(
                 int(event.x / button_size) * button_size + (button_size / 2),
@@ -188,9 +191,7 @@ def flagging(event):
                 anchor="center",
             )
             current_game.flag_dict[(x_flag, y_flag)] = flag_id
-            statusbar_count[
-                "text"
-            ] = f"{current_game.how_many_mines_user_wants - len(current_game.flag_dict)} mines left"
+            current_game.update_statusbar_mines_left()
 
 
 canvas = tkinter.Canvas(
@@ -304,7 +305,7 @@ def new_game(event=None):
         for y in range(0, button_size * current_game.height, button_size):
             canvas.create_image((x, y), image=button_image, anchor="nw")
     statusbar_action["text"] = "***Lets go!***"
-    statusbar_count["text"] = f"{current_game.how_many_mines_user_wants} mines left"
+    current_game.update_statusbar_mines_left()
 
 
 top_menu = tkinter.Menu(root)
