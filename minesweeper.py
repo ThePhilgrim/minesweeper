@@ -44,10 +44,9 @@ class Game:
         gif_label.place(relx=0.5, rely=0.5, anchor="center")
 
         def update(index):
-            frame = frames[index]
+            frame = gif_frames[index]
             index += 1
-            if index %= len(frames):
-                index = 0
+            index %= len(gif_frames)
             gif_label.configure(image=frame)
             if self is current_game:
                 # New game not started yet, can keep animating
@@ -219,7 +218,7 @@ button_image_pressed = PhotoImage(
 )
 flag_image = PhotoImage(file=(where_this_file_is / "flag_small.png"))
 bomb_image = PhotoImage(file=(where_this_file_is / "bomb_small.png"))
-frames = [
+gif_frames = [
     PhotoImage(
         file=where_this_file_is / "doomguy.gif",
         format=f"gif -index {i}",
