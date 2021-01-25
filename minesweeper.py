@@ -87,7 +87,7 @@ class Game:
         else:
             if count_already_open + count_mine_locations == self.width * self.height:
                 self.game_status = GameStatus.game_won
-                statusbar_action.config(text=f"{random.choice(win_message)}")
+                statusbar_action.config(text=random.choice(win_message))
                 self.win_animation()
             else:
                 statusbar_action.config(text=random.choice(live_message))
