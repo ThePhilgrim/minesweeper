@@ -131,10 +131,11 @@ class Game:
                 root.after(1000, self.timer)
             elif self.game_status == GameStatus.game_won:
                 with open(where_this_file_is / 'high_scores.json', "w") as score_list:
-                    json_dict["high_scores"].append({'time' : self.game_time.strftime("%M:%S")}, 
-                                                     {'width' : self.width},
-                                                     {'height' : self.height},
-                                                     {'mine_count' : self.mine_count})
+                    
+                    json_dict["high_scores"].append({'time' : self.game_time.strftime("%M:%S")})
+                    json_dict["high_scores"].append({'width' : self.width})
+                    json_dict["high_scores"].append({'height' : self.height})
+                    json_dict["high_scores"].append({'mine_count' : self.mine_count})
                     
                     json.dump(json_dict, score_list)
 
@@ -273,8 +274,8 @@ win_message = [
 
 def highscore():
     with open(where_this_file_is / 'high_scores.json', 'r') as high_scores:
-        score_list=json.load(current_game.game_time.strftime("%M:%S"), high_scores)
-        print(score_list)
+        high_scores=json.load(high_scores)
+        print(high_scores.strftime("%M:%S"))
 
 
 def quit_game(event=None):
