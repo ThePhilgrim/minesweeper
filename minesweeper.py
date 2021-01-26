@@ -130,8 +130,8 @@ class Game:
                 self.game_time += datetime.timedelta(seconds=1)
                 root.after(1000, self.timer)
             elif self.game_status == GameStatus.game_won:
-                with open("game_data.json", "w") as high_scores:
-                    json.dump(self.game_time.strftime("%M:%S"), high_scores)
+                with open(where_this_file_is / "game_data.json", "w") as game_info:
+                    json.dump(self.game_time.strftime("%M:%S"), game_info)
 
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
@@ -283,7 +283,7 @@ def save_json_file():
     json_dict["height_slider"] = int(height_slider.scale.get())
     json_dict["width_slider"] = int(width_slider.scale.get())
     json_dict["difficulty_slider"] = int(difficulty_slider.scale.get())
-    with open("game_data.json", "w") as game_info:
+    with open(where_this_file_is / "game_data.json", "w") as game_info:
         json.dump(json_dict, game_info)
 
 
