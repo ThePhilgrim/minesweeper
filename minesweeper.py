@@ -220,9 +220,7 @@ gif_label = ttk.Label(
 
 where_this_file_is = pathlib.Path(__file__).parent
 button_image = PhotoImage(file=(where_this_file_is / "button_small.png"))
-button_image_pressed = PhotoImage(
-    file=(where_this_file_is / "pressed_button_small.png")
-)
+button_image_pressed = PhotoImage(file=(where_this_file_is / "pressed_button_small.png"))
 flag_image = PhotoImage(file=(where_this_file_is / "flag_small.png"))
 bomb_image = PhotoImage(file=(where_this_file_is / "bomb_small.png"))
 gif_frames = [
