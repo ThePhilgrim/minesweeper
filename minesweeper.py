@@ -131,10 +131,12 @@ class Game:
                 root.after(1000, self.timer)
             elif self.game_status == GameStatus.game_won:
                 with open(where_this_file_is / 'high_scores.json', "w") as score_list:
-                    json.dump({'time' : self.game_time.strftime("%M:%S")}, score_list)
-                    json.dump({'width' : self.width}, score_list)
-                    json.dump({'height' : self.height}, score_list)
-                    json.dump({'mine_count' : self.how_many_mines_user_wants}, score_list)
+                    json_dict["high_scores"].append({'time' : self.game_time.strftime("%M:%S")}, 
+                                                     {'width' : self.width},
+                                                     {'height' : self.height},
+                                                     {'mine_count' : self.mine_count})
+                    
+                    json.dump(json_dict, score_list)
 
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
