@@ -131,13 +131,14 @@ class Game:
                 root.after(1000, self.timer)
             elif self.game_status == GameStatus.game_won:
                 with open(where_this_file_is / 'high_scores.json', "w") as score_list:
+                   json_dict["high_scores"].append({
+                        'time' : self.game_time.strftime("%M:%S"),
+                        'width' : self.width,
+                        'height' : self.height,
+                        'mine_count' : self.mine_count,
+                    })
                     
-                    json_dict["high_scores"].append({'time' : self.game_time.strftime("%M:%S")})
-                    json_dict["high_scores"].append({'width' : self.width})
-                    json_dict["high_scores"].append({'height' : self.height})
-                    json_dict["high_scores"].append({'mine_count' : self.mine_count})
-                    
-                    json.dump(json_dict, score_list)
+                json.dump(json_dict, score_list)
 
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
@@ -273,17 +274,19 @@ win_message = [
 ]
 
 def highscore():
-    with open(where_this_file_is / 'high_scores.json', 'r') as high_scores:
-        high_scores=json.load(high_scores)
-        print(high_scores.strftime("%M:%S"))
-
-
+    data = where_this_file_is / 'high_scores.json'
+    if data.exists():
+        with open(where_this_file_is / 'high_scores.json', 'r') as source:
+            highscores=json.load(source)
+            print(highscores['high_scores'])
+               
 def quit_game(event=None):
     root.destroy()
 
 
 def new_game(event=None):
     canvas.delete("all")
+    highscore()
 
     height = int(height_slider.scale.get())
     width = int(width_slider.scale.get())
@@ -291,7 +294,7 @@ def new_game(event=None):
     slider_value = slider_variable.get()
     percentage_to_mine_count = (width * height / 100) * slider_value
     mine_count = round(percentage_to_mine_count)
-
+   
     global current_game
     current_game = Game(mine_count, width, height)
 
