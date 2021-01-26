@@ -20,7 +20,7 @@ class Game:
     def __init__(self, mine_count, width, height):
         self.width = width
         self.height = height
-        self.how_many_mines_user_wants = mine_count
+        self.mine_count = mine_count
         self.mine_locations = []
         self.previously_clicked_square = []
         self.flag_dict = {}
@@ -129,7 +129,7 @@ class Game:
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
         clicks the first square"""
-        while len(self.mine_locations) < self.how_many_mines_user_wants:
+        while len(self.mine_locations) < self.mine_count:
             x = random.randrange(self.width)
             y = random.randrange(self.height)
             if (x, y) != where_user_clicked and (x, y) not in self.mine_locations:
@@ -137,9 +137,7 @@ class Game:
 
     def update_statusbar_mines_left(self):
         """ Prints out how many mines are left """
-        statusbar_count[
-            "text"
-        ] = f"{self.how_many_mines_user_wants - len(self.flag_dict)} mines left"
+        statusbar_count["text"] = f"{self.mine_count - len(self.flag_dict)} mines left"
 
 
 def clicked_square(event):
