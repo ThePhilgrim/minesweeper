@@ -278,8 +278,10 @@ def highscore(mins, secs):
             top_10_times.remove(top_10_times[-1])
             top_10_times.insert(index, converted_to_seconds)  # SAME AS ABOVE
 
-#with open("high_scores.json", "w") as high_scores:
+
+# with open("high_scores.json", "w") as high_scores:
 #    json.dump(self.game_time.strftime("%M:%S"), high_scores)
+
 
 def slider_value_to_json():
     json_dict["height_slider"] = int(height_slider.scale.get())
@@ -287,7 +289,7 @@ def slider_value_to_json():
     json_dict["difficulty_slider"] = int(difficulty_slider.scale.get())
     with open("high_scores.json", "w") as sliders:
         json.dump(json_dict, sliders)
-    #close json file (however that is done...)
+    # close json file (however that is done...)
 
 
 def quit_game(event=None):
