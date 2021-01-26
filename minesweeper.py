@@ -130,7 +130,7 @@ class Game:
                 self.game_time += datetime.timedelta(seconds=1)
                 root.after(1000, self.timer)
             elif self.game_status == GameStatus.game_won:
-                with open("high_scores.json", "w") as high_scores:
+                with open("game_data.json", "w") as high_scores:
                     json.dump(self.game_time.strftime("%M:%S"), high_scores)
 
     def generate_random_mine_locations(self, where_user_clicked):
@@ -279,21 +279,16 @@ def highscore(mins, secs):
             top_10_times.insert(index, converted_to_seconds)  # SAME AS ABOVE
 
 
-# with open("high_scores.json", "w") as high_scores:
-#    json.dump(self.game_time.strftime("%M:%S"), high_scores)
-
-
-def slider_value_to_json():
+def save_json_file():
     json_dict["height_slider"] = int(height_slider.scale.get())
     json_dict["width_slider"] = int(width_slider.scale.get())
     json_dict["difficulty_slider"] = int(difficulty_slider.scale.get())
-    with open("high_scores.json", "w") as sliders:
-        json.dump(json_dict, sliders)
-    # close json file (however that is done...)
+    with open("game_data.json", "w") as game_info:
+        json.dump(json_dict, game_info)
 
 
 def quit_game(event=None):
-    slider_value_to_json()
+    save_json_file()
     root.destroy()
 
 
@@ -359,14 +354,14 @@ sidebar_height_text = ttk.Label(sidebar, text="Board Height:")
 sidebar_height_text.pack(pady=[5, 0])
 
 height_slider = ttk.LabeledScale(sidebar, from_=10, to=35)
-height_slider.value = json_dict.get("height_slider", 10)
+height_slider.value = json_dict["height_slider"]
 height_slider.pack(padx=5)
 
 sidebar_width_text = ttk.Label(sidebar, text="Board Width:")
 sidebar_width_text.pack(pady=[5, 0])
 
 width_slider = ttk.LabeledScale(sidebar, from_=10, to=55)
-width_slider.value = json_dict.get("width_slider", 15)
+width_slider.value = json_dict["width_slider"]
 width_slider.pack(padx=5)
 
 sidebar_percentage_text = ttk.Label(sidebar, text="Mine Percentage:")
@@ -391,7 +386,7 @@ slider_variable = tkinter.IntVar()
 slider_variable.trace_variable("w", difficulty_slider_callback)
 
 difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=50, variable=slider_variable)
-difficulty_slider.value = json_dict.get("difficulty_slider", 15)
+difficulty_slider.value = json_dict["difficulty_slider"]
 difficulty_slider.pack(padx=5)
 
 # Tkinter's LabeledScale is broken: https://bugs.python.org/issue40219
@@ -419,4 +414,3 @@ root.iconphoto(False, tkinter.PhotoImage(file=where_this_file_is / "bomb.png"))
 
 root.protocol("WM_DELETE_WINDOW", quit_game)
 root.mainloop()
-# TODO: save json_dict to file
