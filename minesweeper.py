@@ -13,7 +13,14 @@ from enum import Enum
 sys.setrecursionlimit(2000)
 
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
-hs_list = []
+json_dict = {
+    "width_slider": 15,
+    "height_slider": 10,
+    "difficulty_slider": 15,
+    "high_scores": [],  # list of dicts with keys: 'time', 'width', 'height', 'mine_count'
+}
+# TODO: read json_dict from file, if file exists
+# TODO: set values to sliders from json_dict
 
 
 class Game:
@@ -259,13 +266,6 @@ win_message = [
     "The force is strong with this one.",
 ]
 
-# This is a starting idea of how a high score list could look. For now it only considers time,
-# It takes the time, converts it to seconds, and loops through top_10_times to see if the current score
-# is lower than a previous time at that index. It will then insert that score to the index of top_10_times.
-# # TODO: ADD THE SCORE TO TOP_10_TIMES AS (CONVERTED_TO_SECONDS % 60) TO FORMAT IT IN MINS & SECS.
-# # TAKE INTO CONSIDERATION THE DIFFICULTY. EX, 50 MINUTES ON MEDIUM IS HIGHER THAN 10 MINUTES ON EASY.
-top_10_times = []
-
 
 def highscore(mins, secs):
     converted_to_seconds = mins * 60 + secs
@@ -402,4 +402,6 @@ root.bind("<F10>", quit_game)
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.iconphoto(False, tkinter.PhotoImage(file=where_this_file_is / "bomb.png"))
+
 root.mainloop()
+# TODO: save json_dict to file
