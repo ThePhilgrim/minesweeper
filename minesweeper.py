@@ -118,8 +118,11 @@ class Game:
                 self.game_time += datetime.timedelta(seconds=1)
                 root.after(1000, self.timer)
             elif self.game_status == GameStatus.game_won:
-                with open("high_scores.json", "w") as high_scores:
-                    json.dump(self.game_time.strftime("%M:%S"), high_scores)
+                with open(where_this_file_is / 'high_scores.json', "w") as score_list:
+                    json.dump({'time' : self.game_time.strftime("%M:%S")}, score_list)
+                    json.dump({'width' : self.width}, score_list)
+                    json.dump({'height' : self.height}, score_list)
+                    json.dump({'mine_count' : self.how_many_mines_user_wants}, score_list)
 
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
@@ -265,17 +268,10 @@ win_message = [
 # # TAKE INTO CONSIDERATION THE DIFFICULTY. EX, 50 MINUTES ON MEDIUM IS HIGHER THAN 10 MINUTES ON EASY.
 top_10_times = []
 
-
-def highscore(mins, secs):
-    converted_to_seconds = mins * 60 + secs
-    for time in top_10_times:
-        if converted_to_seconds < time and len(top_10_times) < 10:
-            top_10_times.insert(
-                index, converted_to_seconds
-            )  # HOW DO I GET THE INDEX OF "TIME" IN FOR LOOP?
-        elif converted_to_seconds < time and len(top_10_times >= 10):
-            top_10_times.remove(top_10_times[-1])
-            top_10_times.insert(index, converted_to_seconds)  # SAME AS ABOVE
+def highscore():
+    with open(where_this_file_is / 'high_scores.json', 'r') as high_scores:
+        score_list=json.load(current_game.game_time.strftime("%M:%S"), high_scores)
+        print(score_list)
 
 
 def quit_game(event=None):
