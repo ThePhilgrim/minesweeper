@@ -417,5 +417,6 @@ new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.iconphoto(False, tkinter.PhotoImage(file=where_this_file_is / "bomb.png"))
 
+root.protocol("WM_DELETE_WINDOW", quit_game)
 root.mainloop()
 # TODO: save json_dict to file
