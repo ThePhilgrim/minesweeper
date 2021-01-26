@@ -350,7 +350,7 @@ height_slider.pack(padx=5)
 sidebar_width_text = ttk.Label(sidebar, text="Board Width:")
 sidebar_width_text.pack(pady=[5, 0])
 
-width_slider = ttk.LabeledScale(sidebar, from_=10, to=55)
+width_slider = ttk.LabeledScale(sidebar, from_=10, to=50)
 width_slider.value = 15
 width_slider.pack(padx=5)
 
