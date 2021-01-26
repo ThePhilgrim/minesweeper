@@ -22,7 +22,7 @@ class Game:
         self.height = height
         self.how_many_mines_user_wants = mine_count
         self.mine_locations = []
-        self.previously_clicked_square = []
+        self.previously_clicked_square = set()
         self.flag_dict = {}
         self.game_status = GameStatus.in_progress
 
@@ -69,7 +69,7 @@ class Game:
         if coordinate in self.previously_clicked_square or coordinate in self.flag_dict:
             return
 
-        self.previously_clicked_square.append((x, y))
+        self.previously_clicked_square.add((x, y))
         canvas.create_image(
             int(x * button_size),
             int(y * button_size),
