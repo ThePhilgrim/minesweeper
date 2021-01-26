@@ -32,11 +32,15 @@ class Game:
         adjacent_mines = 0
         for mine in self.mine_locations:
             if (mine[0] == coordinate[0] - 1 or mine[0] == coordinate[0] + 1) and (
-                mine[1] == coordinate[1] or mine[1] == coordinate[1] - 1 or mine[1] == coordinate[1] + 1
+                mine[1] == coordinate[1]
+                or mine[1] == coordinate[1] - 1
+                or mine[1] == coordinate[1] + 1
             ):
                 adjacent_mines += 1
             elif (mine[1] == coordinate[1] - 1 or mine[1] == coordinate[1] + 1) and (
-                mine[0] == coordinate[0] or mine[0] == coordinate[0] - 1 or mine[0] == coordinate[0] + 1
+                mine[0] == coordinate[0]
+                or mine[0] == coordinate[0] - 1
+                or mine[0] == coordinate[0] + 1
             ):
                 adjacent_mines += 1
         return adjacent_mines
@@ -133,7 +137,9 @@ class Game:
 
     def update_statusbar_mines_left(self):
         """ Prints out how many mines are left """
-        statusbar_count["text"] = f"{self.how_many_mines_user_wants - len(self.flag_dict)} mines left"
+        statusbar_count[
+            "text"
+        ] = f"{self.how_many_mines_user_wants - len(self.flag_dict)} mines left"
 
 
 def clicked_square(event):
