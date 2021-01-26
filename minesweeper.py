@@ -32,15 +32,11 @@ class Game:
         adjacent_mines = 0
         for mine in self.mine_locations:
             if (mine[0] == coordinate[0] - 1 or mine[0] == coordinate[0] + 1) and (
-                mine[1] == coordinate[1]
-                or mine[1] == coordinate[1] - 1
-                or mine[1] == coordinate[1] + 1
+                mine[1] == coordinate[1] or mine[1] == coordinate[1] - 1 or mine[1] == coordinate[1] + 1
             ):
                 adjacent_mines += 1
             elif (mine[1] == coordinate[1] - 1 or mine[1] == coordinate[1] + 1) and (
-                mine[0] == coordinate[0]
-                or mine[0] == coordinate[0] - 1
-                or mine[0] == coordinate[0] + 1
+                mine[0] == coordinate[0] or mine[0] == coordinate[0] - 1 or mine[0] == coordinate[0] + 1
             ):
                 adjacent_mines += 1
         return adjacent_mines
@@ -137,9 +133,7 @@ class Game:
 
     def update_statusbar_mines_left(self):
         """ Prints out how many mines are left """
-        statusbar_count[
-            "text"
-        ] = f"{self.how_many_mines_user_wants - len(self.flag_dict)} mines left"
+        statusbar_count["text"] = f"{self.how_many_mines_user_wants - len(self.flag_dict)} mines left"
 
 
 def clicked_square(event):
@@ -220,9 +214,7 @@ gif_label = ttk.Label(
 
 where_this_file_is = pathlib.Path(__file__).parent
 button_image = PhotoImage(file=(where_this_file_is / "button_small.png"))
-button_image_pressed = PhotoImage(
-    file=(where_this_file_is / "pressed_button_small.png")
-)
+button_image_pressed = PhotoImage(file=(where_this_file_is / "pressed_button_small.png"))
 flag_image = PhotoImage(file=(where_this_file_is / "flag_small.png"))
 bomb_image = PhotoImage(file=(where_this_file_is / "bomb_small.png"))
 gif_frames = [
