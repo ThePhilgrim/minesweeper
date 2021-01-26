@@ -3,21 +3,33 @@ import random
 import tkinter
 import datetime
 import json
+import sys
 from tkinter import ttk
 from tkinter import PhotoImage
 from enum import Enum
 
+# Recursion limit is increased to prevent Recursion error from
+# auto-opening open_squares in open_squares ()
+sys.setrecursionlimit(2000)
+
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
-hs_list = []
+json_dict = {
+    "width_slider": 15,
+    "height_slider": 10,
+    "difficulty_slider": 15,
+    "high_scores": [],  # list of dicts with keys: 'time', 'width', 'height', 'mine_count'
+}
+# TODO: read json_dict from file, if file exists
+# TODO: set values to sliders from json_dict
 
 
 class Game:
     def __init__(self, mine_count, width, height):
         self.width = width
         self.height = height
-        self.how_many_mines_user_wants = mine_count
+        self.mine_count = mine_count
         self.mine_locations = []
-        self.previously_clicked_square = []
+        self.previously_clicked_square = set()
         self.flag_dict = {}
         self.game_status = GameStatus.in_progress
 
@@ -64,7 +76,7 @@ class Game:
         if coordinate in self.previously_clicked_square or coordinate in self.flag_dict:
             return
 
-        self.previously_clicked_square.append((x, y))
+        self.previously_clicked_square.add((x, y))
         canvas.create_image(
             int(x * button_size),
             int(y * button_size),
@@ -127,7 +139,7 @@ class Game:
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
         clicks the first square"""
-        while len(self.mine_locations) < self.how_many_mines_user_wants:
+        while len(self.mine_locations) < self.mine_count:
             x = random.randrange(self.width)
             y = random.randrange(self.height)
             if (x, y) != where_user_clicked and (x, y) not in self.mine_locations:
@@ -135,9 +147,7 @@ class Game:
 
     def update_statusbar_mines_left(self):
         """ Prints out how many mines are left """
-        statusbar_count[
-            "text"
-        ] = f"{self.how_many_mines_user_wants - len(self.flag_dict)} mines left"
+        statusbar_count["text"] = f"{self.mine_count - len(self.flag_dict)} mines left"
 
 
 def clicked_square(event):
@@ -218,9 +228,7 @@ gif_label = ttk.Label(
 
 where_this_file_is = pathlib.Path(__file__).parent
 button_image = PhotoImage(file=(where_this_file_is / "button_small.png"))
-button_image_pressed = PhotoImage(
-    file=(where_this_file_is / "pressed_button_small.png")
-)
+button_image_pressed = PhotoImage(file=(where_this_file_is / "pressed_button_small.png"))
 flag_image = PhotoImage(file=(where_this_file_is / "flag_small.png"))
 bomb_image = PhotoImage(file=(where_this_file_is / "bomb_small.png"))
 gif_frames = [
@@ -260,13 +268,6 @@ win_message = [
     "The student has become the master.",
     "The force is strong with this one.",
 ]
-
-# This is a starting idea of how a high score list could look. For now it only considers time,
-# It takes the time, converts it to seconds, and loops through top_10_times to see if the current score
-# is lower than a previous time at that index. It will then insert that score to the index of top_10_times.
-# # TODO: ADD THE SCORE TO TOP_10_TIMES AS (CONVERTED_TO_SECONDS % 60) TO FORMAT IT IN MINS & SECS.
-# # TAKE INTO CONSIDERATION THE DIFFICULTY. EX, 50 MINUTES ON MEDIUM IS HIGHER THAN 10 MINUTES ON EASY.
-top_10_times = []
 
 def highscore():
     with open(where_this_file_is / 'high_scores.json', 'r') as high_scores:
@@ -397,4 +398,6 @@ root.bind("<F10>", quit_game)
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.iconphoto(False, tkinter.PhotoImage(file=where_this_file_is / "bomb.png"))
+
 root.mainloop()
+# TODO: save json_dict to file
