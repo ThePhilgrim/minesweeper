@@ -3,9 +3,12 @@ import random
 import tkinter
 import datetime
 import json
+import sys
 from tkinter import ttk
 from tkinter import PhotoImage
 from enum import Enum
+
+sys.setrecursionlimit(2000)
 
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
 hs_list = []
