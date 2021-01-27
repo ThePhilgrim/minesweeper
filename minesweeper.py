@@ -24,7 +24,7 @@ json_dict = {
 # TODO: set values to sliders from json_dict
 try:
     with open(where_this_file_is / 'game_data.json', 'r') as source:
-        highscores=json.load(source)
+        json_dict=json.load(source)
         print(highscores)
 except FileNotFoundError:
     json_dict = {
