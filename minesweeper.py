@@ -14,18 +14,10 @@ sys.setrecursionlimit(2000)
 where_this_file_is = pathlib.Path(__file__).parent
 
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
-json_dict = {
-    "width_slider": 15,
-    "height_slider": 10,
-    "difficulty_slider": 15,
-    "high_scores": [],  # list of dicts with keys: 'time', 'width', 'height', 'mine_count'
-}
-# TODO: read json_dict from file, if file exists
 # TODO: set values to sliders from json_dict
 try:
     with open(where_this_file_is / 'game_data.json', 'r') as source:
-        highscores=json.load(source)
-        print(highscores)
+        json_dict=json.load(source)
 except FileNotFoundError:
     json_dict = {
     "width_slider": 15,
@@ -405,4 +397,3 @@ root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.iconphoto(False, tkinter.PhotoImage(file=where_this_file_is / "bomb.png"))
 
 root.mainloop()
-# TODO: save json_dict to file
