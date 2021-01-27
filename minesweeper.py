@@ -138,7 +138,7 @@ class Game:
                         'mine_count' : self.mine_count,
                     })
                     
-                json.dump(json_dict, score_list)
+                   json.dump(json_dict, score_list)
 
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
@@ -274,11 +274,14 @@ win_message = [
 ]
 
 def highscore():
-    data = where_this_file_is / 'high_scores.json'
-    if data.exists():
+    try:
         with open(where_this_file_is / 'high_scores.json', 'r') as source:
             highscores=json.load(source)
-            print(highscores['high_scores'])
+            m_s = [60,1]
+            time_convert = sum([a*b for a,b in zip(m_s, map(int,highscores['high_scores'][0]['time'].split(':')))])
+            highscores['high_scores'][0]['time'] = time_convert
+    except FileNotFoundError:
+        print(json_dict['high_scores'])
                
 def quit_game(event=None):
     root.destroy()
