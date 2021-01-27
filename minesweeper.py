@@ -21,7 +21,13 @@ json_dict = {
 }
 # TODO: read json_dict from file, if file exists
 # TODO: set values to sliders from json_dict
-
+def highscore():
+    try:
+        with open(where_this_file_is / 'high_scores.json', 'r') as source:
+            highscores=json.load(source)
+            print(highscores)
+    except FileNotFoundError:
+        return json_dict['high_scores']
 
 class Game:
     def __init__(self, mine_count, width, height):
@@ -132,7 +138,7 @@ class Game:
             elif self.game_status == GameStatus.game_won:
                 with open(where_this_file_is / 'high_scores.json', "w") as score_list:
                    json_dict["high_scores"].append({
-                        'time' : self.game_time.strftime("%M:%S"),
+                        'time' : self.game_time.minute*60 + self.game_time.second,
                         'width' : self.width,
                         'height' : self.height,
                         'mine_count' : self.mine_count,
@@ -273,16 +279,6 @@ win_message = [
     "The force is strong with this one.",
 ]
 
-def highscore():
-    try:
-        with open(where_this_file_is / 'high_scores.json', 'r') as source:
-            highscores=json.load(source)
-            m_s = [60,1]
-            time_convert = sum([a*b for a,b in zip(m_s, map(int,highscores['high_scores'][0]['time'].split(':')))])
-            highscores['high_scores'][0]['time'] = time_convert
-    except FileNotFoundError:
-        print(json_dict['high_scores'])
-               
 def quit_game(event=None):
     root.destroy()
 
