@@ -11,16 +11,20 @@ from enum import Enum
 # Recursion limit is increased to prevent Recursion error from
 # auto-opening open_squares in open_squares ()
 sys.setrecursionlimit(2000)
+where_this_file_is = pathlib.Path(__file__).parent
 
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
-json_dict = {
-    "width_slider": 15,
-    "height_slider": 10,
-    "difficulty_slider": 15,
-    "high_scores": [],  # list of dicts with keys: 'time', 'width', 'height', 'mine_count'
-}
-# TODO: read json_dict from file, if file exists
 # TODO: set values to sliders from json_dict
+try:
+    with open(where_this_file_is / "game_data.json", "r") as source:
+        json_dict = json.load(source)
+except FileNotFoundError:
+    json_dict = {
+        "width_slider": 15,
+        "height_slider": 10,
+        "difficulty_slider": 15,
+        "high_scores": [],  # list of dicts with keys: 'time', 'width', 'height', 'mine_count'
+    }
 
 
 class Game:
@@ -130,8 +134,14 @@ class Game:
                 self.game_time += datetime.timedelta(seconds=1)
                 root.after(1000, self.timer)
             elif self.game_status == GameStatus.game_won:
-                with open("high_scores.json", "w") as high_scores:
-                    json.dump(self.game_time.strftime("%M:%S"), high_scores)
+                json_dict["high_scores"].append(
+                    {
+                        "time": self.game_time.minute * 60 + self.game_time.second,
+                        "width": self.width,
+                        "height": self.height,
+                        "mine_count": self.mine_count,
+                    }
+                )
 
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
@@ -223,7 +233,7 @@ gif_label = ttk.Label(
     foreground="sienna3",
 )
 
-where_this_file_is = pathlib.Path(__file__).parent
+
 button_image = PhotoImage(file=(where_this_file_is / "button_small.png"))
 button_image_pressed = PhotoImage(file=(where_this_file_is / "pressed_button_small.png"))
 flag_image = PhotoImage(file=(where_this_file_is / "flag_small.png"))
@@ -267,25 +277,12 @@ win_message = [
 ]
 
 
-def highscore(mins, secs):
-    converted_to_seconds = mins * 60 + secs
-    for time in top_10_times:
-        if converted_to_seconds < time and len(top_10_times) < 10:
-            top_10_times.insert(
-                index, converted_to_seconds
-            )  # HOW DO I GET THE INDEX OF "TIME" IN FOR LOOP?
-        elif converted_to_seconds < time and len(top_10_times >= 10):
-            top_10_times.remove(top_10_times[-1])
-            top_10_times.insert(index, converted_to_seconds)  # SAME AS ABOVE
-
-
 def quit_game(event=None):
     root.destroy()
 
 
 def new_game(event=None):
     canvas.delete("all")
-
     height = int(height_slider.scale.get())
     width = int(width_slider.scale.get())
 
@@ -404,4 +401,3 @@ root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.iconphoto(False, tkinter.PhotoImage(file=where_this_file_is / "bomb.png"))
 
 root.mainloop()
-# TODO: save json_dict to file
