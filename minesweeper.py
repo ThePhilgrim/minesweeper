@@ -11,6 +11,7 @@ from enum import Enum
 # Recursion limit is increased to prevent Recursion error from
 # auto-opening open_squares in open_squares ()
 sys.setrecursionlimit(2000)
+where_this_file_is = pathlib.Path(__file__).parent
 
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
 json_dict = {
@@ -21,13 +22,17 @@ json_dict = {
 }
 # TODO: read json_dict from file, if file exists
 # TODO: set values to sliders from json_dict
-def highscore():
-    try:
-        with open(where_this_file_is / 'game_data.json', 'r') as source:
-            highscores=json.load(source)
-            print(highscores)
-    except FileNotFoundError:
-        return json_dict['high_scores']
+try:
+    with open(where_this_file_is / 'game_data.json', 'r') as source:
+        highscores=json.load(source)
+        print(highscores)
+except FileNotFoundError:
+    json_dict = {
+    "width_slider": 15,
+    "height_slider": 10,
+    "difficulty_slider": 15,
+    "high_scores": [],  # list of dicts with keys: 'time', 'width', 'height', 'mine_count'
+    }
 
 class Game:
     def __init__(self, mine_count, width, height):
@@ -136,15 +141,12 @@ class Game:
                 self.game_time += datetime.timedelta(seconds=1)
                 root.after(1000, self.timer)
             elif self.game_status == GameStatus.game_won:
-                with open(where_this_file_is / 'game_data.json', "w") as score_list:
                    json_dict["high_scores"].append({
                         'time' : self.game_time.minute*60 + self.game_time.second,
                         'width' : self.width,
                         'height' : self.height,
                         'mine_count' : self.mine_count,
                     })
-                    
-                   json.dump(json_dict, score_list)
 
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
@@ -236,7 +238,7 @@ gif_label = ttk.Label(
     foreground="sienna3",
 )
 
-where_this_file_is = pathlib.Path(__file__).parent
+
 button_image = PhotoImage(file=(where_this_file_is / "button_small.png"))
 button_image_pressed = PhotoImage(file=(where_this_file_is / "pressed_button_small.png"))
 flag_image = PhotoImage(file=(where_this_file_is / "flag_small.png"))
@@ -285,8 +287,6 @@ def quit_game(event=None):
 
 def new_game(event=None):
     canvas.delete("all")
-    highscore()
-
     height = int(height_slider.scale.get())
     width = int(width_slider.scale.get())
 
