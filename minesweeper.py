@@ -16,15 +16,16 @@ where_this_file_is = pathlib.Path(__file__).parent
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
 # TODO: set values to sliders from json_dict
 try:
-    with open(where_this_file_is / 'game_data.json', 'r') as source:
-        json_dict=json.load(source)
+    with open(where_this_file_is / "game_data.json", "r") as source:
+        json_dict = json.load(source)
 except FileNotFoundError:
     json_dict = {
-    "width_slider": 15,
-    "height_slider": 10,
-    "difficulty_slider": 15,
-    "high_scores": [],  # list of dicts with keys: 'time', 'width', 'height', 'mine_count'
+        "width_slider": 15,
+        "height_slider": 10,
+        "difficulty_slider": 15,
+        "high_scores": [],  # list of dicts with keys: 'time', 'width', 'height', 'mine_count'
     }
+
 
 class Game:
     def __init__(self, mine_count, width, height):
@@ -133,12 +134,14 @@ class Game:
                 self.game_time += datetime.timedelta(seconds=1)
                 root.after(1000, self.timer)
             elif self.game_status == GameStatus.game_won:
-                   json_dict["high_scores"].append({
-                        'time' : self.game_time.minute*60 + self.game_time.second,
-                        'width' : self.width,
-                        'height' : self.height,
-                        'mine_count' : self.mine_count,
-                    })
+                json_dict["high_scores"].append(
+                    {
+                        "time": self.game_time.minute * 60 + self.game_time.second,
+                        "width": self.width,
+                        "height": self.height,
+                        "mine_count": self.mine_count,
+                    }
+                )
 
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
@@ -273,6 +276,7 @@ win_message = [
     "The force is strong with this one.",
 ]
 
+
 def quit_game(event=None):
     root.destroy()
 
@@ -285,7 +289,7 @@ def new_game(event=None):
     slider_value = slider_variable.get()
     percentage_to_mine_count = (width * height / 100) * slider_value
     mine_count = round(percentage_to_mine_count)
-   
+
     global current_game
     current_game = Game(mine_count, width, height)
 
