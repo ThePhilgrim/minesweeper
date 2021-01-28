@@ -136,11 +136,10 @@ class Game:
                 )
 
     def timer(self):
-        if self is current_game:
-            if self.game_status == GameStatus.in_progress:
-                statusbar_time.config(text=self.game_time.strftime("%M:%S"))
-                self.game_time += datetime.timedelta(seconds=1)
-                root.after(1000, self.timer)
+        if self is current_game and self.game_status == GameStatus.in_progress:
+            statusbar_time.config(text=self.game_time.strftime("%M:%S"))
+            self.game_time += datetime.timedelta(seconds=1)
+            root.after(1000, self.timer)
 
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
