@@ -280,8 +280,8 @@ def save_json_file():
     json_dict["height_slider"] = int(height_slider.scale.get())
     json_dict["width_slider"] = int(width_slider.scale.get())
     json_dict["difficulty_slider"] = int(difficulty_slider.scale.get())
-    with open(where_this_file_is / "game_data.json", "w") as game_info:
-        json.dump(json_dict, game_info)
+    with open(where_this_file_is / "game_data.json", "w") as file:
+        json.dump(json_dict, file)
 
 
 def quit_game(event=None):
