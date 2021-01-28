@@ -14,7 +14,6 @@ sys.setrecursionlimit(2000)
 where_this_file_is = pathlib.Path(__file__).parent
 
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
-# TODO: set values to sliders from json_dict
 try:
     with open(where_this_file_is / "game_data.json", "r") as source:
         json_dict = json.load(source)
@@ -277,7 +276,16 @@ win_message = [
 ]
 
 
+def save_json_file():
+    json_dict["height_slider"] = int(height_slider.scale.get())
+    json_dict["width_slider"] = int(width_slider.scale.get())
+    json_dict["difficulty_slider"] = int(difficulty_slider.scale.get())
+    with open(where_this_file_is / "game_data.json", "w") as file:
+        json.dump(json_dict, file)
+
+
 def quit_game(event=None):
+    save_json_file()
     root.destroy()
 
 
@@ -342,14 +350,14 @@ sidebar_height_text = ttk.Label(sidebar, text="Board Height:")
 sidebar_height_text.pack(pady=[5, 0])
 
 height_slider = ttk.LabeledScale(sidebar, from_=10, to=35)
-height_slider.value = 10
+height_slider.value = json_dict["height_slider"]
 height_slider.pack(padx=5)
 
 sidebar_width_text = ttk.Label(sidebar, text="Board Width:")
 sidebar_width_text.pack(pady=[5, 0])
 
 width_slider = ttk.LabeledScale(sidebar, from_=10, to=55)
-width_slider.value = 15
+width_slider.value = json_dict["width_slider"]
 width_slider.pack(padx=5)
 
 sidebar_percentage_text = ttk.Label(sidebar, text="Mine Percentage:")
@@ -374,7 +382,7 @@ slider_variable = tkinter.IntVar()
 slider_variable.trace_variable("w", difficulty_slider_callback)
 
 difficulty_slider = ttk.LabeledScale(sidebar, from_=5, to=50, variable=slider_variable)
-difficulty_slider.value = 15
+difficulty_slider.value = json_dict["difficulty_slider"]
 difficulty_slider.pack(padx=5)
 
 # Tkinter's LabeledScale is broken: https://bugs.python.org/issue40219
@@ -400,4 +408,5 @@ new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
 root.iconphoto(False, tkinter.PhotoImage(file=where_this_file_is / "bomb.png"))
 
+root.protocol("WM_DELETE_WINDOW", quit_game)
 root.mainloop()
