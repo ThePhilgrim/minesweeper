@@ -102,6 +102,14 @@ class Game:
         else:
             if count_already_open + count_mine_locations == self.width * self.height:
                 self.game_status = GameStatus.game_won
+                json_dict["high_scores"].append(
+                    {
+                        "time": self.game_time.minute * 60 + self.game_time.second,
+                        "width": self.width,
+                        "height": self.height,
+                        "mine_count": self.mine_count,
+                    }
+                )
                 statusbar_action.config(text=random.choice(win_message))
                 self.win_animation()
             else:
@@ -127,20 +135,10 @@ class Game:
                 )
 
     def timer(self):
-        if self is current_game:
-            if self.game_status == GameStatus.in_progress:
-                statusbar_time.config(text=self.game_time.strftime("%M:%S"))
-                self.game_time += datetime.timedelta(seconds=1)
-                root.after(1000, self.timer)
-            elif self.game_status == GameStatus.game_won:
-                json_dict["high_scores"].append(
-                    {
-                        "time": self.game_time.minute * 60 + self.game_time.second,
-                        "width": self.width,
-                        "height": self.height,
-                        "mine_count": self.mine_count,
-                    }
-                )
+        if self is current_game and self.game_status == GameStatus.in_progress:
+            statusbar_time.config(text=self.game_time.strftime("%M:%S"))
+            self.game_time += datetime.timedelta(seconds=1)
+            root.after(1000, self.timer)
 
     def generate_random_mine_locations(self, where_user_clicked):
         """Generates mine locations across the board after the user
