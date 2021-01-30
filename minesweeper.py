@@ -286,16 +286,41 @@ def quit_game(event=None):
     save_json_file()
     root.destroy()
 
-
-def highscore_window(event=None):
-    window = tkinter.Toplevel()
-    window.resizable(False, False)
-    window.title("High Score")
-    frame = ttk.Frame(window)
+highscore_window = None
+def create_highscores_window(event=None):
+    global highscore_window
+    if highscore_window is not None and highscore_window.winfo_exists():
+        highscore_window.lift()
+        return
+    # TODO Prevent from opening more than one window
+    highscore_window = tkinter.Toplevel()
+    highscore_window.resizable(False, False)
+    highscore_window.title("High Scores")
+    frame = ttk.Frame(highscore_window)
     frame.pack(fill="both", expand=True)
 
     treeview = ttk.Treeview(frame)
+    # Define columns
+    treeview["columns"] = ("Mine Percentage", "Time per Square", "Total Time")
+
+    # Format columns
+    treeview.column("#0", width=120, minwidth=25)
+    treeview.column("Mine Percentage", anchor="w", width=120)
+    treeview.column("Time per Square", anchor="w", width=120)
+    treeview.column("Total Time", anchor="w", width=100)
+
+    # Create headings
+    treeview.heading("#0", text="", anchor="w")
+    treeview.heading("Mine Percentage", text="Mine Percentage", anchor="w")
+    treeview.heading("Time per Square", text="Avg. Time per Square", anchor="w")
+    treeview.heading("Total Time", text="Total Time", anchor="w")
+
+    treeview.insert(parent='', index='end', text='tes1', values=("testing alot", "testing even more", "testing forever"))
+
+
     treeview.pack()
+    highscore_window = None
+
 
 
 def new_game(event=None):
@@ -331,11 +356,11 @@ top_menu_game = tkinter.Menu(top_menu)
 if root.tk.call("tk", "windowingsystem") == "aqua":
     top_menu.add_cascade(label="Game", menu=top_menu_game)
     top_menu_game.add_command(label="New Game", accelerator="F2", command=new_game)
-    top_menu_game.add_command(label="High Score", accelerator="F6", command=highscore_window)
+    top_menu_game.add_command(label="High Scores", accelerator="F6", command=create_highscores_window)
     top_menu_game.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 else:
     top_menu.add_command(label="New Game", accelerator="F2", command=new_game)
-    top_menu_game.add_command(label="High Score", accelerator="F6", command=highscore_window)
+    top_menu_game.add_command(label="High Scores", accelerator="F6", command=create_highscores_window)
     top_menu.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 
 
@@ -413,7 +438,7 @@ def update_statusbar_wraplength(event):
 
 root.bind("<Configure>", update_statusbar_wraplength)
 root.bind("<F2>", new_game)
-root.bind("<F6>", highscore_window)
+root.bind("<F6>", create_highscores_window)
 root.bind("<F10>", quit_game)
 
 new_game()
