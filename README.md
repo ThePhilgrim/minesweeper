@@ -1,4 +1,5 @@
 # minesweeper
+test
 This is a minesweeper game to make two amateur coders into pros.
 Run these commands to play it:
 
