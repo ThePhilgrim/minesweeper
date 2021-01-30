@@ -286,7 +286,10 @@ def quit_game(event=None):
     save_json_file()
     root.destroy()
 
+
 highscore_window = None
+
+
 def create_highscores_window(event=None):
     global highscore_window
     if highscore_window is not None and highscore_window.winfo_exists():
@@ -315,12 +318,15 @@ def create_highscores_window(event=None):
     treeview.heading("Time per Square", text="Avg. Time per Square", anchor="w")
     treeview.heading("Total Time", text="Total Time", anchor="w")
 
-    treeview.insert(parent='', index='end', text='tes1', values=("testing alot", "testing even more", "testing forever"))
-
+    treeview.insert(
+        parent="",
+        index="end",
+        text="tes1",
+        values=("testing alot", "testing even more", "testing forever"),
+    )
 
     treeview.pack()
     highscore_window = None
-
 
 
 def new_game(event=None):
@@ -356,11 +362,15 @@ top_menu_game = tkinter.Menu(top_menu)
 if root.tk.call("tk", "windowingsystem") == "aqua":
     top_menu.add_cascade(label="Game", menu=top_menu_game)
     top_menu_game.add_command(label="New Game", accelerator="F2", command=new_game)
-    top_menu_game.add_command(label="High Scores", accelerator="F6", command=create_highscores_window)
+    top_menu_game.add_command(
+        label="High Scores", accelerator="F6", command=create_highscores_window
+    )
     top_menu_game.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 else:
     top_menu.add_command(label="New Game", accelerator="F2", command=new_game)
-    top_menu_game.add_command(label="High Scores", accelerator="F6", command=create_highscores_window)
+    top_menu_game.add_command(
+        label="High Scores", accelerator="F6", command=create_highscores_window
+    )
     top_menu.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 
 
