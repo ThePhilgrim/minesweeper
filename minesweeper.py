@@ -286,6 +286,17 @@ def quit_game(event=None):
     save_json_file()
     root.destroy()
 
+def highscore_window(event=None):
+    window = tkinter.Toplevel()
+    window.resizable(False, False)
+    window.title("High Score")
+    window.lift()
+    frame = ttk.Frame(window)
+    frame.pack(fill="both", expand=True)
+
+    treeview = ttk.Treeview(frame)
+    treeview.pack()
+
 
 def new_game(event=None):
     canvas.delete("all")
@@ -320,9 +331,11 @@ top_menu_game = tkinter.Menu(top_menu)
 if root.tk.call("tk", "windowingsystem") == "aqua":
     top_menu.add_cascade(label="Game", menu=top_menu_game)
     top_menu_game.add_command(label="New Game", accelerator="F2", command=new_game)
+    top_menu_game.add_command(label="High Score", accelerator="F6", command=highscore_window)
     top_menu_game.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 else:
     top_menu.add_command(label="New Game", accelerator="F2", command=new_game)
+    top_menu_game.add_command(label="High Score", accelerator="F6", command=highscore_window)
     top_menu.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 
 
@@ -397,9 +410,9 @@ def update_statusbar_wraplength(event):
         - 15  # Leave gaps between the status bar labels
     )
 
-
 root.bind("<Configure>", update_statusbar_wraplength)
 root.bind("<F2>", new_game)
+root.bind("<F6>", highscore_window)
 root.bind("<F10>", quit_game)
 
 new_game()
