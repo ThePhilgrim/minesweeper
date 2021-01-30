@@ -286,11 +286,11 @@ def quit_game(event=None):
     save_json_file()
     root.destroy()
 
+
 def highscore_window(event=None):
     window = tkinter.Toplevel()
     window.resizable(False, False)
     window.title("High Score")
-    window.lift()
     frame = ttk.Frame(window)
     frame.pack(fill="both", expand=True)
 
@@ -409,6 +409,7 @@ def update_statusbar_wraplength(event):
         - statusbar_count.winfo_reqwidth()
         - 15  # Leave gaps between the status bar labels
     )
+
 
 root.bind("<Configure>", update_statusbar_wraplength)
 root.bind("<F2>", new_game)
