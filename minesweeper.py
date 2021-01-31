@@ -319,16 +319,16 @@ def create_highscores_window(event=None):
     treeview.heading("Total Time", text="Total Time", anchor="w")
 
     def get_highscore_data(highscore_dict):
-        return (-treeview_mine_percentage(), treeview_avg_time())
+        return (-get_mine_percentage(highscore_dict), get_avg_time(highscore_dict))
 
-    def treeview_mine_percentage(highscore_dict):
+    def get_mine_percentage(highscore_dict):
         return round(
             highscore_dict["mine_count"]
             / (highscore_dict["width"] * highscore_dict["height"])
             * 100
         )
 
-    def treeview_avg_time(highscore_dict):
+    def get_avg_time(highscore_dict):
         return round(
             highscore_dict["time"] / (highscore_dict["width"] * highscore_dict["height"]), 2
         )
@@ -344,11 +344,9 @@ def create_highscores_window(event=None):
         treeview.insert(
             parent="",
             index="end",
-            iid=ID_count,
-            text="",
             values=(
-                (f"{treeview_mine_percentage(highscore_dict)} %"),
-                (f"{treeview_avg_time(highscore_dict)} sec"),
+                (f"{get_mine_percentage(highscore_dict)} %"),
+                (f"{get_avg_time(highscore_dict)} sec"),
                 format_time,
             ),
         )
@@ -396,9 +394,7 @@ if root.tk.call("tk", "windowingsystem") == "aqua":
     top_menu_game.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 else:
     top_menu.add_command(label="New Game", accelerator="F2", command=new_game)
-    top_menu.add_command(
-        label="High Scores", accelerator="F6", command=create_highscores_window
-    )
+    top_menu.add_command(label="High Scores", accelerator="F6", command=create_highscores_window)
     top_menu.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 
 
