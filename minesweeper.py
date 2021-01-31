@@ -8,15 +8,20 @@ from tkinter import ttk
 from tkinter import PhotoImage
 from enum import Enum
 
+try:
+    image_dir = pathlib.Path(sys._MEIPASS)
+except AttributeError:
+    image_dir = pathlib.Path(__file__).parent
+    
 # Recursion limit is increased to prevent Recursion error from
 # auto-opening open_squares in open_squares ()
 sys.setrecursionlimit(2000)
-where_this_file_is = pathlib.Path(__file__).parent
+image_dir = pathlib.Path(__file__).parent
 
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
 # TODO: set values to sliders from json_dict
 try:
-    with open(where_this_file_is / 'game_data.json', 'r') as source:
+    with open(image_dir / 'game_data.json', 'r') as source:
         json_dict=json.load(source)
 except FileNotFoundError:
     json_dict = {
@@ -230,19 +235,17 @@ gif_label = ttk.Label(
     foreground="sienna3",
 )
 
-
-button_image = PhotoImage(file=(where_this_file_is / "button_small.png"))
-button_image_pressed = PhotoImage(file=(where_this_file_is / "pressed_button_small.png"))
-flag_image = PhotoImage(file=(where_this_file_is / "flag_small.png"))
-bomb_image = PhotoImage(file=(where_this_file_is / "bomb_small.png"))
+button_image = PhotoImage(file=(image_dir / "button_small.png"))
+button_image_pressed = PhotoImage(file=(image_dir / "pressed_button_small.png"))
+flag_image = PhotoImage(file=(image_dir / "flag_small.png"))
+bomb_image = PhotoImage(file=(image_dir / "bomb_small.png"))
 gif_frames = [
     PhotoImage(
-        file=where_this_file_is / "doomguy.gif",
+        file=image_dir / "doomguy.gif",
         format=f"gif -index {i}",
     )
     for i in range(8)
 ]
-
 
 live_message = [
     "You're alive.. for now !",
@@ -365,7 +368,6 @@ def difficulty_slider_callback(*args):
     else:
         sidebar_difficulty_text["text"] = "HELL!"
 
-
 slider_variable = tkinter.IntVar()
 slider_variable.trace_variable("w", difficulty_slider_callback)
 
@@ -387,13 +389,14 @@ def update_statusbar_wraplength(event):
         - 15  # Leave gaps between the status bar labels
     )
 
-
 root.bind("<Configure>", update_statusbar_wraplength)
 root.bind("<F2>", new_game)
 root.bind("<F10>", quit_game)
 
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
-root.iconphoto(False, tkinter.PhotoImage(file=where_this_file_is / "bomb.png"))
+root.iconphoto(False, tkinter.PhotoImage(file=image_dir / "bomb.png"))
 
 root.mainloop()
+
+
