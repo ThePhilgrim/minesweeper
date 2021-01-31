@@ -295,7 +295,6 @@ def create_highscores_window(event=None):
     if highscore_window is not None and highscore_window.winfo_exists():
         highscore_window.lift()
         return
-    # TODO Prevent from opening more than one window
     highscore_window = tkinter.Toplevel()
     highscore_window.resizable(False, False)
     highscore_window.title("High Scores")
@@ -325,31 +324,41 @@ def create_highscores_window(event=None):
             / (highscore_dict["width"] * highscore_dict["height"])
             * 100
         )
-        highscore_avg_time = highscore_dict["time"] / (highscore_dict["width"] * highscore_dict["height"])
+        highscore_avg_time = highscore_dict["time"] / (
+            highscore_dict["width"] * highscore_dict["height"]
+        )
         return (-highscore_mine_percentage, highscore_avg_time)
 
     def treeview_mine_percentage(highscore_dict):
         return round(
             highscore_dict["mine_count"]
             / (highscore_dict["width"] * highscore_dict["height"])
-            * 100)
+            * 100
+        )
 
     def treeview_avg_time(highscore_dict):
-        return highscore_dict["time"] / (highscore_dict["width"] * highscore_dict["height"])
+        return round(
+            highscore_dict["time"] / (highscore_dict["width"] * highscore_dict["height"]), 2
+        )
 
     ID_count = 0
     for highscore_dict in sorted(json_dict["high_scores"], key=get_highscore_data):
-        # CREATES ERROR (SyntaxError: positional argument follows keyword argument)
-        # if highscore_dict["time"] > 60:
-        format_time = f"{highscore_dict['time'] / 60} min & {highscore_dict['time'] % 60} sec"
-        # else:
-        #    format_time = f"{highscore_dict['time']} sec"
+        if highscore_dict["time"] >= 60:
+            format_time = (
+                f"{int(highscore_dict['time'] / 60)} min & {highscore_dict['time'] % 60} sec"
+            )
+        else:
+            format_time = f"{highscore_dict['time']} sec"
         treeview.insert(
-        parent='',
-        index="end",
-        iid=ID_count,
-        text="",
-        values=treeview_mine_percentage, treeview_avg_time, format_time)
+            parent="",
+            index="end",
+            iid=ID_count,
+            text="",
+            values=(
+                (f"{treeview_mine_percentage(highscore_dict)} %"),
+                (f"{treeview_avg_time(highscore_dict)} sec"),
+                format_time,
+            ),
         )
         ID_count += 1
 
@@ -395,9 +404,7 @@ if root.tk.call("tk", "windowingsystem") == "aqua":
     top_menu_game.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 else:
     top_menu.add_command(label="New Game", accelerator="F2", command=new_game)
-    top_menu_game.add_command(
-        label="High Scores", accelerator="F6", command=create_highscores_window
-    )
+    top_menu.add_command(label="High Scores", accelerator="F6", command=create_highscores_window)
     top_menu.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 
 
