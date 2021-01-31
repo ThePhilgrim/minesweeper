@@ -395,7 +395,7 @@ if root.tk.call("tk", "windowingsystem") == "aqua":
     top_menu_game.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 else:
     top_menu.add_command(label="New Game", accelerator="F2", command=new_game)
-    top_menu_game.add_command(
+    top_menu.add_command(
         label="High Scores", accelerator="F6", command=create_highscores_window
     )
     top_menu.add_command(label="Quit Game", accelerator="F10", command=quit_game)
