@@ -130,3 +130,6 @@ dmypy.json
 
 # Funny file on ThePhilgrim's computer
 .DS_Store
+
+# Game data file created by minesweeper
+game_data.json
