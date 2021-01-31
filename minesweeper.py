@@ -319,15 +319,7 @@ def create_highscores_window(event=None):
     treeview.heading("Total Time", text="Total Time", anchor="w")
 
     def get_highscore_data(highscore_dict):
-        highscore_mine_percentage = round(
-            highscore_dict["mine_count"]
-            / (highscore_dict["width"] * highscore_dict["height"])
-            * 100
-        )
-        highscore_avg_time = highscore_dict["time"] / (
-            highscore_dict["width"] * highscore_dict["height"]
-        )
-        return (-highscore_mine_percentage, highscore_avg_time)
+        return (-treeview_mine_percentage(), treeview_avg_time())
 
     def treeview_mine_percentage(highscore_dict):
         return round(
