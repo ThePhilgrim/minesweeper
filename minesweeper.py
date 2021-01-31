@@ -319,8 +319,6 @@ def create_highscores_window(event=None):
     treeview.heading("Time per Square", text="Avg. Time per Square", anchor="w")
     treeview.heading("Total Time", text="Total Time", anchor="w")
 
-    # sorted_highscore_list = sorted(json_dict["high_scores"], key=lambda x: () )
-
     def get_highscore_data(highscore_dict):
         highscore_mine_percentage = round(
             highscore_dict["mine_count"]
@@ -328,37 +326,32 @@ def create_highscores_window(event=None):
             * 100
         )
         highscore_avg_time = highscore_dict["time"] / (highscore_dict["width"] * highscore_dict["height"])
-        return -(highscore_mine_percentage, highscore_avg_time)
+        return (-highscore_mine_percentage, highscore_avg_time)
+
+    def treeview_mine_percentage(highscore_dict):
+        return round(
+            highscore_dict["mine_count"]
+            / (highscore_dict["width"] * highscore_dict["height"])
+            * 100)
+
+    def treeview_avg_time(highscore_dict):
+        return highscore_dict["time"] / (highscore_dict["width"] * highscore_dict["height"])
 
     ID_count = 0
-
     for highscore_dict in sorted(json_dict["high_scores"], key=get_highscore_data):
-        format_time = f"{highscore_dict["time"] / 60} min & {highscore_dict["time"] % 60} sec"
+        # CREATES ERROR (SyntaxError: positional argument follows keyword argument)
+        # if highscore_dict["time"] > 60:
+        format_time = f"{highscore_dict['time'] / 60} min & {highscore_dict['time'] % 60} sec"
+        # else:
+        #    format_time = f"{highscore_dict['time']} sec"
         treeview.insert(
-        parent="",
+        parent='',
         index="end",
+        iid=ID_count,
         text="",
-        values=(highscore_mine_percentage, highscore_avg_time, format_time)
+        values=treeview_mine_percentage, treeview_avg_time, format_time)
         )
-
-
-    # for highscore_dict in json_dict["high_scores"]:
-    #     mine_percentage = round(dict["mine_count"] / (dict["width"] * dict["height"]) * 100)
-    #     average_time_per_square = dict["time"] / (dict["width"] * dict["height"])
-    #     format_time = f"{dict["time"] / 60} min & {dict["time"] % 60} sec"
-    #     mine_percentage_list.append([mine_percentage, average_time_per_square, format_time])
-
-    # "high_scores":
-    #   [{"time": 15, "width": 17, "height": 15, "mine_count": 13},
-    #     {"time": 22, "width": 16, "height": 12, "mine_count": 10},
-    #     {"time": 57, "width": 20, "height": 23, "mine_count": 23},
-    #     {"time": 86, "width": 10, "height": 10, "mine_count": 5}]}
-
-    # for dict in json_dict["high_scores"]:
-
-
-    #print(json_dict["high_scores"])
-    # sorted(json_dict, key=lambda x: (x['m']))
+        ID_count += 1
 
     treeview.pack()
 
