@@ -287,6 +287,72 @@ def quit_game(event=None):
     root.destroy()
 
 
+highscore_window = None
+
+
+def create_highscores_window(event=None):
+    global highscore_window
+    if highscore_window is not None and highscore_window.winfo_exists():
+        highscore_window.lift()
+        return
+    highscore_window = tkinter.Toplevel()
+    highscore_window.resizable(False, False)
+    highscore_window.title("High Scores")
+    frame = ttk.Frame(highscore_window)
+    frame.pack(fill="both", expand=True)
+
+    treeview = ttk.Treeview(frame)
+
+    # Define columns
+    treeview["columns"] = ("Mine Percentage", "Time per Square", "Total Time")
+
+    # Format columns
+    treeview.column("#0", width=0, stretch="NO")
+    treeview.column("Mine Percentage", anchor="w", width=140, minwidth=140)
+    treeview.column("Time per Square", anchor="w", width=175, minwidth=175)
+    treeview.column("Total Time", anchor="w", width=100, minwidth=100)
+
+    # Create headings
+    treeview.heading("#0", text="", anchor="w")
+    treeview.heading("Mine Percentage", text="Mine Percentage", anchor="w")
+    treeview.heading("Time per Square", text="Avg. Time per Square", anchor="w")
+    treeview.heading("Total Time", text="Total Time", anchor="w")
+
+    def get_highscore_data(highscore_dict):
+        return (-get_mine_percentage(highscore_dict), get_avg_time(highscore_dict))
+
+    def get_mine_percentage(highscore_dict):
+        return round(
+            highscore_dict["mine_count"]
+            / (highscore_dict["width"] * highscore_dict["height"])
+            * 100
+        )
+
+    def get_avg_time(highscore_dict):
+        return round(
+            highscore_dict["time"] / (highscore_dict["width"] * highscore_dict["height"]), 2
+        )
+
+    for highscore_dict in sorted(json_dict["high_scores"], key=get_highscore_data):
+        if highscore_dict["time"] >= 60:
+            format_time = (
+                f"{int(highscore_dict['time'] / 60)} min & {highscore_dict['time'] % 60} sec"
+            )
+        else:
+            format_time = f"{highscore_dict['time']} sec"
+        treeview.insert(
+            parent="",
+            index="end",
+            values=(
+                (f"{get_mine_percentage(highscore_dict)} %"),
+                (f"{get_avg_time(highscore_dict)} sec"),
+                format_time,
+            ),
+        )
+
+    treeview.pack()
+
+
 def new_game(event=None):
     canvas.delete("all")
     height = int(height_slider.scale.get())
@@ -320,9 +386,13 @@ top_menu_game = tkinter.Menu(top_menu)
 if root.tk.call("tk", "windowingsystem") == "aqua":
     top_menu.add_cascade(label="Game", menu=top_menu_game)
     top_menu_game.add_command(label="New Game", accelerator="F2", command=new_game)
+    top_menu_game.add_command(
+        label="High Scores", accelerator="F6", command=create_highscores_window
+    )
     top_menu_game.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 else:
     top_menu.add_command(label="New Game", accelerator="F2", command=new_game)
+    top_menu.add_command(label="High Scores", accelerator="F6", command=create_highscores_window)
     top_menu.add_command(label="Quit Game", accelerator="F10", command=quit_game)
 
 
@@ -400,6 +470,7 @@ def update_statusbar_wraplength(event):
 
 root.bind("<Configure>", update_statusbar_wraplength)
 root.bind("<F2>", new_game)
+root.bind("<F6>", create_highscores_window)
 root.bind("<F10>", quit_game)
 
 new_game()
