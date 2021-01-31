@@ -39,9 +39,3 @@ Images:
 - If you change the sizes of the small images, change `minesweeper.py` to use the new size.
 - When resizing a big image to make a small image, make sure that the small image has transparent background.
 - Keep `image_sources.txt` up to date.
-
-
-## Notes about exporting the code into an .exe file including images (Windows):
-- code used in cmd console: pyinstaller --onefile --add-data button_small.png;. --add-data pressed_button_small.png;. --add-data flag_small.png;. --add-data bomb_small.png;. --add-data doomguy.gif;. minesweeper.py
-
-This returns an .exe file which however doesn't include the images.
