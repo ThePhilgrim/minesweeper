@@ -333,7 +333,6 @@ def create_highscores_window(event=None):
             highscore_dict["time"] / (highscore_dict["width"] * highscore_dict["height"]), 2
         )
 
-    ID_count = 0
     for highscore_dict in sorted(json_dict["high_scores"], key=get_highscore_data):
         if highscore_dict["time"] >= 60:
             format_time = (
@@ -350,7 +349,6 @@ def create_highscores_window(event=None):
                 format_time,
             ),
         )
-        ID_count += 1
 
     treeview.pack()
 
