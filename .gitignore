@@ -133,3 +133,6 @@ dmypy.json
 
 # Game data file created by minesweeper
 game_data.json
+
+# Windows executable created by PyInstaller
+minesweeper.exe
