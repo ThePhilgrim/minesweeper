@@ -231,13 +231,13 @@ gif_label = ttk.Label(
 )
 
 
-button_image = PhotoImage(file=(where_this_file_is / "button_small.png"))
-button_image_pressed = PhotoImage(file=(where_this_file_is / "pressed_button_small.png"))
-flag_image = PhotoImage(file=(where_this_file_is / "flag_small.png"))
-bomb_image = PhotoImage(file=(where_this_file_is / "bomb_small.png"))
+button_image = PhotoImage(file=(where_this_file_is / "images" / "button_small.png"))
+button_image_pressed = PhotoImage(file=(where_this_file_is / "images" / "pressed_button_small.png"))
+flag_image = PhotoImage(file=(where_this_file_is / "images" / "flag_small.png"))
+bomb_image = PhotoImage(file=(where_this_file_is / "images" / "bomb_small.png"))
 gif_frames = [
     PhotoImage(
-        file=where_this_file_is / "doomguy.gif",
+        file=where_this_file_is / "images" / "doomguy.gif",
         format=f"gif -index {i}",
     )
     for i in range(8)
@@ -475,7 +475,7 @@ root.bind("<F10>", quit_game)
 
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
-root.iconphoto(False, tkinter.PhotoImage(file=where_this_file_is / "bomb.png"))
+root.iconphoto(False, tkinter.PhotoImage(file=where_this_file_is / "images" / "bomb.png"))
 
 root.protocol("WM_DELETE_WINDOW", quit_game)
 root.mainloop()
