@@ -343,7 +343,7 @@ def create_highscores_window(event=None):
                 f"{int(highscore_dict['time'] / 60)} min & {highscore_dict['time'] % 60} sec"
             )
         else:
-            format_time = f"{highscore_dict['time']} sec"
+            format_time = f"{int(highscore_dict['time'])} sec"
         treeview.insert(
             parent="",
             index="end",
