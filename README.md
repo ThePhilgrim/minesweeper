@@ -42,4 +42,4 @@ Images:
 
 
 ## Notes about exporting the code into an .exe file including images (Windows):
-- code used in cmd console: pyinstaller --onefile --add-data button_small.png;. --add-data pressed_button_small.png;. --add-data flag_small.png;. --add-data bomb_small.png;. --add-data doomguy.gif;. minesweeper.py
+- code used in cmd console: pyinstaller --onefile --add-data button_small.png;. --add-data images\pressed_button_small.png;. --add-data images\flag_small.png;. --add-data images\bomb_small.png;. --add-data images\doomguy.gif;. --add-data images\bomb.png;. minesweeper.py
