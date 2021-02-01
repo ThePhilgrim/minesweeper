@@ -19,7 +19,7 @@ sys.setrecursionlimit(2000)
 
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
 try:
-    with open(image_dir / 'game_data.json', 'r') as source:
+    with open(image_dir / "game_data.json", "r") as source:
         json_dict = json.load(source)
 except FileNotFoundError:
     # TODO: game_data.json shouldn't be in image_dir
@@ -364,7 +364,7 @@ def new_game(event=None):
     slider_value = slider_variable.get()
     percentage_to_mine_count = (width * height / 100) * slider_value
     mine_count = round(percentage_to_mine_count)
-   
+
     global current_game
     current_game = Game(mine_count, width, height)
 
@@ -448,6 +448,7 @@ def difficulty_slider_callback(*args):
     else:
         sidebar_difficulty_text["text"] = "HELL!"
 
+
 slider_variable = tkinter.IntVar()
 slider_variable.trace_variable("w", difficulty_slider_callback)
 
@@ -468,6 +469,7 @@ def update_statusbar_wraplength(event):
         - statusbar_count.winfo_reqwidth()
         - 15  # Leave gaps between the status bar labels
     )
+
 
 root.bind("<Configure>", update_statusbar_wraplength)
 root.bind("<F2>", new_game)
