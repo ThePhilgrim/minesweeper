@@ -8,16 +8,21 @@ from tkinter import ttk
 from tkinter import PhotoImage
 from enum import Enum
 
+try:
+    image_dir = pathlib.Path(sys._MEIPASS)
+except AttributeError:
+    image_dir = pathlib.Path(__file__).parent / "images"
+
 # Recursion limit is increased to prevent Recursion error from
 # auto-opening open_squares in open_squares ()
 sys.setrecursionlimit(2000)
-where_this_file_is = pathlib.Path(__file__).parent
 
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
 try:
-    with open(where_this_file_is / "game_data.json", "r") as source:
+    with open(image_dir / "game_data.json", "r") as source:
         json_dict = json.load(source)
 except FileNotFoundError:
+    # TODO: game_data.json shouldn't be in image_dir
     json_dict = {
         "width_slider": 15,
         "height_slider": 10,
@@ -230,19 +235,17 @@ gif_label = ttk.Label(
     foreground="sienna3",
 )
 
-
-button_image = PhotoImage(file=(where_this_file_is / "images" / "button_small.png"))
-button_image_pressed = PhotoImage(file=(where_this_file_is / "images" / "pressed_button_small.png"))
-flag_image = PhotoImage(file=(where_this_file_is / "images" / "flag_small.png"))
-bomb_image = PhotoImage(file=(where_this_file_is / "images" / "bomb_small.png"))
+button_image = PhotoImage(file=(image_dir / "button_small.png"))
+button_image_pressed = PhotoImage(file=(image_dir / "pressed_button_small.png"))
+flag_image = PhotoImage(file=(image_dir / "flag_small.png"))
+bomb_image = PhotoImage(file=(image_dir / "bomb_small.png"))
 gif_frames = [
     PhotoImage(
-        file=where_this_file_is / "images" / "doomguy.gif",
+        file=image_dir / "doomguy.gif",
         format=f"gif -index {i}",
     )
     for i in range(8)
 ]
-
 
 live_message = [
     "You're alive.. for now !",
@@ -278,7 +281,7 @@ def save_json_file():
     json_dict["height_slider"] = int(height_slider.scale.get())
     json_dict["width_slider"] = int(width_slider.scale.get())
     json_dict["difficulty_slider"] = int(difficulty_slider.scale.get())
-    with open(where_this_file_is / "game_data.json", "w") as file:
+    with open(image_dir / "game_data.json", "w") as file:
         json.dump(json_dict, file)
 
 
@@ -475,7 +478,7 @@ root.bind("<F10>", quit_game)
 
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
-root.iconphoto(False, tkinter.PhotoImage(file=where_this_file_is / "images" / "bomb.png"))
+root.iconphoto(False, tkinter.PhotoImage(file=image_dir / "bomb.png"))
 
 root.protocol("WM_DELETE_WINDOW", quit_game)
 root.mainloop()
