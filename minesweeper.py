@@ -1,7 +1,7 @@
 import pathlib
 import random
 import tkinter
-import datetime
+import time
 import json
 import sys
 from tkinter import ttk
@@ -35,6 +35,7 @@ class Game:
         self.previously_clicked_square = set()
         self.flag_dict = {}
         self.game_status = GameStatus.in_progress
+        self.start_time = time.time()
 
     def mines_around_square(self, coordinate):
         """Looks at the squares adjacent to current_square and counts
@@ -104,7 +105,7 @@ class Game:
                 self.game_status = GameStatus.game_won
                 json_dict["high_scores"].append(
                     {
-                        "time": self.game_time.minute * 60 + self.game_time.second,
+                        "time": self.start_time.minute * 60 + self.start_time.second,
                         "width": self.width,
                         "height": self.height,
                         "mine_count": self.mine_count,
@@ -136,8 +137,8 @@ class Game:
 
     def timer(self):
         if self is current_game and self.game_status == GameStatus.in_progress:
-            statusbar_time.config(text=self.game_time.strftime("%M:%S"))
-            self.game_time += datetime.timedelta(seconds=1)
+            game_time = time.time() - self.start_time
+            statusbar_time.config(text=f'{int(game_time / 60):02d}:{int(game_time % 60):02d}')
             root.after(1000, self.timer)
 
     def generate_random_mine_locations(self, where_user_clicked):
@@ -366,7 +367,6 @@ def new_game(event=None):
     current_game = Game(mine_count, width, height)
 
     gif_label.place_forget()
-    current_game.game_time = datetime.datetime(2021, 1, 1)
     current_game.timer()
     canvas["width"] = button_size * current_game.width
     canvas["height"] = button_size * current_game.height
