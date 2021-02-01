@@ -40,6 +40,13 @@ Images:
 - When resizing a big image to make a small image, make sure that the small image has transparent background.
 - Keep `images/sources.txt` up to date.
 
-
 ## Notes about exporting the code into an .exe file including images (Windows):
+
 - code used in cmd console: pyinstaller --onefile --add-data images\button_small.png;. --add-data images\pressed_button_small.png;. --add-data images\flag_small.png;. --add-data images\bomb_small.png;. --add-data images\doomguy.gif;. --add-data images\bomb.png;. minesweeper.py
+
+## Notes about creating executable file on Mac OS
+
+To reproduce the installer, please run the following commands: (for reference: https://www.youtube.com/watch?v=DVOoHL2Bp_o&t=461s&ab_channel=SamanthaCruz, http://www.marinamele.com/from-a-python-script-to-a-portable-mac-application-with-py2app)
+- The executable is created with py2app. Run `pip3 install -U py2app` in terminal to install.
+- Make sure that you are located in the minesweeper directory. In your terminal, run `python3 setup.py py2app`
+- The .app file is found in the newly created 'dist' folder.
