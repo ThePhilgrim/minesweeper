@@ -338,12 +338,11 @@ def create_highscores_window(event=None):
         )
 
     for highscore_dict in sorted(json_dict["high_scores"], key=get_highscore_data):
-        if highscore_dict["time"] >= 60:
-            format_time = (
-                f"{int(highscore_dict['time'] / 60)} min & {highscore_dict['time'] % 60} sec"
-            )
+        seconds = round(highscore_dict['time'])
+        if seconds >= 60:
+            format_time = f"{seconds / 60} min & {seconds % 60} sec"
         else:
-            format_time = f"{int(highscore_dict['time'])} sec"
+            format_time = f"{seconds} sec"
         treeview.insert(
             parent="",
             index="end",
