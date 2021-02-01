@@ -8,14 +8,7 @@ Usage:
 from setuptools import setup
 
 APP = ["minesweeper.py"]
-DATA_FILES = [
-    "doomguy.gif",
-    "bomb_small.png",
-    "bomb.png",
-    "button_small.png",
-    "flag_small.png",
-    "pressed_button_small.png",
-]
+DATA_FILES = glob.glob("*.gif") + glob.glob("*.png")
 OPTIONS = {}
 
 setup(
