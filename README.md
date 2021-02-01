@@ -38,7 +38,7 @@ Images:
 - There is a big and small version of each image. The big images are used to produce the small images.
 - If you change the sizes of the small images, change `minesweeper.py` to use the new size.
 - When resizing a big image to make a small image, make sure that the small image has transparent background.
-- Keep `image_sources.txt` up to date.
+- Keep `images/sources.txt` up to date.
 
 
 ## Notes about exporting the code into an .exe file including images (Windows):
