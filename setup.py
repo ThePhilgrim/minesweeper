@@ -10,7 +10,7 @@ Usage:
 from setuptools import setup
 
 APP = ["minesweeper.py"]
-DATA_FILES = glob.glob("*.gif") + glob.glob("*.png")
+DATA_FILES = ["images"]
 OPTIONS = {}
 
 setup(
