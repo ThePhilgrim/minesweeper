@@ -110,7 +110,7 @@ class Game:
                 self.game_status = GameStatus.game_won
                 json_dict["high_scores"].append(
                     {
-                        "time": self.start_time.minute * 60 + self.start_time.second,
+                        "time": time.time() - self.start_time,
                         "width": self.width,
                         "height": self.height,
                         "mine_count": self.mine_count,
