@@ -2,7 +2,7 @@ name: Bump version
 on:
   push:
     branches:
-      - mac_build
+      - macbuild
 jobs:
   build:
     runs-on: ubuntu-latest
