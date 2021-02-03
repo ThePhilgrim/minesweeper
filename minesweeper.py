@@ -143,7 +143,7 @@ class Game:
     def timer(self):
         if self is current_game and self.game_status == GameStatus.in_progress:
             game_time = time.time() - self.start_time
-            statusbar_time.config(text=f'{int(game_time / 60):02d}:{int(game_time % 60):02d}')
+            statusbar_time.config(text=f"{int(game_time / 60):02d}:{int(game_time % 60):02d}")
             root.after(1000, self.timer)
 
     def generate_random_mine_locations(self, where_user_clicked):
@@ -338,7 +338,7 @@ def create_highscores_window(event=None):
         )
 
     for highscore_dict in sorted(json_dict["high_scores"], key=get_highscore_data):
-        seconds = round(highscore_dict['time'])
+        seconds = round(highscore_dict["time"])
         if seconds >= 60:
             format_time = f"{seconds / 60} min & {seconds % 60} sec"
         else:
