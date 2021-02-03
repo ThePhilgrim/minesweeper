@@ -314,7 +314,7 @@ def create_highscores_window(event=None):
     treeview.column("#0", width=0, stretch="NO")
     treeview.column("Mine Percentage", anchor="w", width=140, minwidth=140)
     treeview.column("Time per Square", anchor="w", width=175, minwidth=175)
-    treeview.column("Total Time", anchor="w", width=100, minwidth=100)
+    treeview.column("Total Time", anchor="w", width=120, minwidth=120)
 
     # Create headings
     treeview.heading("#0", text="", anchor="w")
