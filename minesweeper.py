@@ -46,20 +46,21 @@ class Game:
         """Looks at the squares adjacent to current_square and counts
         how many mines there are"""
         adjacent_mines = 0
-        x,y = coordinate
-        for mine_x, mine_y in self.mine_locations:
-            if (mine_x, mine_y) == (x, y-1) or (
-                mine_x, mine_y) == (x, y+1) or (        
-                mine_x, mine_y) == (x-1, y) or (
-                mine_x, mine_y) == (x-1, y-1) or (
-                mine_x, mine_y) == (x-1, y+1) or (
-                mine_x, mine_y) == (x+1, y) or (
-                mine_x, mine_y) == (x+1, y-1) or (
-                mine_x, mine_y) == (x+1, y+1):
-                    adjacent_mines += 1
+        x, y = coordinate
+        for mine in self.mine_locations:
+            if (
+                mine == (x, y - 1)
+                or mine == (x, y + 1)
+                or mine == (x - 1, y)
+                or mine == (x - 1, y - 1)
+                or mine == (x - 1, y + 1)
+                or mine == (x + 1, y)
+                or mine == (x + 1, y - 1)
+                or mine == (x + 1, y + 1)
+            ):
+                adjacent_mines += 1
         return adjacent_mines
 
-        
     def win_animation(self):
         gif_label.place(relx=0.5, rely=0.5, anchor="center")
 
