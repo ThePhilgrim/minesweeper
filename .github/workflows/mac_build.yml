@@ -11,6 +11,8 @@ jobs:
     - uses: actions/setup-python@v1
       with:
         python-version: "3.9"
+    # https://www.youtube.com/watch?v=DVOoHL2Bp_o&t=461s&ab_channel=SamanthaCruz
+    # http://www.marinamele.com/from-a-python-script-to-a-portable-mac-application-with-py2app
     - run: pip3 install -U py2app
     - run: python3 setup.py py2app
     - name: Bump version and push tag
