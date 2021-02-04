@@ -12,4 +12,4 @@ jobs:
       with:
         python-version: "3.9"
     - run: pip3 install pyinstaller
-    - run: pyinstaller --onefile --add-data images;. minesweeper.py
+    - run: pyinstaller --onefile --add-data 'images;.' minesweeper.py
