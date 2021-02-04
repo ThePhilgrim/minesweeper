@@ -85,13 +85,22 @@ class Game:
         if coordinate in self.previously_clicked_square or coordinate in self.flag_dict:
             return
 
-        self.previously_clicked_square.add((x, y))
-        canvas.create_image(
-            int(x * button_size),
-            int(y * button_size),
-            image=button_image_pressed,
-            anchor="nw",
-        )
+        if coordinate in self.mine_locations:
+            self.previously_clicked_square.add((x, y))
+            canvas.create_image(
+                int(x * button_size),
+                int(y * button_size),
+                image=red_button_image_pressed,
+                anchor="nw",
+            )
+        else:
+            self.previously_clicked_square.add((x, y))
+            canvas.create_image(
+                int(x * button_size),
+                int(y * button_size),
+                image=button_image_pressed,
+                anchor="nw",
+            )
 
         count_already_open = len(self.previously_clicked_square)
         count_mine_locations = len(self.mine_locations)
@@ -99,12 +108,17 @@ class Game:
         if coordinate in self.mine_locations:
             statusbar_action.config(text=f"BOOOOOOOOOOM! {random.choice(fail_message)}")
             self.game_status = GameStatus.game_lost
-            canvas.create_image(
-                int(x * button_size),
-                int(y * button_size),
-                image=bomb_image,
-                anchor="nw",
-            )
+
+            # Shows user all mines when losing
+            # TODO: Distinguish between correctly and incorrectly placed flags
+            for mine in self.mine_locations:
+                canvas.create_image(
+                    int(mine[0] * button_size),
+                    int(mine[1] * button_size),
+                    image=bomb_image,
+                    anchor="nw",
+                )
+
         else:
             if count_already_open + count_mine_locations == self.width * self.height:
                 self.game_status = GameStatus.game_won
@@ -238,6 +252,7 @@ gif_label = ttk.Label(
 
 button_image = PhotoImage(file=(image_dir / "button_small.png"))
 button_image_pressed = PhotoImage(file=(image_dir / "pressed_button_small.png"))
+red_button_image_pressed = PhotoImage(file=(image_dir / "pressed_red_button_small.png"))
 flag_image = PhotoImage(file=(image_dir / "flag_small.png"))
 bomb_image = PhotoImage(file=(image_dir / "bomb_small.png"))
 gif_frames = [
