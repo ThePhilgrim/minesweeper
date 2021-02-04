@@ -1,6 +1,7 @@
 # Minesweeper
 This is a minesweeper game to make two amateur coders into pros.
-Run these commands to play it:
+On Mac, you can install it from [the releases page](https://github.com/ThePhilgrim/minesweeper/releases).
+Alternatively, if you have Python installed, you can run these commands to download and play it:
 
 ```
 git clone https://github.com/ThePhilgrim/minesweeper
@@ -39,6 +40,9 @@ Images:
 - If you change the sizes of the small images, change `minesweeper.py` to use the new size.
 - When resizing a big image to make a small image, make sure that the small image has transparent background.
 - Keep `images/sources.txt` up to date.
+
+When a new commit is pushed (or a pull request is merged) to `main` branch,
+a Mac `.app` is created and uploaded automatically by `.github/workflows/mac_build.yml`.
 
 ## Creating Windows .exe file
 
