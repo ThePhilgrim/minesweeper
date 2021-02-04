@@ -5,7 +5,6 @@ import time
 import json
 import sys
 from tkinter import ttk
-from tkinter import PhotoImage
 from enum import Enum
 
 try:
@@ -236,12 +235,12 @@ gif_label = ttk.Label(
     foreground="sienna3",
 )
 
-button_image = PhotoImage(file=(image_dir / "button_small.png"))
-button_image_pressed = PhotoImage(file=(image_dir / "pressed_button_small.png"))
-flag_image = PhotoImage(file=(image_dir / "flag_small.png"))
-bomb_image = PhotoImage(file=(image_dir / "bomb_small.png"))
+button_image = tkinter.PhotoImage(file=(image_dir / "button_small.png"))
+button_image_pressed = tkinter.PhotoImage(file=(image_dir / "pressed_button_small.png"))
+flag_image = tkinter.PhotoImage(file=(image_dir / "flag_small.png"))
+bomb_image = tkinter.PhotoImage(file=(image_dir / "bomb_small.png"))
 gif_frames = [
-    PhotoImage(
+    tkinter.PhotoImage(
         file=image_dir / "doomguy.gif",
         format=f"gif -index {i}",
     )
