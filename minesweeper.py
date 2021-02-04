@@ -1,23 +1,28 @@
 import pathlib
 import random
 import tkinter
-import datetime
+import time
 import json
 import sys
 from tkinter import ttk
 from tkinter import PhotoImage
 from enum import Enum
 
+try:
+    image_dir = pathlib.Path(sys._MEIPASS)
+except AttributeError:
+    image_dir = pathlib.Path(__file__).parent / "images"
+
 # Recursion limit is increased to prevent Recursion error from
 # auto-opening open_squares in open_squares ()
 sys.setrecursionlimit(2000)
-where_this_file_is = pathlib.Path(__file__).parent
 
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
 try:
-    with open(where_this_file_is / "game_data.json", "r") as source:
+    with open(image_dir / "game_data.json", "r") as source:
         json_dict = json.load(source)
 except FileNotFoundError:
+    # TODO: game_data.json shouldn't be in image_dir
     json_dict = {
         "width_slider": 15,
         "height_slider": 10,
@@ -35,22 +40,23 @@ class Game:
         self.previously_clicked_square = set()
         self.flag_dict = {}
         self.game_status = GameStatus.in_progress
+        self.start_time = time.time()
 
     def mines_around_square(self, coordinate):
         """Looks at the squares adjacent to current_square and counts
         how many mines there are"""
         adjacent_mines = 0
+        x, y = coordinate
         for mine in self.mine_locations:
-            if (mine[0] == coordinate[0] - 1 or mine[0] == coordinate[0] + 1) and (
-                mine[1] == coordinate[1]
-                or mine[1] == coordinate[1] - 1
-                or mine[1] == coordinate[1] + 1
-            ):
-                adjacent_mines += 1
-            elif (mine[1] == coordinate[1] - 1 or mine[1] == coordinate[1] + 1) and (
-                mine[0] == coordinate[0]
-                or mine[0] == coordinate[0] - 1
-                or mine[0] == coordinate[0] + 1
+            if (
+                mine == (x, y - 1)
+                or mine == (x, y + 1)
+                or mine == (x - 1, y)
+                or mine == (x - 1, y - 1)
+                or mine == (x - 1, y + 1)
+                or mine == (x + 1, y)
+                or mine == (x + 1, y - 1)
+                or mine == (x + 1, y + 1)
             ):
                 adjacent_mines += 1
         return adjacent_mines
@@ -104,7 +110,7 @@ class Game:
                 self.game_status = GameStatus.game_won
                 json_dict["high_scores"].append(
                     {
-                        "time": self.game_time.minute * 60 + self.game_time.second,
+                        "time": time.time() - self.start_time,
                         "width": self.width,
                         "height": self.height,
                         "mine_count": self.mine_count,
@@ -136,8 +142,8 @@ class Game:
 
     def timer(self):
         if self is current_game and self.game_status == GameStatus.in_progress:
-            statusbar_time.config(text=self.game_time.strftime("%M:%S"))
-            self.game_time += datetime.timedelta(seconds=1)
+            game_time = time.time() - self.start_time
+            statusbar_time.config(text=f"{int(game_time / 60):02d}:{int(game_time % 60):02d}")
             root.after(1000, self.timer)
 
     def generate_random_mine_locations(self, where_user_clicked):
@@ -230,19 +236,17 @@ gif_label = ttk.Label(
     foreground="sienna3",
 )
 
-
-button_image = PhotoImage(file=(where_this_file_is / "images" / "button_small.png"))
-button_image_pressed = PhotoImage(file=(where_this_file_is / "images" / "pressed_button_small.png"))
-flag_image = PhotoImage(file=(where_this_file_is / "images" / "flag_small.png"))
-bomb_image = PhotoImage(file=(where_this_file_is / "images" / "bomb_small.png"))
+button_image = PhotoImage(file=(image_dir / "button_small.png"))
+button_image_pressed = PhotoImage(file=(image_dir / "pressed_button_small.png"))
+flag_image = PhotoImage(file=(image_dir / "flag_small.png"))
+bomb_image = PhotoImage(file=(image_dir / "bomb_small.png"))
 gif_frames = [
     PhotoImage(
-        file=where_this_file_is / "images" / "doomguy.gif",
+        file=image_dir / "doomguy.gif",
         format=f"gif -index {i}",
     )
     for i in range(8)
 ]
-
 
 live_message = [
     "You're alive.. for now !",
@@ -278,7 +282,7 @@ def save_json_file():
     json_dict["height_slider"] = int(height_slider.scale.get())
     json_dict["width_slider"] = int(width_slider.scale.get())
     json_dict["difficulty_slider"] = int(difficulty_slider.scale.get())
-    with open(where_this_file_is / "game_data.json", "w") as file:
+    with open(image_dir / "game_data.json", "w") as file:
         json.dump(json_dict, file)
 
 
@@ -310,7 +314,7 @@ def create_highscores_window(event=None):
     treeview.column("#0", width=0, stretch="NO")
     treeview.column("Mine Percentage", anchor="w", width=140, minwidth=140)
     treeview.column("Time per Square", anchor="w", width=175, minwidth=175)
-    treeview.column("Total Time", anchor="w", width=100, minwidth=100)
+    treeview.column("Total Time", anchor="w", width=120, minwidth=120)
 
     # Create headings
     treeview.heading("#0", text="", anchor="w")
@@ -334,12 +338,11 @@ def create_highscores_window(event=None):
         )
 
     for highscore_dict in sorted(json_dict["high_scores"], key=get_highscore_data):
-        if highscore_dict["time"] >= 60:
-            format_time = (
-                f"{int(highscore_dict['time'] / 60)} min & {highscore_dict['time'] % 60} sec"
-            )
+        seconds = round(highscore_dict["time"])
+        if seconds >= 60:
+            format_time = f"{int(seconds / 60)} min & {seconds % 60} sec"
         else:
-            format_time = f"{highscore_dict['time']} sec"
+            format_time = f"{seconds} sec"
         treeview.insert(
             parent="",
             index="end",
@@ -366,7 +369,6 @@ def new_game(event=None):
     current_game = Game(mine_count, width, height)
 
     gif_label.place_forget()
-    current_game.game_time = datetime.datetime(2021, 1, 1)
     current_game.timer()
     canvas["width"] = button_size * current_game.width
     canvas["height"] = button_size * current_game.height
@@ -475,7 +477,7 @@ root.bind("<F10>", quit_game)
 
 new_game()
 root.title("Minesweeper – by Arrinao, The Philgrim, and Master Akuli")
-root.iconphoto(False, tkinter.PhotoImage(file=where_this_file_is / "images" / "bomb.png"))
+root.iconphoto(False, tkinter.PhotoImage(file=image_dir / "bomb.png"))
 
 root.protocol("WM_DELETE_WINDOW", quit_game)
 root.mainloop()

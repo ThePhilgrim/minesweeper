@@ -1,4 +1,4 @@
-# minesweeper
+# Minesweeper
 This is a minesweeper game to make two amateur coders into pros.
 Run these commands to play it:
 
@@ -11,7 +11,7 @@ python3 minesweeper.py
 On Windows you likely need `py` instead of `python3`.
 
 
-## Notes about developing
+## Developing
 
 New changes should usually be made with pull requests.
 Before merging, your pull request must be reviewed and approved by at least one other person.
@@ -40,7 +40,11 @@ Images:
 - When resizing a big image to make a small image, make sure that the small image has transparent background.
 - Keep `images/sources.txt` up to date.
 
-## Notes about creating executable file on Mac OS
+## Creating Windows .exe file
+
+- code used in cmd console: pyinstaller --onefile --add-data images\button_small.png;. --add-data images\pressed_button_small.png;. --add-data images\flag_small.png;. --add-data images\bomb_small.png;. --add-data images\doomguy.gif;. --add-data images\bomb.png;. minesweeper.py
+
+## Creating Mac .app file
 
 To reproduce the installer, please run the following commands: (for reference: https://www.youtube.com/watch?v=DVOoHL2Bp_o&t=461s&ab_channel=SamanthaCruz, http://www.marinamele.com/from-a-python-script-to-a-portable-mac-application-with-py2app)
 - The executable is created with py2app. Run `pip3 install -U py2app` in terminal to install.
