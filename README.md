@@ -46,4 +46,4 @@ a Mac `.app` is created and uploaded automatically by `.github/workflows/mac_bui
 
 ## Creating Windows .exe file
 
-- code used in cmd console: pyinstaller --onefile --add-data images\button_small.png;. --add-data images\pressed_button_small.png;. --add-data images\flag_small.png;. --add-data images\bomb_small.png;. --add-data images\doomguy.gif;. --add-data images\bomb.png;. minesweeper.py
+- code used in cmd console: pyinstaller --onefile --add-data images;. minesweeper.py
