@@ -110,7 +110,6 @@ class Game:
             self.game_status = GameStatus.game_lost
 
             # Shows user all mines when losing
-            # TODO: Distinguish between correctly and incorrectly placed flags
             for x, y in self.mine_locations:
                 if (x, y) not in self.flag_dict:
                     if (x, y) not in self.previously_clicked_square:
