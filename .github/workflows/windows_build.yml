@@ -17,23 +17,23 @@ jobs:
       uses: mathieudutour/github-tag-action@v5.1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-    - id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.tag_version.outputs.new_tag }}
-        release_name: ${{ steps.tag_version.outputs.new_tag }}
-        body: ${{ steps.tag_version.outputs.changelog }}
-    - uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/minesweeper.exe
-        asset_name: Minesweeper_${{ steps.tag_version.outputs.new_tag }}.app
-        asset_content_type: application/octet-stream   # couldn't find anything better
+#    - id: create_release
+#      uses: actions/create-release@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        tag_name: ${{ steps.tag_version.outputs.new_tag }}
+#        release_name: ${{ steps.tag_version.outputs.new_tag }}
+#        body: ${{ steps.tag_version.outputs.changelog }}
+#    - uses: actions/upload-release-asset@v1.0.1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        upload_url: ${{ steps.create_release.outputs.upload_url }}
+#        asset_path: dist/minesweeper.exe
+#        asset_name: Minesweeper_${{ steps.tag_version.outputs.new_tag }}.app
+#        asset_content_type: application/octet-stream   # couldn't find anything better
     - uses: actions/upload-artifact@v2
       with:
         name: minesweeper.exe
-        path: dist\minesweeper.exe
+        path: dist/minesweeper.exe
