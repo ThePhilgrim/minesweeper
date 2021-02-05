@@ -1,6 +1,7 @@
 # Minesweeper
 This is a minesweeper game to make two amateur coders into pros.
-Run these commands to play it:
+On Windows, you can download `minesweeper.exe` from [the releases page](https://github.com/ThePhilgrim/minesweeper/releases).
+On other operating systems, make sure you have Python with Tkinter, and run these commands:
 
 ```
 git clone https://github.com/ThePhilgrim/minesweeper
@@ -17,6 +18,10 @@ New changes should usually be made with pull requests.
 Before merging, your pull request must be reviewed and approved by at least one other person.
 When merging a pull request, choose "Squash and merge" from the little arrow in the merge button.
 This way, each pull request shows up as one commit when looking at the commit log of `main` branch.
+
+When a commit is pushed (or a pull request is merged) to `main`,
+`.github/workflows/windows_build.yml` automatically builds a file named `minesweeper.exe`
+and makes a new release containing it.
 
 Run these commands to start working on a new pull request:
 
