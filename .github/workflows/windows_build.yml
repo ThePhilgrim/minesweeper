@@ -11,7 +11,13 @@ jobs:
     - uses: actions/setup-python@v1
       with:
         python-version: "3.9"
-    - run: pip3 install pyinstaller
+    # Custom-built pyinstaller bootloader to avoid Windows Defender false positive
+    # https://stackoverflow.com/a/52054580
+    # https://pyinstaller.readthedocs.io/en/stable/bootloader-building.html
+    - uses: ilammy/msvc-dev-cmd@v1
+    - run: git clone --depth=1 https://github.com/pyinstaller/pyinstaller --branch v4.2
+    - run: cd pyinstaller/bootloader && python ./waf all
+    - run: pip install ./pyinstaller
     - run: pyinstaller --onefile --add-data 'images;.' minesweeper.py
 #    - id: tag_version
 #      uses: mathieudutour/github-tag-action@v5.1
