@@ -33,3 +33,7 @@ jobs:
         asset_path: dist/minesweeper.exe
         asset_name: Minesweeper_${{ steps.tag_version.outputs.new_tag }}.app
         asset_content_type: application/octet-stream   # couldn't find anything better
+      - uses: actions/upload-artifact@v2
+        with:
+          name: minesweeper.exe
+          path: dist\minesweeper.exe
