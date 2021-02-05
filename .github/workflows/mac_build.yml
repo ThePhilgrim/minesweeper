@@ -5,7 +5,7 @@ on:
       - macbuild  # just for testing
 jobs:
   mac_build:
-    runs-on: macos-11.0
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v1
     - run: brew install python@3.9
