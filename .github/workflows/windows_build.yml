@@ -1,0 +1,40 @@
+on:
+  push:
+    branches:
+      - main
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v1
+      with:
+        python-version: "3.9"
+    # Custom-built pyinstaller bootloader to avoid Windows Defender false positive
+    # https://stackoverflow.com/a/52054580
+    # https://pyinstaller.readthedocs.io/en/stable/bootloader-building.html
+    - uses: ilammy/msvc-dev-cmd@v1
+    - run: git clone --depth=1 https://github.com/pyinstaller/pyinstaller --branch v4.2
+    - run: cd pyinstaller/bootloader && python ./waf all
+    - run: pip install ./pyinstaller
+    - run: pyinstaller --onefile --add-data 'images;.' minesweeper.py
+    - id: tag_version
+      uses: mathieudutour/github-tag-action@v5.1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+    - id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag_version.outputs.new_tag }}
+        release_name: ${{ steps.tag_version.outputs.new_tag }}
+        body: ${{ steps.tag_version.outputs.changelog }}
+    - uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: dist/minesweeper.exe
+        asset_name: Minesweeper_${{ steps.tag_version.outputs.new_tag }}.exe
+        asset_content_type: application/vnd.microsoft.portable-executable
