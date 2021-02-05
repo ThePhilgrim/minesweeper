@@ -40,10 +40,6 @@ Images:
 - When resizing a big image to make a small image, make sure that the small image has transparent background.
 - Keep `images/sources.txt` up to date.
 
-## Creating Windows .exe file
-
-- code used in cmd console: pyinstaller --onefile --add-data images;. minesweeper.py
-
 ## Creating Mac .app file
 
 To reproduce the installer, please run the following commands: (for reference: https://www.youtube.com/watch?v=DVOoHL2Bp_o&t=461s&ab_channel=SamanthaCruz, http://www.marinamele.com/from-a-python-script-to-a-portable-mac-application-with-py2app)

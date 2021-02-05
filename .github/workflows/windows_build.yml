@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - main
-      - windowsbuild  # just for testing
 jobs:
   windows:
     runs-on: windows-latest
