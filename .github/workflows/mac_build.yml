@@ -36,6 +36,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/minesweeper.app
-        asset_name: Minesweeper_${{ steps.tag_version.outputs.new_tag }}.app
+        asset_path: Minesweeper.dmg
+        asset_name: Minesweeper_${{ steps.tag_version.outputs.new_tag }}.dmg
         asset_content_type: application/octet-stream   # couldn't find anything better
