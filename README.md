@@ -40,8 +40,8 @@ This project uses [black](https://github.com/psf/black) to clean up code style.
 Run these commands to use it (with virtualenv activated):
 
 ```
-python3 -m pip install black
-python3 -m black minesweeper.py
+pip install black
+black minesweeper.py
 ```
 
 Images:
