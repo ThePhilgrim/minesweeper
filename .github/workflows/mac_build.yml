@@ -13,8 +13,8 @@ jobs:
         python-version: "3.9"
     # https://www.youtube.com/watch?v=DVOoHL2Bp_o&t=461s&ab_channel=SamanthaCruz
     # http://www.marinamele.com/from-a-python-script-to-a-portable-mac-application-with-py2app
-    - run: pip3 install -U py2app
-    - run: python3 setup.py py2app
+    - run: pip3 install pyinstaller
+    - run: pyinstaller --add-data 'images:.' --windowed minesweeper.py
     - run: hdiutil create Minesweeper.dmg -volname "Minesweeper" -srcfolder dist/minesweeper.app
     - name: Bump version and push tag
       id: tag_version
