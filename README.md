@@ -39,6 +39,16 @@ python3 -m pip install black
 python3 -m black minesweeper.py
 ```
 
+Virtual Environments:
+- To keep installations project-specific, a virtual environment can be used. This prevents ones computer
+  from being affected by black, pyinstaller, and other things used for the game.
+
+- Installation: cd to the minesweeper folder in your terminal, and run `python3 -m venv env`
+- Activation: Activate the virtual env –
+  Windows;  `env\Scripts\activate`
+  Mac; `source/env/bin/activate`
+- To delete the virtual env, simply delete the "env" folder inside of the minesweeper folder.
+
 Images:
 - There is a big and small version of each image. The big images are used to produce the small images.
 - If you change the sizes of the small images, change `minesweeper.py` to use the new size.
