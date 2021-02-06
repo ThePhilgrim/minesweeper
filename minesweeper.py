@@ -188,7 +188,6 @@ def clicked_square(event):
             current_game.generate_random_mine_locations(coordinate)
         current_game.open_squares(x, y)
 
-
 button_size = 23
 
 color_chart = {
