@@ -5,10 +5,12 @@ on:
       - macbuild  # just for testing
 jobs:
   mac_build:
-    runs-on: macos-latest
+    runs-on: macos-11.0
     steps:
     - uses: actions/checkout@v1
-    - run: brew install python@3.9    # https://github.com/actions/setup-python/issues/58
+    - uses: actions/setup-python@v1
+      with:
+        python-version: "3.9"
     # https://www.youtube.com/watch?v=DVOoHL2Bp_o&t=461s&ab_channel=SamanthaCruz
     # http://www.marinamele.com/from-a-python-script-to-a-portable-mac-application-with-py2app
     - run: pip3 install pyinstaller
