@@ -20,9 +20,9 @@ When merging a pull request, choose "Squash and merge" from the little arrow in 
 This way, each pull request shows up as one commit when looking at the commit log of `main` branch.
 
 When a commit is pushed (or a pull request is merged) to `main`,
-`.github/workflows/windows_build.yml` and `.github/workflows/mac_build.yml`
-automatically build files named `minesweeper.exe` and `minesweeper.dmg`,
-and make new releases containing them.
+`.github/workflows/build.yml`
+automatically builds files named `minesweeper.exe` and `minesweeper.dmg`,
+and makes a new release containing them.
 
 Run these commands to start working on a new pull request:
 
