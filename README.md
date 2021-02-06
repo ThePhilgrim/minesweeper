@@ -1,6 +1,6 @@
 # Minesweeper
 This is a minesweeper game to make two amateur coders into pros.
-On Windows, you can download `minesweeper.exe` from [the releases page](https://github.com/ThePhilgrim/minesweeper/releases).
+On Windows or Mac, you can download `minesweeper.exe` or `minesweeper.dmg` from [the releases page](https://github.com/ThePhilgrim/minesweeper/releases).
 On other operating systems, make sure you have Python with Tkinter, and run these commands:
 
 ```
@@ -18,8 +18,9 @@ When merging a pull request, choose "Squash and merge" from the little arrow in 
 This way, each pull request shows up as one commit when looking at the commit log of `main` branch.
 
 When a commit is pushed (or a pull request is merged) to `main`,
-`.github/workflows/windows_build.yml` automatically builds a file named `minesweeper.exe`
-and makes a new release containing it.
+`.github/workflows/build.yml`
+automatically builds files named `minesweeper.exe` and `minesweeper.dmg`,
+and makes a new release containing them.
 
 Run these commands to start working on a new pull request:
 
@@ -49,10 +50,3 @@ Images:
 - If you change the sizes of the small images, change `minesweeper.py` to use the new size.
 - When resizing a big image to make a small image, make sure that the small image has transparent background.
 - Keep `images/sources.txt` up to date.
-
-## Creating Mac .app file
-
-To reproduce the installer, please run the following commands: (for reference: https://www.youtube.com/watch?v=DVOoHL2Bp_o&t=461s&ab_channel=SamanthaCruz, http://www.marinamele.com/from-a-python-script-to-a-portable-mac-application-with-py2app)
-- The executable is created with py2app. Run `pip3 install -U py2app` in terminal to install.
-- Make sure that you are located in the minesweeper directory. In your terminal, run `python3 setup.py py2app`
-- The .app file is found in the newly created 'dist' folder.
