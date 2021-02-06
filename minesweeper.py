@@ -74,20 +74,7 @@ class Game:
 
         root.after(0, update, 0)
 
-    def coords(x,y, image):
-        if  image == bomb_image:
-            int(event.x / button_size) * button_size + (button_size / 2),
-            int(event.y / button_size) * button_size + (button_size / 2),
-            image=flag_image,
-            anchor="center",
-        else:
-            canvas.create_image(
-            int(x * button_size),
-            int(y * button_size),
-            image = image
-            anchor = 'nw'
-            
-   def open_squares(self, x, y):
+    def open_squares(self, x, y):
         if x not in range(self.width) or y not in range(self.height):
             # Happens when auto-opening at edge buttons
             return
@@ -188,7 +175,6 @@ def draw_image(x, y, image):
         int(y * button_size),
         image = image,
         anchor = 'nw')
-
 
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
