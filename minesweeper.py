@@ -70,7 +70,7 @@ class Game:
             gif_label.configure(image=frame)
             if self is current_game:
                 # New game not started yet, can keep animating
-                root.after(100, update, index)
+                root.after(90, update, index)
 
         root.after(0, update, 0)
 
@@ -100,19 +100,9 @@ class Game:
         self.previously_clicked_square.add((x, y))
 
         if coordinate in self.mine_locations:
-            canvas.create_image(
-                int(x * button_size),
-                int(y * button_size),
-                image=red_button_image_pressed,
-                anchor="nw",
-            )
+            draw_image(x, y, red_button_image_pressed)
         else:
-            canvas.create_image(
-                int(x * button_size),
-                int(y * button_size),
-                image=button_image_pressed,
-                anchor="nw",
-            )
+            draw_image(x, y, button_image_pressed)
 
         count_already_open = len(self.previously_clicked_square)
         count_mine_locations = len(self.mine_locations)
@@ -125,26 +115,11 @@ class Game:
             for x, y in self.mine_locations:
                 if (x, y) not in self.flag_dict:
                     if (x, y) not in self.previously_clicked_square:
-                        canvas.create_image(
-                            int(x * button_size),
-                            int(y * button_size),
-                            image=button_image_pressed,
-                            anchor="nw",
-                        )
-                    canvas.create_image(
-                        int(x * button_size),
-                        int(y * button_size),
-                        image=bomb_image,
-                        anchor="nw",
-                    )
+                         draw_image(x, y, button_image_pressed)
+                    draw_image(x, y, bomb_image)
             for x, y in self.flag_dict:
                 if (x, y) not in self.mine_locations:
-                    canvas.create_image(
-                        int(x * button_size) + (button_size / 2),
-                        int(y * button_size) + (button_size / 2),
-                        image=wrong_flag_image,
-                        anchor="center",
-                    )
+                    draw_image(x, y, wrong_flag_image)
 
         else:
             if count_already_open + count_mine_locations == self.width * self.height:
@@ -200,6 +175,20 @@ class Game:
         """ Prints out how many mines are left """
         statusbar_count["text"] = f"{self.mine_count - len(self.flag_dict)} mines left"
 
+def draw_image(x, y, image):
+    if image == flag_image or image == wrong_flag_image:
+        return canvas.create_image(
+        x * button_size + (button_size / 2),
+        y * button_size + (button_size / 2),
+        image=image,
+        anchor="center")
+    else:
+        return canvas.create_image(
+        int(x * button_size),
+        int(y * button_size),
+        image = image,
+        anchor = 'nw')
+
 
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
@@ -248,12 +237,7 @@ def flagging(event):
             canvas.delete(current_game.flag_dict[x_flag, y_flag])
             current_game.flag_dict.pop((x_flag, y_flag))
         else:
-            flag_id = canvas.create_image(
-                int(event.x / button_size) * button_size + (button_size / 2),
-                int(event.y / button_size) * button_size + (button_size / 2),
-                image=flag_image,
-                anchor="center",
-            )
+            flag_id = draw_image(x_flag, y_flag, flag_image)
             current_game.flag_dict[(x_flag, y_flag)] = flag_id
         current_game.update_statusbar_mines_left()
 
