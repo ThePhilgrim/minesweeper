@@ -174,7 +174,7 @@ def draw_image(x, y, image):
         int(x * button_size),
         int(y * button_size),
         image = image,
-        anchor = 'nw')
+        anchor = 'nw') 
 
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
@@ -386,16 +386,15 @@ def new_game(event=None):
     canvas["width"] = button_size * current_game.width
     canvas["height"] = button_size * current_game.height
 
-    for x in range(0, button_size * current_game.width, button_size):
-        for y in range(0, button_size * current_game.height, button_size):
-            canvas.create_image((x, y), image=button_image, anchor="nw")
+    for x in range(current_game.width):
+        for y in range(current_game.height):
+            draw_image(x, y, image=button_image)
     statusbar_action["text"] = "***Lets go!***"
     current_game.update_statusbar_mines_left()
 
 
 top_menu = tkinter.Menu(root)
 root.config(menu=top_menu)
-
 
 top_menu_game = tkinter.Menu(top_menu)
 if root.tk.call("tk", "windowingsystem") == "aqua":
