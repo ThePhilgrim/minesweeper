@@ -171,8 +171,8 @@ def draw_image(x, y, image):
         anchor="center")
     else:
         return canvas.create_image(
-        int(x * button_size),
-        int(y * button_size),
+        x * button_size,
+        y * button_size,
         image = image,
         anchor = 'nw') 
 
