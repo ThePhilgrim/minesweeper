@@ -1,7 +1,7 @@
 # Minesweeper
 This is a minesweeper game to make two amateur coders into pros.
-On Mac, you can install it from [the releases page](https://github.com/ThePhilgrim/minesweeper/releases).
-Alternatively, if you have Python installed, you can run these commands to download and play it:
+On Windows or Mac, you can download `minesweeper.exe` or `minesweeper.dmg` from [the releases page](https://github.com/ThePhilgrim/minesweeper/releases).
+On other operating systems, make sure you have Python with Tkinter, and run these commands:
 
 ```
 git clone https://github.com/ThePhilgrim/minesweeper
@@ -18,6 +18,11 @@ New changes should usually be made with pull requests.
 Before merging, your pull request must be reviewed and approved by at least one other person.
 When merging a pull request, choose "Squash and merge" from the little arrow in the merge button.
 This way, each pull request shows up as one commit when looking at the commit log of `main` branch.
+
+When a commit is pushed (or a pull request is merged) to `main`,
+`.github/workflows/windows_build.yml` and `.github/workflows/mac_build.yml`
+automatically build files named `minesweeper.exe` and `minesweeper.dmg`,
+and make new releases containing them.
 
 Run these commands to start working on a new pull request:
 
@@ -40,10 +45,3 @@ Images:
 - If you change the sizes of the small images, change `minesweeper.py` to use the new size.
 - When resizing a big image to make a small image, make sure that the small image has transparent background.
 - Keep `images/sources.txt` up to date.
-
-When a new commit is pushed (or a pull request is merged) to `main` branch,
-a Mac `.app` is created and uploaded automatically by `.github/workflows/mac_build.yml`.
-
-## Creating Windows .exe file
-
-- code used in cmd console: pyinstaller --onefile --add-data images;. minesweeper.py
