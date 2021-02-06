@@ -102,7 +102,7 @@ class Game:
             for x, y in self.mine_locations:
                 if (x, y) not in self.flag_dict:
                     if (x, y) not in self.previously_clicked_square:
-                         draw_image(x, y, button_image_pressed)
+                        draw_image(x, y, button_image_pressed)
                     draw_image(x, y, bomb_image)
             for x, y in self.flag_dict:
                 if (x, y) not in self.mine_locations:
@@ -162,19 +162,20 @@ class Game:
         """ Prints out how many mines are left """
         statusbar_count["text"] = f"{self.mine_count - len(self.flag_dict)} mines left"
 
+
 def draw_image(x, y, image):
     if image == flag_image or image == wrong_flag_image:
         return canvas.create_image(
-        x * button_size + (button_size / 2),
-        y * button_size + (button_size / 2),
-        image=image,
-        anchor="center")
+            x * button_size + (button_size / 2),
+            y * button_size + (button_size / 2),
+            image=image,
+            anchor="center",
+        )
     else:
         return canvas.create_image(
-        int(x * button_size),
-        int(y * button_size),
-        image = image,
-        anchor = 'nw') 
+            int(x * button_size), int(y * button_size), image=image, anchor="nw"
+        )
+
 
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
@@ -187,6 +188,7 @@ def clicked_square(event):
         if len(current_game.mine_locations) == 0:
             current_game.generate_random_mine_locations(coordinate)
         current_game.open_squares(x, y)
+
 
 button_size = 23
 
