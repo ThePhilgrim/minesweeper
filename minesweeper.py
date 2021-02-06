@@ -172,11 +172,8 @@ def draw_image(x, y, image):
             anchor="center",
         )
     else:
-        return canvas.create_image(
-        x * button_size,
-        y * button_size,
-        image = image,
-        anchor = 'nw') 
+        return canvas.create_image(x * button_size, y * button_size, image=image, anchor="nw")
+
 
 def clicked_square(event):
     """Takes click events and prints number of adjacent mines,
@@ -189,6 +186,7 @@ def clicked_square(event):
         if len(current_game.mine_locations) == 0:
             current_game.generate_random_mine_locations(coordinate)
         current_game.open_squares(x, y)
+
 
 button_size = 23
 
