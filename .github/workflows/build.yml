@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - main
-      - macbuild  # just for testing
 jobs:
   mac_build:
     runs-on: macos-latest
