@@ -21,6 +21,7 @@ try:
     with open(image_dir / "game_data.json", "r") as source:
         json_dict = json.load(source)
 except FileNotFoundError:
+    # TODO: game_data.json shouldn't be in image_dir
     json_dict = {
         "width_slider": 15,
         "height_slider": 10,
