@@ -18,10 +18,9 @@ sys.setrecursionlimit(2000)
 
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
 try:
-    with open(image_dir / "game_data.json", "r") as source:
+    with open("game_data.json", "r") as source:
         json_dict = json.load(source)
 except FileNotFoundError:
-    # TODO: game_data.json shouldn't be in image_dir
     json_dict = {
         "width_slider": 15,
         "height_slider": 10,
@@ -294,7 +293,7 @@ def save_json_file():
     json_dict["height_slider"] = int(height_slider.scale.get())
     json_dict["width_slider"] = int(width_slider.scale.get())
     json_dict["difficulty_slider"] = int(difficulty_slider.scale.get())
-    with open(image_dir / "game_data.json", "w") as file:
+    with open("game_data.json", "w") as file:
         json.dump(json_dict, file)
 
 
@@ -320,17 +319,19 @@ def create_highscores_window(event=None):
     treeview = ttk.Treeview(frame)
 
     # Define columns
-    treeview["columns"] = ("Mine Percentage", "Time per Square", "Total Time")
+    treeview["columns"] = ("Mine Percentage", "Board Size", "Time per Square", "Total Time")
 
     # Format columns
     treeview.column("#0", width=0, stretch="NO")
     treeview.column("Mine Percentage", anchor="w", width=140, minwidth=140)
+    treeview.column("Board Size", anchor="w", width=140, minwidth=140)
     treeview.column("Time per Square", anchor="w", width=175, minwidth=175)
     treeview.column("Total Time", anchor="w", width=120, minwidth=120)
 
     # Create headings
     treeview.heading("#0", text="", anchor="w")
     treeview.heading("Mine Percentage", text="Mine Percentage", anchor="w")
+    treeview.heading("Board Size", text="Board Size", anchor="w")
     treeview.heading("Time per Square", text="Avg. Time per Square", anchor="w")
     treeview.heading("Total Time", text="Total Time", anchor="w")
 
@@ -344,13 +345,16 @@ def create_highscores_window(event=None):
             * 100
         )
 
+    def get_board_size(highscore_dict):
+        return f"{highscore_dict['width']} x {highscore_dict['height']}"
+
     def get_avg_time(highscore_dict):
         return round(
             highscore_dict["time"] / (highscore_dict["width"] * highscore_dict["height"]), 2
         )
 
     for highscore_dict in sorted(json_dict["high_scores"], key=get_highscore_data):
-        seconds = round(highscore_dict["time"])
+        seconds = int(highscore_dict["time"])
         if seconds >= 60:
             format_time = f"{int(seconds / 60)} min & {seconds % 60} sec"
         else:
@@ -360,6 +364,7 @@ def create_highscores_window(event=None):
             index="end",
             values=(
                 (f"{get_mine_percentage(highscore_dict)} %"),
+                get_board_size(highscore_dict),
                 (f"{get_avg_time(highscore_dict)} sec"),
                 format_time,
             ),
