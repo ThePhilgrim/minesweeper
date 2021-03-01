@@ -8,8 +8,12 @@ from tkinter import ttk
 from enum import Enum
 
 try:
+    # If we are running in pyinstaller, then sys._MEIPASS is the path to where
+    # images are, as a string.
     image_dir = pathlib.Path(sys._MEIPASS)
 except AttributeError:
+    # Because there is no sys._MEIPASS attribute, we are not running in
+    # pyinstaller, and we need to find the images based on where this file is.
     image_dir = pathlib.Path(__file__).parent / "images"
 
 # Recursion limit is increased to prevent Recursion error from
