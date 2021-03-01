@@ -8,12 +8,12 @@ from tkinter import ttk
 from enum import Enum
 from appdirs import AppDirs
 
-dirs = AppDirs("Minesweeper")
-
 try:
     image_dir = pathlib.Path(sys._MEIPASS)
 except AttributeError:
     image_dir = pathlib.Path(__file__).parent / "images"
+
+config_dir = pathlib.Path(AppDirs("Minesweeper").user_config_dir)
 
 # Recursion limit is increased to prevent Recursion error from
 # auto-opening open_squares in open_squares ()
@@ -21,10 +21,9 @@ sys.setrecursionlimit(2000)
 
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
 try:
-    with open(dirs.user_config_dir / "game_data.json", "r") as source:
+    with open(config_dir / "game_data.json", "r") as source:
         json_dict = json.load(source)
 except FileNotFoundError:
-    # TODO: game_data.json shouldn't be in image_dir
     json_dict = {
         "width_slider": 15,
         "height_slider": 10,
@@ -297,7 +296,8 @@ def save_json_file():
     json_dict["height_slider"] = int(height_slider.scale.get())
     json_dict["width_slider"] = int(width_slider.scale.get())
     json_dict["difficulty_slider"] = int(difficulty_slider.scale.get())
-    with open(dirs.user_config_data / "game_data.json", "w") as file:
+    pathlib.Path(config_dir).mkdir(exist_ok=True, parents=True)
+    with open(config_dir / "game_data.json", "w") as file:
         json.dump(json_dict, file)
 
 
@@ -479,6 +479,7 @@ difficulty_slider.pack(padx=5)
 height_slider.label.lift()
 width_slider.label.lift()
 difficulty_slider.label.lift()
+
 
 # Make sure that text in status bar is wrapped correctly
 def update_statusbar_wraplength(event):
