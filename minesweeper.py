@@ -18,7 +18,7 @@ sys.setrecursionlimit(2000)
 
 GameStatus = Enum("GameStatus", "in_progress, game_lost, game_won")
 try:
-    with open("game_data.json", "r") as source:
+    with open(image_dir / "game_data.json", "r") as source:
         json_dict = json.load(source)
 except FileNotFoundError:
     json_dict = {
@@ -293,7 +293,7 @@ def save_json_file():
     json_dict["height_slider"] = int(height_slider.scale.get())
     json_dict["width_slider"] = int(width_slider.scale.get())
     json_dict["difficulty_slider"] = int(difficulty_slider.scale.get())
-    with open("game_data.json", "w") as file:
+    with open(image_dir / "game_data.json", "w") as file:
         json.dump(json_dict, file)
 
 
