@@ -222,8 +222,7 @@ def flagging(event):
         if (x_flag, y_flag) in current_game.previously_clicked_square:
             return
         elif (x_flag, y_flag) in current_game.flag_dict.keys():
-            canvas.delete(current_game.flag_dict[x_flag, y_flag])
-            current_game.flag_dict.pop((x_flag, y_flag))
+            canvas.delete(current_game.flag_dict.pop((x_flag, y_flag)))
         else:
             flag_id = draw_image(x_flag, y_flag, flag_image)
             current_game.flag_dict[(x_flag, y_flag)] = flag_id
