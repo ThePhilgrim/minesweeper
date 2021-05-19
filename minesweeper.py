@@ -161,7 +161,7 @@ class Game:
                 self.mine_locations.append((x, y))
 
     def update_statusbar_mines_left(self):
-        """ Prints out how many mines are left """
+        """Prints out how many mines are left"""
         statusbar_count["text"] = f"{self.mine_count - len(self.flag_dict)} mines left"
 
 
