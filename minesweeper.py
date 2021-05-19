@@ -295,7 +295,7 @@ def save_json_file():
     json_dict["height_slider"] = int(height_slider.scale.get())
     json_dict["width_slider"] = int(width_slider.scale.get())
     json_dict["difficulty_slider"] = int(difficulty_slider.scale.get())
-    pathlib.Path(config_dir).mkdir(exist_ok=True, parents=True)
+    config_dir.mkdir(exist_ok=True, parents=True)
     with open(config_dir / "game_data.json", "w") as file:
         json.dump(json_dict, file)
 
