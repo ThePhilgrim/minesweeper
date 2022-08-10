@@ -9,6 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - run: brew install python@3.9    # https://github.com/actions/setup-python/issues/58
+    - run: brew install python-tk@3.9
     # TODO: is it possible to use a newer pyinstaller?
     - run: pip3 install pyinstaller==4.10 appdirs
     - run: pyinstaller --add-data 'images:.' --windowed --icon images/bomb.png minesweeper.py
