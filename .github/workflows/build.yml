@@ -10,9 +10,7 @@ jobs:
     - uses: actions/checkout@v1
     - run: brew install python@3.9    # https://github.com/actions/setup-python/issues/58
     # TODO: is it possible to use a newer pyinstaller?
-    # --no-use-pep517 is to prevent pyproject.toml error when installing old pyinstaller.
-    - run: pip3 install --no-use-pep517 pyinstaller==4.10
-    - run: pip3 install appdirs
+    - run: pip3 install pyinstaller==4.10 appdirs
     - run: pyinstaller --add-data 'images:.' --windowed --icon images/bomb.png minesweeper.py
     - run: hdiutil create Minesweeper.dmg -volname "Minesweeper" -srcfolder dist/minesweeper.app
     - uses: actions/upload-artifact@v2
