@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
 jobs:
   mac_build:
     runs-on: macos-latest
@@ -35,6 +36,7 @@ jobs:
         name: windows-exe
         path: dist/minesweeper.exe
   release:
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     needs: [mac_build, windows_build]
     steps:
