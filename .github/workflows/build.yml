@@ -9,7 +9,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - run: brew install python@3.9    # https://github.com/actions/setup-python/issues/58
-    - run: pip3 install pyinstaller==4.2 appdirs
+    # TODO: is it possible to use a newer pyinstaller?
+    # --no-use-pep517 is to prevent pyproject.toml error when installing old pyinstaller.
+    - run: pip3 install --no-use-pep517 pyinstaller==4.2
+    - run: pip3 install appdirs
     - run: pyinstaller --add-data 'images:.' --windowed --icon images/bomb.png minesweeper.py
     - run: hdiutil create Minesweeper.dmg -volname "Minesweeper" -srcfolder dist/minesweeper.app
     - uses: actions/upload-artifact@v2
@@ -29,7 +32,10 @@ jobs:
     - uses: ilammy/msvc-dev-cmd@v1
     - run: git clone --depth=1 https://github.com/pyinstaller/pyinstaller --branch v4.2
     - run: cd pyinstaller/bootloader && python ./waf all
-    - run: pip install ./pyinstaller appdirs
+    # TODO: is it possible to use a newer pyinstaller?
+    # --no-use-pep517 is to prevent pyproject.toml error when installing old pyinstaller.
+    - run: pip install --no-use-pep517 ./pyinstaller
+    - run: pip install appdirs
     - run: pyinstaller --onefile --add-data 'images;.' minesweeper.py
     - uses: actions/upload-artifact@v2
       with:
